@@ -1,6 +1,7 @@
-import { Auth, Card, Space } from '@supabase/ui';
 import { supabase } from '@/utils/initSupabase';
+import { Card, Space } from '@supabase/ui';
 import BackButton from '@/components/BackButton';
+import Auth from '@/components/Auth';
 
 const UpdatePassword = ({ user }: any) => {
   return (

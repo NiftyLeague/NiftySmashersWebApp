@@ -1,9 +1,9 @@
 import '@/styles/globals.css';
 import { useEffect } from 'react';
-import type { AppProps } from 'next/app';
-import { Auth } from '@supabase/ui';
-import { supabase } from '@/utils/initSupabase';
 import { useRouter } from 'next/router';
+import type { AppProps } from 'next/app';
+import { supabase } from '@/utils/initSupabase';
+import Auth from '@/components/Auth';
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();

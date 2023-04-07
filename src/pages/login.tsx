@@ -1,7 +1,8 @@
 import Image from 'next/image';
-import { Auth, Card, Typography, Space } from '@supabase/ui';
+import { Card, Typography, Space } from '@supabase/ui';
 import { supabase } from '@/utils/initSupabase';
 import BackButton from '@/components/BackButton';
+import Auth from '@/components/Auth';
 
 const Login = () => {
   const { user } = Auth.useUser();

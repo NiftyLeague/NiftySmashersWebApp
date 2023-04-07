@@ -1,0 +1,148 @@
+/* 
+  ==========================
+  PROFILE
+  ==========================
+*/
+
+/* Profile Card */
+
+.profileCard {
+  margin: auto;
+  width: 100%;
+  padding: 0px 10px;
+}
+
+.profileCard .profileCardHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.profileCard .userInfo {
+  font-weight: 300;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profileCard .userInfo p {
+  margin: 0;
+}
+
+.profileCard .userInfo .username {
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.profileCard .userInfo .avatarContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  flex-direction: column;
+}
+
+/* Button */
+
+.button {
+  color: var(--custom-color);
+  border: var(--custom-border);
+  background-color: var(--custom-bg-color);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--custom-border-radius);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  margin: 8px 0px;
+}
+
+.button.primary {
+  background-color: var(--custom-color-brand);
+  border: 1px solid var(--custom-color-brand);
+}
+
+.button svg {
+  margin-right: 8px;
+}
+
+/* Widgets */
+
+.card {
+  width: 100%;
+  display: block;
+  border: var(--custom-border);
+  border-radius: var(--custom-border-radius);
+  padding: var(--custom-spacing);
+}
+
+.avatar {
+  border-radius: var(--custom-border-radius);
+  overflow: hidden;
+  max-width: 100%;
+}
+.avatar.image {
+  object-fit: cover;
+}
+.avatar.no_image {
+  background-color: #333;
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 5px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mainHeader {
+  width: 100%;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+}
+
+.avatarPlaceholder {
+  border: var(--custom-border);
+  border-radius: var(--custom-border-radius);
+  width: 35px;
+  height: 35px;
+  background-color: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Auth */
+
+.auth-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.auth-widget > .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: #444444;
+  text-transform: none !important;
+  transition: all 0.2s ease;
+}
+
+.auth-widget .button:hover {
+  background-color: #2a2a2a;
+}
+
+.auth-widget .button > .loader,
+.account .button > .loader {
+  width: 17px;
+  animation: spin 1s linear infinite;
+  filter: invert(1);
+}

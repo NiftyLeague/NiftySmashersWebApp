@@ -59,7 +59,7 @@ export default function Home() {
                 alt="Company Logo"
                 className={styles.logo}
                 width={50}
-                height={50}
+                height={48}
               />
             </div>
           </a>
@@ -133,7 +133,7 @@ export default function Home() {
           </nav>
           <div className={styles.content}>
             <Image
-              src="/logo/wordmark_logo.png"
+              src="/logo/wordmark_logo_white_glow.png"
               alt="Wordmark Logo"
               className={styles.wordmark}
               width={704}

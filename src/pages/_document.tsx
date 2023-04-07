@@ -25,6 +25,10 @@ export default function Document() {
           rel="stylesheet"
         />
         <link
+          href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap"
+          rel="stylesheet"
+        />
+        <link
           href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&family=Press+Start+2P&display=swap"
           rel="stylesheet"
         />

@@ -85,7 +85,7 @@ export default function Profile({ user }: { user: User }) {
             src="/logo/white.png"
             alt="Company Logo"
             width={50}
-            height={50}
+            height={48}
           />
           <Typography.Text type="success">
             You&apos;re signed in

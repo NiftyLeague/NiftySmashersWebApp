@@ -13,7 +13,8 @@
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: rgba(98, 14, 223, 0.75);
+  /* background-color: rgba(98, 14, 223, 0.2); */
+  background-color: rgba(0, 0, 0, 0.25);
 }
 
 .logo_container {
@@ -137,13 +138,17 @@
 .wordmark {
   margin-bottom: 20px;
   max-width: 98vw;
+  width: 475px;
   height: auto;
+  margin-bottom: auto;
+  margin-top: 65px;
 }
 
 .buttons {
   width: 400px;
   display: flex;
   justify-content: space-evenly;
+  margin-bottom: 60px;
 }
 
 .buttons button {
@@ -154,9 +159,10 @@
   padding: 12px 20px;
   border-radius: 100px;
   transition: all 0.3s ease-in-out;
-  font-family: 'Press Start 2P', sans-serif;
-  font-size: 16px;
+  font-family: 'Lilita One', 'Press Start 2P', sans-serif;
+  font-size: 20px;
   cursor: pointer;
+  text-transform: uppercase;
 }
 
 .buttons button:hover {
@@ -202,13 +208,13 @@
   cursor: pointer;
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 576px) {
   .navbar {
     display: none;
   }
 
   .buttons button {
-    font-size: 12px;
+    font-size: 16px;
   }
 
   .modal_content {

@@ -1,38 +1,74 @@
 import Head from 'next/head';
 import Image from 'next/image';
+import Script from 'next/script';
+import styles from '@/styles/smashers.module.css';
+import cn from 'classnames';
 
 export default function Home() {
   return (
     <>
       <Head>
         <title>Nifty Smashers</title>
-        <meta
-          name="description"
-          content="Mobile and PC friendly brawler game"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <div className="container">
+      <Script
+        id="modal-handler"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            const trailerBtn = document.getElementById("trailer-btn");
+            const playBtn = document.getElementById("play-btn");
+            const modal = document.getElementById("modal");
+            const modalIframe = document.getElementById("modal-iframe");
+            const closeBtn = document.getElementById("close-icon");
+          
+            function openModal(src) {
+              modalIframe.src = src;
+              modal.classList.remove("hidden");
+            }
+          
+            function closeModal() {
+              modalIframe.src = "";
+              modal.classList.add("hidden");
+            }
+          
+            trailerBtn.addEventListener("click", () => {
+              openModal("https://www.youtube.com/embed/CroLiLm4cto");
+            });
+          
+            playBtn.addEventListener("click", () => {
+              openModal("your_unity_webgl_url");
+            });
+          
+            modal.addEventListener("click", (e) => {
+              if (e.target === modal) closeModal();
+            });
+
+            closeBtn.addEventListener("click", (e) => {
+              closeModal();
+            });         
+        `,
+        }}
+      />
+      <main className={styles.main}>
+        <div className={styles.container}>
           <a href="https://niftyleague.com" target="_blank" rel="noreferrer">
-            <div className="logo-container">
+            <div className={styles.logo_container}>
               <Image
                 src="/logo/white.png"
                 alt="Company Logo"
-                className="logo"
+                className={styles.logo}
                 width={50}
                 height={50}
               />
             </div>
           </a>
-          <nav className="navbar">
-            <div className="navbar-inner">
+          <nav className={styles.navbar}>
+            <div className={styles.navbar_inner}>
               <a
                 href="https://discord.gg/niftyleague"
                 target="_blank"
                 rel="noreferrer"
-                className="nav-item"
+                className={styles.nav_item}
               >
                 <Image
                   src="/icons/discord.svg"
@@ -45,7 +81,7 @@ export default function Home() {
                 href="https://twitter.com/NiftyLeague"
                 target="_blank"
                 rel="noreferrer"
-                className="nav-item"
+                className={styles.nav_item}
               >
                 <Image
                   src="/icons/twitter.svg"
@@ -58,7 +94,7 @@ export default function Home() {
                 href="https://www.twitch.tv/niftyleagueofficial"
                 target="_blank"
                 rel="noreferrer"
-                className="nav-item"
+                className={styles.nav_item}
               >
                 <Image
                   src="/icons/twitch.svg"
@@ -71,7 +107,7 @@ export default function Home() {
                 href="https://opensea.io/collection/niftydegen"
                 target="_blank"
                 rel="noreferrer"
-                className="nav-item"
+                className={styles.nav_item}
               >
                 <Image
                   src="/icons/opensea.svg"
@@ -81,12 +117,12 @@ export default function Home() {
                 />
               </a>
             </div>
-            <a href="/dashboard">
-              <div className="nav-item dashboard">
-                <div className="dashboard-icon">
+            <a href="/profile">
+              <div className={cn(styles.nav_item, styles.profile)}>
+                <div className={styles.profile_icon}>
                   <Image
                     src="/icons/user.svg"
-                    alt="Dashboard Icon"
+                    alt="Profile Icon"
                     width={22}
                     height={22}
                   />
@@ -94,15 +130,15 @@ export default function Home() {
               </div>
             </a>
           </nav>
-          <div className="content">
+          <div className={styles.content}>
             <Image
               src="/logo/wordmark_logo.png"
               alt="Wordmark Logo"
-              className="wordmark"
+              className={styles.wordmark}
               width={704}
               height={292}
             />
-            <div className="buttons">
+            <div className={styles.buttons}>
               <button id="trailer-btn">
                 <Image
                   src="/icons/youtube.svg"
@@ -124,11 +160,18 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div id="modal" className="modal hidden">
-          <div className="modal-content">
-            <iframe id="modal-iframe" src="" frameBorder="0"></iframe>
+        <div id="modal" className={cn(styles.modal, 'hidden')}>
+          <div className={styles.modal_content}>
+            <iframe
+              id="modal-iframe"
+              className={styles.modal_iframe}
+              src=""
+              frameBorder="0"
+            ></iframe>
           </div>
-          <div className="close-icon">&times;</div>
+          <div id="close-icon" className={styles.close_icon}>
+            &times;
+          </div>
         </div>
       </main>
     </>

@@ -1,18 +1,10 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
+.main {
   background-image: url('/assets/background.gif');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
-  position: relative;
 }
 
 .container {
@@ -24,7 +16,7 @@ body {
   background-color: rgba(98, 14, 223, 0.75);
 }
 
-.logo-container {
+.logo_container {
   position: absolute;
   background: url(/assets/corner.svg) 100% 100% no-repeat;
   width: 145px;
@@ -62,24 +54,24 @@ body {
   transform: perspective(50em) rotateX(60deg);
 }
 
-.navbar-inner {
+.navbar_inner {
   display: flex;
   white-space: nowrap;
   margin-right: 95px;
 }
 
-.nav-item {
+.nav_item {
   display: flex;
   align-items: center;
   position: relative;
   margin-left: 44px;
 }
 
-.navbar-inner .nav-item:first-child {
+.navbar_inner .nav_item:first-child {
   margin-left: -2px;
 }
 
-.navbar-inner .nav-item::after {
+.navbar_inner .nav_item::after {
   content: '';
   position: absolute;
   right: -22px;
@@ -90,22 +82,22 @@ body {
   transform: skew(-20deg);
 }
 
-.navbar-inner .nav-item:last-child::after {
+.navbar_inner .nav_item:last-child::after {
   display: none;
 }
 
-.nav-item img {
+.nav_item img {
   height: 22px;
   width: 22px;
 }
 
-.nav-item img:hover,
-.logo-container img:hover {
+.nav_item img:hover,
+.logo_container img:hover {
   transform: translateY(-4px);
   transition: transform 0.2s;
 }
 
-.dashboard {
+.profile {
   background-color: transparent;
   padding: 20px;
   position: fixed;
@@ -115,7 +107,7 @@ body {
   white-space: nowrap;
 }
 
-.dashboard::before {
+.profile::before {
   content: '';
   position: absolute;
   left: 0;
@@ -126,7 +118,7 @@ body {
   transform: skew(-20deg);
 }
 
-.dashboard-icon {
+.profile_icon {
   display: flex;
   align-items: center;
   margin-left: 16px;
@@ -190,21 +182,18 @@ body {
   z-index: 999;
 }
 
-.hidden {
-  display: none;
-}
-
-.modal-content {
+.modal_content {
   position: relative;
+  background-color: white;
   border: 5px solid white;
 }
 
-#modal-iframe {
+.modal_iframe {
   width: 80vw;
   height: 80vh;
 }
 
-.close-icon {
+.close_icon {
   position: absolute;
   top: 5px;
   right: 10px;
@@ -222,7 +211,7 @@ body {
     font-size: 12px;
   }
 
-  .modal-content {
+  .modal_content {
     width: 95%;
     height: 50%;
   }

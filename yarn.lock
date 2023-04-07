@@ -175,6 +175,32 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.2.0.tgz#8be36a1f66f3265389e90b5f9c9962146758f728"
   integrity sha512-sXo/qW2/pAcmT43VoRKOJbDOfV3cYpq3szSVfIThQXNt+E4DfKj361vaAt3c88U5tPUxzEswam7GW48PJqtKAg==
 
+"@stitches/core@^1.2.8":
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/@stitches/core/-/core-1.2.8.tgz#dce3b8fdc764fbc6dbea30c83b73bfb52cf96173"
+  integrity sha512-Gfkvwk9o9kE9r9XNBmJRfV8zONvXThnm1tcuojL04Uy5uRyqg93DC83lDebl0rocZCfKSjUv+fWYtMQmEDJldg==
+
+"@supabase/auth-helpers-react@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@supabase/auth-helpers-react/-/auth-helpers-react-0.3.1.tgz#815493a294662c56b83c7dd51692dacd24329342"
+  integrity sha512-g3SFv08Dz9FapNif/ZY1b7qKGlMJDyTLSayHBz3kb3FuYxg7aLWgQtydDhm5AGbc0XtvpIBuhGTIOVevwpdosA==
+
+"@supabase/auth-ui-react@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@supabase/auth-ui-react/-/auth-ui-react-0.3.5.tgz#cef9b671d15e917bcc22c52827d03acc9d73b502"
+  integrity sha512-3X9rlLwQliRZ386qFjsCdHvMYQIzAByXT4uWcHssFIX4s0ymwkIH49UJDb6vtpswDV4z9ZOxF0igPZyEyZT32w==
+  dependencies:
+    "@stitches/core" "^1.2.8"
+    "@supabase/auth-ui-shared" "0.1.3"
+    prop-types "^15.7.2"
+    react "^18.2.0"
+    react-dom "^18.2.0"
+
+"@supabase/auth-ui-shared@0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@supabase/auth-ui-shared/-/auth-ui-shared-0.1.3.tgz#0d903e21fc3012b216e0dc1b64bf92cb5d0b76d2"
+  integrity sha512-GoyW+3EiDcy+sQdmdkezx9fpsRSogHJwTdzxgf79PjyLbpyAKCnTVhOB02tiMHZ0uIZ+afAQ8CmNEwwxwHVnJw==
+
 "@supabase/functions-js@^1.3.4":
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/@supabase/functions-js/-/functions-js-1.3.4.tgz#44f86f7cf949baa7f1bb414f3b8c0985a19df633"
@@ -243,6 +269,11 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
+
+"@types/lodash@^4.14.192":
+  version "4.14.192"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.192.tgz#5790406361a2852d332d41635d927f1600811285"
+  integrity sha512-km+Vyn3BYm5ytMO13k9KTp27O75rbQ0NFw+U//g+PX7VZyjCioXaRFisqSIJRECljcTv73G3i6BpglNGHgUQ5A==
 
 "@types/node@18.15.3":
   version "18.15.3"
@@ -1554,7 +1585,7 @@ lodash.merge@^4.6.2:
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
-lodash@^4.17.20:
+lodash@^4.17.20, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -1850,7 +1881,7 @@ queue-microtask@^1.2.2:
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
-react-dom@18.2.0:
+react-dom@18.2.0, react-dom@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
   integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
@@ -1863,7 +1894,7 @@ react-is@^16.13.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react@18.2.0:
+react@18.2.0, react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==

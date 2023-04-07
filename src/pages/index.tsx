@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import Image from 'next/image';
 import Script from 'next/script';
 import styles from '@/styles/smashers.module.css';
@@ -117,7 +118,7 @@ export default function Home() {
                 />
               </a>
             </div>
-            <a href="/profile">
+            <Link href="/profile">
               <div className={cn(styles.nav_item, styles.profile)}>
                 <div className={styles.profile_icon}>
                   <Image
@@ -128,7 +129,7 @@ export default function Home() {
                   />
                 </div>
               </div>
-            </a>
+            </Link>
           </nav>
           <div className={styles.content}>
             <Image

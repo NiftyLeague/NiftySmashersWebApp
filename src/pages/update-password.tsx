@@ -1,24 +1,28 @@
 import { Auth, Card, Space } from '@supabase/ui';
 import { supabase } from '@/utils/initSupabase';
+import BackButton from '@/components/BackButton';
 
 const UpdatePassword = ({ user }: any) => {
   return (
-    <div
-      style={{
-        display: 'flex',
-        maxWidth: '420px',
-        height: '100vh',
-        margin: 'auto',
-      }}
-    >
-      {user && (
-        <Card style={{ margin: 'auto', textAlign: 'center' }}>
-          <Space direction="vertical" size={6}>
-            <Auth.UpdatePassword supabaseClient={supabase} />
-          </Space>
-        </Card>
-      )}
-    </div>
+    <>
+      <BackButton />
+      <div
+        style={{
+          display: 'flex',
+          maxWidth: '420px',
+          height: '100vh',
+          margin: 'auto',
+        }}
+      >
+        {user && (
+          <Card style={{ margin: 'auto', textAlign: 'center' }}>
+            <Space direction="vertical" size={6}>
+              <Auth.UpdatePassword supabaseClient={supabase} />
+            </Space>
+          </Card>
+        )}
+      </div>
+    </>
   );
 };
 

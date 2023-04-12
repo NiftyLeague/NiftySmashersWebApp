@@ -46,6 +46,7 @@ const Login = () => {
                 view="sign_in"
                 socialLayout="horizontal"
                 socialButtonSize="xlarge"
+                redirectTo="/profile"
               />
             </Space>
           </Card>

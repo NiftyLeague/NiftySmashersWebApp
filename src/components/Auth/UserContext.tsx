@@ -19,6 +19,8 @@ type AccountResult = PlayFabClientModels.GetAccountInfoResult;
 type Currencies = { [key: string]: number };
 type Inventory = PlayFabClientModels.ItemInstance[];
 type PlayerResult = PlayFabClientModels.GetPlayerCombinedInfoResult;
+type PublisherDataResult = PlayFabClientModels.GetUserDataResult;
+type PublisherData = { [key: string]: PlayFabClientModels.UserDataRecord };
 type Profile = PlayFabClientModels.PlayerProfileModel;
 type Stats = PlayFabClientModels.StatisticValue[];
 
@@ -29,6 +31,7 @@ export interface AuthSession {
   isLoggedIn: boolean;
   playFabId?: string;
   profile?: Profile;
+  publisherData?: PublisherData;
   stats?: Stats;
 }
 
@@ -39,6 +42,7 @@ const UserContext = createContext<AuthSession>({
   isLoggedIn: false,
   playFabId: undefined,
   profile: undefined,
+  publisherData: undefined,
   stats: [],
 });
 
@@ -80,31 +84,70 @@ const GenerateCustomIDAsync = async (
   });
 };
 
+const ProfileConstraints = {
+  ShowAvatarUrl: true,
+  // ShowBannedUntil: true,
+  // ShowCampaignAttributions: true,
+  // ShowContactEmailAddresses: true,
+  // ShowCreated: true,
+  ShowDisplayName: true,
+  // ShowExperimentVariants: true,
+  // ShowLastLogin: true,
+  // ShowLinkedAccounts: true,
+  // ShowLocations: true,
+  // ShowMemberships: true,
+  // ShowOrigination: true,
+  // ShowPushNotificationRegistrations: true,
+  // ShowStatistics: true,
+  // ShowTags: true,
+  // ShowTotalValueToDateInUsd: true,
+  // ShowValuesToDate: true,
+} as PlayFabClientModels.PlayerProfileViewConstraints;
+
+const InfoRequestParameters = {
+  GetUserAccountInfo: true,
+  GetPlayerProfile: true,
+  ProfileConstraints,
+  GetPlayerStatistics: true,
+  // PlayerStatisticNames: [],
+  GetUserInventory: true,
+  GetUserVirtualCurrency: true,
+  GetCharacterInventories: false,
+  GetCharacterList: false,
+  GetTitleData: false,
+  GetUserData: false,
+  // UserDataKeys: ['DisplayName', 'LinkedWallets'],
+  GetUserReadOnlyData: false,
+  // UserReadOnlyDataKeys: []
+} as PlayFabClientModels.GetPlayerCombinedInfoRequestParams;
+
 const GetPlayerCombinedInfoAsync = async (
   playFabClient: typeof PlayFabClient
 ): Promise<PlayerResult | null> => {
   return new Promise((resolve, reject) => {
-    const request = {
-      InfoRequestParameters: {
-        GetCharacterInventories: false,
-        GetCharacterList: false,
-        GetPlayerProfile: true,
-        GetPlayerStatistics: true,
-        GetTitleData: false,
-        GetUserAccountInfo: true,
-        GetUserData: false,
-        GetUserInventory: true,
-        GetUserPublisherData: false,
-        GetUserReadOnlyData: false,
-        GetUserTitleData: false,
-        GetUserVirtualCurrency: true,
-      },
-    };
     playFabClient.GetPlayerCombinedInfo(
-      request as unknown as PlayFabClientModels.GetPlayerCombinedInfoRequest,
+      { InfoRequestParameters },
       function (error, result) {
         if (error) {
           console.error('GetPlayerCombinedInfo Error:', error.errorMessage);
+          reject(error);
+        } else {
+          resolve(result.data);
+        }
+      }
+    );
+  });
+};
+
+const GetUserPublisherDataAsync = async (
+  playFabClient: typeof PlayFabClient
+): Promise<PublisherDataResult | null> => {
+  return new Promise((resolve, reject) => {
+    playFabClient.GetUserPublisherData(
+      { Keys: ['DisplayName', 'LinkedWallets'] },
+      function (error, result) {
+        if (error) {
+          console.error('GetUserPublisherData Error:', error.errorMessage);
           reject(error);
         } else {
           resolve(result.data);
@@ -118,12 +161,16 @@ export const UserContextProvider = (props: Props) => {
   const { playFabClient } = props;
   const [init, setInit] = useState(false);
   const [player, setPlayer] = useState<PlayerResult | null>(null);
+  const [publisherData, setPublisherData] =
+    useState<PublisherDataResult | null>(null);
   const isLoggedIn = playFabClient?.IsClientLoggedIn();
   const { customId, persistLogin } = getUserAuth();
 
   const handlePlayerCombinedInfo = useCallback(async () => {
     const player = await GetPlayerCombinedInfoAsync(playFabClient);
     if (player) {
+      const publisherData = await GetUserPublisherDataAsync(playFabClient);
+      setPublisherData(publisherData);
       setPlayer(player);
       setInit(true);
     }
@@ -189,9 +236,13 @@ export const UserContextProvider = (props: Props) => {
       playFabId: PlayFabId,
       profile: InfoResultPayload?.PlayerProfile,
       stats: InfoResultPayload?.PlayerStatistics,
+      publisherData: publisherData?.Data,
     }),
-    [InfoResultPayload, isLoggedIn, PlayFabId]
+    [InfoResultPayload, isLoggedIn, PlayFabId, publisherData]
   );
+  console.log('UserContextProvider.player', player);
+  console.log('UserContextProvider.account', value.account);
+  console.log('UserContextProvider.publisherData', value.publisherData);
 
   return <UserContext.Provider value={value} {...props} />;
 };

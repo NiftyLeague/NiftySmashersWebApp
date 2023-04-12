@@ -110,6 +110,7 @@ export const UserContextProvider = (props: Props) => {
     if (isLoggedIn) {
       void handleAccountInfo();
     } else if (customId && persistLogin) {
+      // console.log('logged in', playFabClient.IsClientLoggedIn());
       void handleAnonLogin(customId);
     } else {
       setSession(null);

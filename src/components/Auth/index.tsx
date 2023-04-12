@@ -23,7 +23,6 @@ const VIEWS: ViewsMap = {
   SIGN_IN: 'sign_in',
   SIGN_UP: 'sign_up',
   FORGOTTEN_PASSWORD: 'forgotten_password',
-  MAGIC_LINK: 'magic_link',
   UPDATE_PASSWORD: 'update_password',
 };
 
@@ -35,7 +34,6 @@ type ViewType =
   | 'sign_in'
   | 'sign_up'
   | 'forgotten_password'
-  | 'magic_link'
   | 'update_password';
 
 type RedirectTo = undefined | string;
@@ -53,7 +51,6 @@ export interface Props {
   view?: ViewType;
   redirectTo?: RedirectTo;
   onlyThirdPartyProviders?: boolean;
-  magicLink?: boolean;
 }
 
 function Auth({
@@ -67,7 +64,6 @@ function Auth({
   view = 'sign_in',
   redirectTo,
   onlyThirdPartyProviders = false,
-  magicLink = false,
 }: Props): JSX.Element | null {
   const [authView, setAuthView] = useState(view);
   const [defaultEmail, setDefaultEmail] = useState('');
@@ -92,7 +88,6 @@ function Auth({
           socialColors={socialColors}
           redirectTo={redirectTo}
           onlyThirdPartyProviders={onlyThirdPartyProviders}
-          magicLink={magicLink}
         />
         {!onlyThirdPartyProviders && props.children}
       </Space>
@@ -119,7 +114,6 @@ function Auth({
             setDefaultEmail={setDefaultEmail}
             setDefaultPassword={setDefaultPassword}
             redirectTo={redirectTo}
-            magicLink={magicLink}
           />
         </Container>
       );
@@ -127,17 +121,6 @@ function Auth({
       return (
         <Container>
           <ForgottenPassword
-            playFabClient={playFabClient}
-            setAuthView={setAuthView}
-            redirectTo={redirectTo}
-          />
-        </Container>
-      );
-
-    case VIEWS.MAGIC_LINK:
-      return (
-        <Container>
-          <MagicLink
             playFabClient={playFabClient}
             setAuthView={setAuthView}
             redirectTo={redirectTo}
@@ -169,7 +152,6 @@ function SocialAuth({
   verticalSocialLayout,
   redirectTo,
   onlyThirdPartyProviders,
-  magicLink,
   ...props
 }: Props) {
   const buttonStyles: any = {
@@ -281,8 +263,7 @@ function EmailAuth({
   setDefaultEmail,
   setDefaultPassword,
   playFabClient,
-  redirectTo = '/',
-  magicLink,
+  redirectTo,
 }: {
   authView: ViewType;
   defaultEmail: string;
@@ -293,7 +274,6 @@ function EmailAuth({
   setDefaultPassword: (password: string) => void;
   playFabClient: typeof PlayFabClient;
   redirectTo: RedirectTo;
-  magicLink?: boolean;
 }) {
   const router = useRouter();
   const isMounted = useRef<boolean>(true);
@@ -332,7 +312,7 @@ function EmailAuth({
               setLoading(false);
             } else {
               setUserAuth(loginResult.data, rememberMe);
-              router.push(redirectTo);
+              if (redirectTo) router.push(redirectTo);
             }
           }
         );
@@ -349,9 +329,8 @@ function EmailAuth({
             if (error) {
               setError(error.errorMessage);
             } else {
-              console.log(registerResult);
               setUserAuth(registerResult.data, rememberMe);
-              router.push(redirectTo);
+              if (redirectTo) router.push(redirectTo);
             }
           }
         );
@@ -429,17 +408,6 @@ function EmailAuth({
           </Button>
         </Space>
         <Space direction="vertical" style={{ textAlign: 'center' }}>
-          {authView === VIEWS.SIGN_IN && magicLink && (
-            <Typography.Link
-              href="#auth-magic-link"
-              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                e.preventDefault();
-                setAuthView(VIEWS.MAGIC_LINK);
-              }}
-            >
-              Sign in with magic link
-            </Typography.Link>
-          )}
           {authView === VIEWS.SIGN_IN ? (
             <Typography.Link
               href="#auth-sign-up"
@@ -464,72 +432,6 @@ function EmailAuth({
           {message && <Typography.Text>{message}</Typography.Text>}
           {error && <Typography.Text type="danger">{error}</Typography.Text>}
         </Space>
-      </Space>
-    </form>
-  );
-}
-
-function MagicLink({
-  setAuthView,
-  playFabClient,
-  redirectTo,
-}: {
-  setAuthView: any;
-  playFabClient: typeof PlayFabClient;
-  redirectTo?: RedirectTo;
-}) {
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const handleMagicLinkSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError('');
-    setMessage('');
-    setLoading(true);
-    // const { error } = await supabaseClient.auth.signIn(
-    //   { email },
-    //   { redirectTo }
-    // );
-    // if (error) setError(error.message);
-    // else setMessage('Check your email for the magic link');
-    setLoading(false);
-  };
-
-  return (
-    <form id="auth-magic-link" onSubmit={handleMagicLinkSignIn}>
-      <Space size={4} direction={'vertical'}>
-        <Space size={3} direction={'vertical'}>
-          <Input
-            label="Email address"
-            placeholder="Your email address"
-            icon={<IconMail size={21} stroke={'#666666'} />}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setEmail(e.target.value)
-            }
-          />
-          <Button
-            block
-            size="large"
-            htmlType="submit"
-            icon={<IconInbox size={21} />}
-            loading={loading}
-          >
-            Send magic link
-          </Button>
-        </Space>
-        <Typography.Link
-          href="#auth-sign-in"
-          onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-            e.preventDefault();
-            setAuthView(VIEWS.SIGN_IN);
-          }}
-        >
-          Sign in with password
-        </Typography.Link>
-        {message && <Typography.Text>{message}</Typography.Text>}
-        {error && <Typography.Text type="danger">{error}</Typography.Text>}
       </Space>
     </form>
   );
@@ -675,7 +577,6 @@ function UpdatePassword({
 
 Auth.ForgottenPassword = ForgottenPassword;
 Auth.UpdatePassword = UpdatePassword;
-Auth.MagicLink = MagicLink;
 Auth.UserContextProvider = UserContextProvider;
 Auth.useUser = useUser;
 

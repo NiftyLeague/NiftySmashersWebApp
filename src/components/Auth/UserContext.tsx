@@ -118,7 +118,7 @@ export const UserContextProvider = (props: Props) => {
   const { playFabClient } = props;
   const [init, setInit] = useState(false);
   const [player, setPlayer] = useState<PlayerResult | null>(null);
-  const isLoggedIn = playFabClient.IsClientLoggedIn();
+  const isLoggedIn = playFabClient?.IsClientLoggedIn();
   const { customId, persistLogin } = getUserAuth();
 
   const handlePlayerCombinedInfo = useCallback(async () => {

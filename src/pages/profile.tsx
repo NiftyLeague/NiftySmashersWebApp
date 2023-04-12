@@ -12,16 +12,21 @@ import {
   Space,
   Typography,
 } from '@supabase/ui';
-import { supabase } from '@/utils/initSupabase';
 import Auth from '@/components/Auth';
 import Avatar from '@/components/Avatar';
 import BackButton from '@/components/BackButton';
 
 import { playfab } from '@/utils/initPlayfab';
 import { Database } from '@/utils/database.types';
+import { clearCustomID } from '@/utils/authStorage';
 type Profiles = Database['public']['Tables']['profiles']['Row'];
 
 import styles from '@/styles/profile.module.css';
+
+function logout() {
+  playfab.ForgetAllCredentials();
+  clearCustomID();
+}
 
 export default function Profile() {
   const router = useRouter();
@@ -87,94 +92,101 @@ export default function Profile() {
           margin: 'auto',
         }}
       >
-        <Card className={styles.profileCard}>
-          <div className={styles.profileCardHeader}>
-            <Image
-              src="/logo/white.png"
-              alt="Company Logo"
-              width={50}
-              height={48}
-            />
-            <Typography.Text type="success">
-              You&apos;re signed in
-            </Typography.Text>
-          </div>
-          <Space direction="vertical" size={6} className={styles.userInfo}>
-            <div>
-              {uid ? (
-                <Avatar
-                  uid={uid}
-                  url={avatar_url}
-                  size={150}
-                  onUpload={url => {
-                    setAvatarUrl(url);
-                    updateProfile({ username, avatar_url: url });
-                  }}
-                />
-              ) : null}
-              <div>
-                <label htmlFor="email">Email</label>
-                <input id="email" type="text" value={email || ''} disabled />
-              </div>
-              <div>
-                <label htmlFor="name">Name</label>
-                <input id="name" type="text" value={full_name || ''} disabled />
-              </div>
-              <div>
-                <label htmlFor="username">Username</label>
-                <input
-                  id="username"
-                  type="text"
-                  value={username || ''}
-                  onChange={e => setUsername(e.target.value)}
-                />
-              </div>
-
-              <div style={{ marginTop: 16, marginBottom: 16 }}>
-                <button
-                  className={cn(styles.button, styles.primary, 'block')}
-                  disabled={loading}
-                  onClick={() => updateProfile({ username, avatar_url })}
-                >
-                  {loading ? (
-                    <>
-                      <IconLoader /> Loading ...
-                    </>
-                  ) : (
-                    <>
-                      <IconSave /> Save Updates
-                    </>
-                  )}
-                </button>
-              </div>
-
-              <div>
-                <button
-                  className={cn(styles.button, 'block')}
-                  disabled={loading}
-                  onClick={() => router.push('/update-password')}
-                >
-                  <IconLock />
-                  Update Password
-                </button>
-              </div>
-
-              <div>
-                <button
-                  className={cn(styles.button, 'block')}
-                  disabled={loading}
-                  onClick={() => {
-                    supabase.auth.signOut();
-                    setTimeout(() => router.push('/login'), 1000);
-                  }}
-                >
-                  <IconLogOut />
-                  Sign Out
-                </button>
-              </div>
+        {isLoggedIn && (
+          <Card className={styles.profileCard}>
+            <div className={styles.profileCardHeader}>
+              <Image
+                src="/logo/white.png"
+                alt="Company Logo"
+                width={50}
+                height={48}
+              />
+              <Typography.Text type="success">
+                You&apos;re signed in
+              </Typography.Text>
             </div>
-          </Space>
-        </Card>
+            <Space direction="vertical" size={6} className={styles.userInfo}>
+              <div>
+                {uid ? (
+                  <Avatar
+                    uid={uid}
+                    url={avatar_url}
+                    size={150}
+                    onUpload={url => {
+                      setAvatarUrl(url);
+                      updateProfile({ username, avatar_url: url });
+                    }}
+                  />
+                ) : null}
+                <div>
+                  <label htmlFor="email">Email</label>
+                  <input id="email" type="text" value={email || ''} disabled />
+                </div>
+                <div>
+                  <label htmlFor="name">Name</label>
+                  <input
+                    id="name"
+                    type="text"
+                    value={full_name || ''}
+                    disabled
+                  />
+                </div>
+                <div>
+                  <label htmlFor="username">Username</label>
+                  <input
+                    id="username"
+                    type="text"
+                    value={username || ''}
+                    onChange={e => setUsername(e.target.value)}
+                  />
+                </div>
+
+                <div style={{ marginTop: 16, marginBottom: 16 }}>
+                  <button
+                    className={cn(styles.button, styles.primary, 'block')}
+                    disabled={loading}
+                    onClick={() => updateProfile({ username, avatar_url })}
+                  >
+                    {loading ? (
+                      <>
+                        <IconLoader /> Loading ...
+                      </>
+                    ) : (
+                      <>
+                        <IconSave /> Save Updates
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <div>
+                  <button
+                    className={cn(styles.button, 'block')}
+                    disabled={loading}
+                    onClick={() => router.push('/update-password')}
+                  >
+                    <IconLock />
+                    Update Password
+                  </button>
+                </div>
+
+                <div>
+                  <button
+                    className={cn(styles.button, 'block')}
+                    disabled={loading}
+                    onClick={() => {
+                      logout();
+                      setTimeout(() => router.push('/login'), 1000);
+                    }}
+                  >
+                    <IconLogOut />
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            </Space>
+          </Card>
+        )}
       </div>
     </>
   );

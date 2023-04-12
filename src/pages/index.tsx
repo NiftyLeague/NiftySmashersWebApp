@@ -9,8 +9,9 @@ export default function Home() {
     <>
       <Head>
         <title>Nifty Smashers</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main className={styles.main}>
+      <section className={styles.main}>
         <div className={styles.container}>
           <Navbar />
           <div className={styles.content}>
@@ -44,7 +45,7 @@ export default function Home() {
           </div>
         </div>
         <Modal />
-      </main>
+      </section>
     </>
   );
 }

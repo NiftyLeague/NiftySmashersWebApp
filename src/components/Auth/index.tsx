@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SupabaseClient, Provider } from '@supabase/supabase-js';
+import { Provider } from '@supabase/supabase-js';
+import { PlayFabClient } from 'playfab-sdk';
+import { useRouter } from 'next/router';
 import {
   Input,
   Checkbox,
@@ -14,7 +16,7 @@ import {
 } from '@supabase/ui';
 import { UserContextProvider, useUser } from './UserContext';
 import * as SocialIcons from './Icons';
-// @ts-ignore
+import { setUserAuth } from '@/utils/authStorage';
 import AuthStyles from '@/styles/auth.module.css';
 
 const VIEWS: ViewsMap = {
@@ -39,7 +41,7 @@ type ViewType =
 type RedirectTo = undefined | string;
 
 export interface Props {
-  supabaseClient: SupabaseClient;
+  playFabClient: typeof PlayFabClient;
   className?: string;
   children?: React.ReactNode;
   style?: React.CSSProperties;
@@ -55,7 +57,7 @@ export interface Props {
 }
 
 function Auth({
-  supabaseClient,
+  playFabClient,
   className,
   style,
   socialLayout = 'vertical',
@@ -82,7 +84,7 @@ function Auth({
     <div className={containerClasses.join(' ')} style={style}>
       <Space size={8} direction={'vertical'}>
         <SocialAuth
-          supabaseClient={supabaseClient}
+          playFabClient={playFabClient}
           verticalSocialLayout={verticalSocialLayout}
           providers={providers}
           socialLayout={socialLayout}
@@ -109,7 +111,7 @@ function Auth({
         <Container>
           <EmailAuth
             id={authView === VIEWS.SIGN_UP ? 'auth-sign-up' : 'auth-sign-in'}
-            supabaseClient={supabaseClient}
+            playFabClient={playFabClient}
             authView={authView}
             setAuthView={setAuthView}
             defaultEmail={defaultEmail}
@@ -125,7 +127,7 @@ function Auth({
       return (
         <Container>
           <ForgottenPassword
-            supabaseClient={supabaseClient}
+            playFabClient={playFabClient}
             setAuthView={setAuthView}
             redirectTo={redirectTo}
           />
@@ -136,7 +138,7 @@ function Auth({
       return (
         <Container>
           <MagicLink
-            supabaseClient={supabaseClient}
+            playFabClient={playFabClient}
             setAuthView={setAuthView}
             redirectTo={redirectTo}
           />
@@ -146,7 +148,7 @@ function Auth({
     case VIEWS.UPDATE_PASSWORD:
       return (
         <Container>
-          <UpdatePassword supabaseClient={supabaseClient} />
+          <UpdatePassword playFabClient={playFabClient} />
         </Container>
       );
 
@@ -158,7 +160,7 @@ function Auth({
 function SocialAuth({
   className,
   style,
-  supabaseClient,
+  playFabClient,
   children,
   socialLayout = 'vertical',
   socialColors = false,
@@ -216,11 +218,12 @@ function SocialAuth({
 
   const handleProviderSignIn = async (provider: Provider) => {
     setLoading(true);
-    const { error } = await supabaseClient.auth.signIn(
-      { provider },
-      { redirectTo }
-    );
-    if (error) setError(error.message);
+    // TODO: handle provider login
+    // const { error } = await supabaseClient.auth.signIn(
+    //   { provider },
+    //   { redirectTo }
+    // );
+    // if (error) setError(error.message);
     setLoading(false);
   };
 
@@ -277,8 +280,8 @@ function EmailAuth({
   setAuthView,
   setDefaultEmail,
   setDefaultPassword,
-  supabaseClient,
-  redirectTo,
+  playFabClient,
+  redirectTo = '/',
   magicLink,
 }: {
   authView: ViewType;
@@ -288,10 +291,11 @@ function EmailAuth({
   setAuthView: any;
   setDefaultEmail: (email: string) => void;
   setDefaultPassword: (password: string) => void;
-  supabaseClient: SupabaseClient;
-  redirectTo?: RedirectTo;
+  playFabClient: typeof PlayFabClient;
+  redirectTo: RedirectTo;
   magicLink?: boolean;
 }) {
+  const router = useRouter();
   const isMounted = useRef<boolean>(true);
   const [email, setEmail] = useState(defaultEmail);
   const [password, setPassword] = useState(defaultPassword);
@@ -307,7 +311,7 @@ function EmailAuth({
     return () => {
       isMounted.current = false;
     };
-  }, [authView]);
+  }, [authView, defaultEmail, defaultPassword]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -315,31 +319,42 @@ function EmailAuth({
     setLoading(true);
     switch (authView) {
       case 'sign_in':
-        const { error: signInError } = await supabaseClient.auth.signIn(
-          {
-            email,
-            password,
-          },
-          { redirectTo }
+        const loginRequest = {
+          Email: email,
+          Password: password,
+          CreateAccount: false,
+        };
+        playFabClient.LoginWithEmailAddress(
+          loginRequest,
+          (error, loginResult) => {
+            if (error) {
+              setError(error.errorMessage);
+              setLoading(false);
+            } else {
+              setUserAuth(loginResult.data, rememberMe);
+              router.push(redirectTo);
+            }
+          }
         );
-        if (signInError) setError(signInError.message);
         break;
       case 'sign_up':
-        const {
-          user: signUpUser,
-          session: signUpSession,
-          error: signUpError,
-        } = await supabaseClient.auth.signUp(
-          {
-            email,
-            password,
-          },
-          { redirectTo }
+        const registerRequest = {
+          Email: email,
+          Password: password,
+          RequireBothUsernameAndEmail: false,
+        };
+        playFabClient.RegisterPlayFabUser(
+          registerRequest,
+          (error, registerResult) => {
+            if (error) {
+              setError(error.errorMessage);
+            } else {
+              console.log(registerResult);
+              setUserAuth(registerResult.data, rememberMe);
+              router.push(redirectTo);
+            }
+          }
         );
-        if (signUpError) setError(signUpError.message);
-        // Check if session is null -> email confirmation setting is turned on
-        else if (signUpUser && !signUpSession)
-          setMessage('Check your email for the confirmation link.');
         break;
     }
 
@@ -456,11 +471,11 @@ function EmailAuth({
 
 function MagicLink({
   setAuthView,
-  supabaseClient,
+  playFabClient,
   redirectTo,
 }: {
   setAuthView: any;
-  supabaseClient: SupabaseClient;
+  playFabClient: typeof PlayFabClient;
   redirectTo?: RedirectTo;
 }) {
   const [email, setEmail] = useState('');
@@ -473,12 +488,12 @@ function MagicLink({
     setError('');
     setMessage('');
     setLoading(true);
-    const { error } = await supabaseClient.auth.signIn(
-      { email },
-      { redirectTo }
-    );
-    if (error) setError(error.message);
-    else setMessage('Check your email for the magic link');
+    // const { error } = await supabaseClient.auth.signIn(
+    //   { email },
+    //   { redirectTo }
+    // );
+    // if (error) setError(error.message);
+    // else setMessage('Check your email for the magic link');
     setLoading(false);
   };
 
@@ -522,13 +537,14 @@ function MagicLink({
 
 function ForgottenPassword({
   setAuthView,
-  supabaseClient,
+  playFabClient,
   redirectTo,
 }: {
   setAuthView: any;
-  supabaseClient: SupabaseClient;
+  playFabClient: typeof PlayFabClient;
   redirectTo?: RedirectTo;
 }) {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
@@ -539,12 +555,32 @@ function ForgottenPassword({
     setError('');
     setMessage('');
     setLoading(true);
-    const { error } = await supabaseClient.auth.api.resetPasswordForEmail(
-      email,
-      { redirectTo }
+    const resetPasswordRequest = {
+      TitleId: playFabClient.settings.titleId,
+      Email: email,
+      // EmailTemplateId: "YOUR_EMAIL_TEMPLATE_ID",
+      // RecoveryEmail: "",
+      // Username: ""
+    };
+
+    playFabClient.SendAccountRecoveryEmail(
+      resetPasswordRequest,
+      (error, result) => {
+        if (error) {
+          setError(error.errorMessage);
+        } else {
+          console.log('SendAccountRecoveryEmail', result);
+          // if (redirectTo) router.push(redirectTo);
+          setMessage('Check your email for the password reset link');
+        }
+      }
     );
-    if (error) setError(error.message);
-    else setMessage('Check your email for the password reset link');
+    // const { error } = await supabaseClient.auth.api.resetPasswordForEmail(
+    //   email,
+    //   { redirectTo }
+    // );
+    // if (error) setError(error.message);
+    // else setMessage('Check your email for the password reset link');
     setLoading(false);
   };
 
@@ -587,9 +623,9 @@ function ForgottenPassword({
 }
 
 function UpdatePassword({
-  supabaseClient,
+  playFabClient,
 }: {
-  supabaseClient: SupabaseClient;
+  playFabClient: typeof PlayFabClient;
 }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -601,9 +637,9 @@ function UpdatePassword({
     setError('');
     setMessage('');
     setLoading(true);
-    const { error } = await supabaseClient.auth.update({ password });
-    if (error) setError(error.message);
-    else setMessage('Your password has been updated');
+    // const { error } = await supabaseClient.auth.update({ password });
+    // if (error) setError(error.message);
+    // else setMessage('Your password has been updated');
     setLoading(false);
   };
 

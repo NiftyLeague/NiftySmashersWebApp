@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import cn from 'classnames';
-import { Database } from '../utils/database.types';
+import { IconUpload } from '@supabase/ui';
+import { Database } from '@/utils/database.types';
 type Profiles = Database['public']['Tables']['profiles']['Row'];
 
 import styles from '@/styles/profile.module.css';
@@ -66,7 +67,13 @@ export default function Avatar({
           className={cn(styles.button, styles.primary, 'block')}
           htmlFor="single"
         >
-          {uploading ? 'Uploading ...' : 'Upload'}
+          {uploading ? (
+            'Uploading ...'
+          ) : (
+            <>
+              <IconUpload /> Upload
+            </>
+          )}
         </label>
         <input
           style={{

@@ -1,18 +1,17 @@
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { Card, Typography, Space } from '@supabase/ui';
 import { playfab } from '@/utils/initPlayfab';
-import BackButton from '@/components/BackButton';
 import Auth from '@/components/Auth';
-import { useRouter } from 'next/router';
+import BackButton from '@/components/BackButton';
 
 const Login = () => {
   const router = useRouter();
-  // const { user } = Auth.useUser();
-  const isLoggedIn = playfab.IsClientLoggedIn();
+  const { isLoggedIn } = Auth.useUser();
 
   useEffect(() => {
-    if (isLoggedIn) router.push('/');
+    if (isLoggedIn) router.push('/profile');
   }, [isLoggedIn, router]);
 
   return (

@@ -12,18 +12,20 @@ import {
   Space,
   Typography,
 } from '@supabase/ui';
-import { User } from '@supabase/supabase-js';
 import { supabase } from '@/utils/initSupabase';
+import Auth from '@/components/Auth';
 import Avatar from '@/components/Avatar';
 import BackButton from '@/components/BackButton';
 
+import { playfab } from '@/utils/initPlayfab';
 import { Database } from '@/utils/database.types';
 type Profiles = Database['public']['Tables']['profiles']['Row'];
 
 import styles from '@/styles/profile.module.css';
 
-export default function Profile({ user }: { user: User }) {
+export default function Profile() {
   const router = useRouter();
+  const { account, isLoggedIn, playFabId: uid } = Auth.useUser();
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState<Profiles['email']>(null);
   const [username, setUsername] = useState<Profiles['username']>(null);
@@ -31,16 +33,19 @@ export default function Profile({ user }: { user: User }) {
   const [avatar_url, setAvatarUrl] = useState<Profiles['avatar_url']>(null);
 
   useEffect(() => {
-    console.log('Profile.user:', user);
-    if (user?.id && !isEmpty(user?.user_metadata)) {
-      const { user_metadata } = user;
-      setEmail(user_metadata.email);
-      setUsername(user_metadata.username);
-      setFullName(user_metadata.full_name);
-      setAvatarUrl(user_metadata.avatar_url);
+    if (!isLoggedIn) router.push('/login');
+  }, [isLoggedIn, router]);
+
+  useEffect(() => {
+    console.log('Profile.account:', account);
+    if (account && !isEmpty(account)) {
+      setEmail(account.PrivateInfo?.Email ?? null);
+      // setUsername(user_metadata.username);
+      // setFullName(user_metadata.full_name);
+      // setAvatarUrl(user_metadata.avatar_url);
       setLoading(false);
     }
-  }, [user]);
+  }, [account]);
 
   async function updateProfile({
     username,
@@ -51,17 +56,17 @@ export default function Profile({ user }: { user: User }) {
   }) {
     try {
       setLoading(true);
-      if (!user) throw new Error('No user');
+      // if (!user) throw new Error('No user');
 
-      const updates = {
-        id: user.id,
-        username,
-        avatar_url,
-        updated_at: new Date().toISOString(),
-      };
+      // const updates = {
+      //   id: user.id,
+      //   username,
+      //   avatar_url,
+      //   updated_at: new Date().toISOString(),
+      // };
 
-      let { error } = await supabase.from('profiles').upsert(updates);
-      if (error) throw error;
+      // let { error } = await supabase.from('profiles').upsert(updates);
+      // if (error) throw error;
       alert('Profile updated!');
     } catch (error) {
       alert('Error updating the data!');
@@ -96,15 +101,17 @@ export default function Profile({ user }: { user: User }) {
           </div>
           <Space direction="vertical" size={6} className={styles.userInfo}>
             <div>
-              <Avatar
-                uid={user.id}
-                url={avatar_url}
-                size={150}
-                onUpload={url => {
-                  setAvatarUrl(url);
-                  updateProfile({ username, avatar_url: url });
-                }}
-              />
+              {uid ? (
+                <Avatar
+                  uid={uid}
+                  url={avatar_url}
+                  size={150}
+                  onUpload={url => {
+                    setAvatarUrl(url);
+                    updateProfile({ username, avatar_url: url });
+                  }}
+                />
+              ) : null}
               <div>
                 <label htmlFor="email">Email</label>
                 <input id="email" type="text" value={email || ''} disabled />
@@ -171,16 +178,4 @@ export default function Profile({ user }: { user: User }) {
       </div>
     </>
   );
-}
-
-export async function getServerSideProps({ req }: { req: Request }) {
-  const { user } = await supabase.auth.api.getUserByCookie(req);
-
-  if (!user) {
-    // If no user, redirect to login.
-    return { props: {}, redirect: { destination: '/login', permanent: false } };
-  }
-
-  // If there is a user, return it.
-  return { props: { user } };
 }

@@ -13,8 +13,10 @@
   --custom-bg-color: #3d3d3d;
   --custom-panel-color: #222;
   --custom-color: #fff;
-  --custom-color-brand: #24b47e;
   --custom-color-secondary: #666;
+  --custom-color-brand: #620edf;
+  --custom-color-brand-secondary: #5e72eb;
+  --custom-color-success: #24b47e;
 
   --primary-glow: conic-gradient(
     from 180deg at 50% 50%,

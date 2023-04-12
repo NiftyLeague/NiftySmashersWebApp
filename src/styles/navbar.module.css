@@ -26,7 +26,11 @@
 .navbar:before {
   content: '';
   position: absolute;
-  background: linear-gradient(to left, #620edf, #5e72eb);
+  background: linear-gradient(
+    to left,
+    var(--custom-color-brand),
+    var(--custom-color-brand-secondary)
+  );
   border-left: 5px solid white;
   border-bottom: 7px solid white;
   top: -250%;

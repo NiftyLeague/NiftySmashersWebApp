@@ -45,7 +45,7 @@
 .buttons button {
   display: flex;
   align-items: center;
-  background: #620edf;
+  background: var(--custom-color-brand);
   border: 5px solid white;
   padding: 12px 20px;
   border-radius: 100px;
@@ -59,7 +59,7 @@
 .buttons button:hover {
   transform: translateY(-4px);
   transition: transform 0.2s;
-  border-color: #620edf;
+  border-color: var(--custom-color-brand);
 }
 
 .buttons button img {

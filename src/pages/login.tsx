@@ -1,11 +1,20 @@
+import { useEffect } from 'react';
 import Image from 'next/image';
 import { Card, Typography, Space } from '@supabase/ui';
-import { supabase } from '@/utils/initSupabase';
+import { playfab } from '@/utils/initPlayfab';
 import BackButton from '@/components/BackButton';
 import Auth from '@/components/Auth';
+import { useRouter } from 'next/router';
 
 const Login = () => {
-  const { user } = Auth.useUser();
+  const router = useRouter();
+  // const { user } = Auth.useUser();
+  const isLoggedIn = playfab.IsClientLoggedIn();
+
+  useEffect(() => {
+    if (isLoggedIn) router.push('/');
+  }, [isLoggedIn, router]);
+
   return (
     <>
       <BackButton />
@@ -17,7 +26,7 @@ const Login = () => {
           margin: 'auto',
         }}
       >
-        {!user && (
+        {!isLoggedIn && (
           <Card style={{ margin: 'auto' }}>
             <Space direction="vertical" size={8}>
               <div>
@@ -32,7 +41,7 @@ const Login = () => {
                 </Typography.Title>
               </div>
               <Auth
-                supabaseClient={supabase}
+                playFabClient={playfab}
                 providers={['google', 'discord', 'facebook']}
                 view="sign_in"
                 socialLayout="horizontal"
@@ -45,17 +54,5 @@ const Login = () => {
     </>
   );
 };
-
-export async function getServerSideProps({ req }: { req: Request }) {
-  const { user } = await supabase.auth.api.getUserByCookie(req);
-
-  if (user) {
-    // If no user, redirect to index.
-    return { props: {}, redirect: { destination: '/', permanent: false } };
-  }
-
-  // If there is a no user, return it.
-  return { props: { user } };
-}
 
 export default Login;

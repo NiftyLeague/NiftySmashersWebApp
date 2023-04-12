@@ -7,9 +7,9 @@ import React, {
   useState,
 } from 'react';
 import { PlayFabClient } from 'playfab-sdk';
+import { getRandomKey } from '@/utils/helpers';
 import {
   clearCustomID,
-  getRandomKey,
   getUserAuth,
   PersistCustomID,
 } from '@/utils/authStorage';
@@ -66,7 +66,7 @@ const GenerateCustomIDAsync = async (
   playFabClient: typeof PlayFabClient
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
-    const CustomId = getRandomKey();
+    const CustomId = getRandomKey(100);
     const request = { CustomId, ForceLink: false };
     playFabClient.LinkCustomID(request, (error, result) => {
       if (error) {
@@ -151,7 +151,14 @@ export const UserContextProvider = (props: Props) => {
         playFabClient.LoginWithCustomID(request, (error, result) => {
           if (error) {
             console.error('LoginWithCustomID Error:', error.errorMessage);
-            if (error.code === 404) clearCustomID();
+            switch (error.code) {
+              case 400: // AccountDeleted
+              case 404: // AccountNotFound
+                clearCustomID();
+                break;
+              default:
+                break;
+            }
             setPlayer(null);
           } else {
             void handlePlayerCombinedInfo();

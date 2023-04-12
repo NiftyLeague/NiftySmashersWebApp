@@ -163,17 +163,6 @@ export default function Profile() {
                   <button
                     className={cn(styles.button, 'block')}
                     disabled={loading}
-                    onClick={() => router.push('/update-password')}
-                  >
-                    <IconLock />
-                    Update Password
-                  </button>
-                </div>
-
-                <div>
-                  <button
-                    className={cn(styles.button, 'block')}
-                    disabled={loading}
                     onClick={() => {
                       logout();
                       setTimeout(() => router.push('/login'), 1000);

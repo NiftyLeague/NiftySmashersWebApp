@@ -17,6 +17,7 @@ import {
 import { UserContextProvider, useUser } from './UserContext';
 import * as SocialIcons from './Icons';
 import { setUserAuth } from '@/utils/authStorage';
+import { getRandomKey } from '@/utils/helpers';
 import AuthStyles from '@/styles/auth.module.css';
 
 const VIEWS: ViewsMap = {
@@ -123,7 +124,6 @@ function Auth({
           <ForgottenPassword
             playFabClient={playFabClient}
             setAuthView={setAuthView}
-            redirectTo={redirectTo}
           />
         </Container>
       );
@@ -279,7 +279,7 @@ function EmailAuth({
   const isMounted = useRef<boolean>(true);
   const [email, setEmail] = useState(defaultEmail);
   const [password, setPassword] = useState(defaultPassword);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -299,11 +299,7 @@ function EmailAuth({
     setLoading(true);
     switch (authView) {
       case 'sign_in':
-        const loginRequest = {
-          Email: email,
-          Password: password,
-          CreateAccount: false,
-        };
+        const loginRequest = { Email: email, Password: password };
         playFabClient.LoginWithEmailAddress(
           loginRequest,
           (error, loginResult) => {
@@ -320,8 +316,9 @@ function EmailAuth({
       case 'sign_up':
         const registerRequest = {
           Email: email,
+          Username: getRandomKey(20),
           Password: password,
-          RequireBothUsernameAndEmail: false,
+          RequireBothUsernameAndEmail: true,
         };
         playFabClient.RegisterPlayFabUser(
           registerRequest,
@@ -380,6 +377,8 @@ function EmailAuth({
               label="Remember me"
               name="remember_me"
               id="remember_me"
+              size="medium"
+              checked={rememberMe}
               onChange={(value: React.ChangeEvent<HTMLInputElement>) =>
                 setRememberMe(value.target.checked)
               }
@@ -387,6 +386,7 @@ function EmailAuth({
             {authView === VIEWS.SIGN_IN && (
               <Typography.Link
                 href="#auth-forgot-password"
+                style={{ marginBottom: 5 }}
                 onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                   e.preventDefault();
                   setAuthView(VIEWS.FORGOTTEN_PASSWORD);
@@ -440,13 +440,10 @@ function EmailAuth({
 function ForgottenPassword({
   setAuthView,
   playFabClient,
-  redirectTo,
 }: {
   setAuthView: any;
   playFabClient: typeof PlayFabClient;
-  redirectTo?: RedirectTo;
 }) {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
@@ -460,29 +457,17 @@ function ForgottenPassword({
     const resetPasswordRequest = {
       TitleId: playFabClient.settings.titleId,
       Email: email,
-      // EmailTemplateId: "YOUR_EMAIL_TEMPLATE_ID",
-      // RecoveryEmail: "",
-      // Username: ""
     };
-
     playFabClient.SendAccountRecoveryEmail(
       resetPasswordRequest,
       (error, result) => {
         if (error) {
           setError(error.errorMessage);
         } else {
-          console.log('SendAccountRecoveryEmail', result);
-          // if (redirectTo) router.push(redirectTo);
           setMessage('Check your email for the password reset link');
         }
       }
     );
-    // const { error } = await supabaseClient.auth.api.resetPasswordForEmail(
-    //   email,
-    //   { redirectTo }
-    // );
-    // if (error) setError(error.message);
-    // else setMessage('Check your email for the password reset link');
     setLoading(false);
   };
 
@@ -529,19 +514,34 @@ function UpdatePassword({
 }: {
   playFabClient: typeof PlayFabClient;
 }) {
+  const { account } = useUser();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  console.log('UpdatePassword', account);
 
   const handlePasswordReset = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setMessage('');
     setLoading(true);
-    // const { error } = await supabaseClient.auth.update({ password });
-    // if (error) setError(error.message);
-    // else setMessage('Your password has been updated');
+    const Username = account?.Username;
+    const Email = account?.PrivateInfo?.Email;
+    if (Email && Username) {
+      // TODO: there is no public API for password updates
+      // const request = { Email, Username, Password: password };
+      // PlayFabClient.AddUsernamePassword(
+      //   request,
+      //   function (error, result) {
+      //     if (error) {
+      //       setError(error.errorMessage);
+      //     } else {
+      //       setMessage('Your password has been updated');
+      //     }
+      //   }
+      // );
+    }
     setLoading(false);
   };
 

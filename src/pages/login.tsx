@@ -20,7 +20,7 @@ const Login = () => {
       <div
         style={{
           display: 'flex',
-          maxWidth: '420px',
+          maxWidth: '450px',
           height: '100vh',
           margin: 'auto',
         }}

@@ -139,12 +139,12 @@ const GetPlayerCombinedInfoAsync = async (
   });
 };
 
-const GetUserPublisherDataAsync = async (
+async function GetDisplayName(
   playFabClient: typeof PlayFabClient
-): Promise<PublisherDataResult | null> => {
+): Promise<PlayFabClientModels.GetUserDataResult> {
   return new Promise((resolve, reject) => {
     playFabClient.GetUserPublisherData(
-      { Keys: ['DisplayName', 'LinkedWallets'] },
+      { Keys: ['DisplayName'] },
       function (error, result) {
         if (error) {
           console.error('GetUserPublisherData Error:', error.errorMessage);
@@ -155,14 +155,44 @@ const GetUserPublisherDataAsync = async (
       }
     );
   });
+}
+
+async function GetLinkedWallets(
+  playFabClient: typeof PlayFabClient
+): Promise<PlayFabClientModels.GetUserDataResult> {
+  return new Promise((resolve, reject) => {
+    playFabClient.GetUserPublisherReadOnlyData(
+      { Keys: ['LinkedWallets'] },
+      function (error, result) {
+        if (error) {
+          console.error(
+            'GetUserPublisherReadOnlyData Error:',
+            error.errorMessage
+          );
+          reject(error);
+        } else {
+          resolve(result.data);
+        }
+      }
+    );
+  });
+}
+
+const GetUserPublisherDataAsync = async (
+  playFabClient: typeof PlayFabClient
+): Promise<PublisherData> => {
+  const { Data: PublisherData } = await GetDisplayName(playFabClient);
+  const { Data: ReadOnlyData } = await GetLinkedWallets(playFabClient);
+  return { ...PublisherData, ...ReadOnlyData };
 };
 
 export const UserContextProvider = (props: Props) => {
   const { playFabClient } = props;
   const [init, setInit] = useState(false);
   const [player, setPlayer] = useState<PlayerResult | null>(null);
-  const [publisherData, setPublisherData] =
-    useState<PublisherDataResult | null>(null);
+  const [publisherData, setPublisherData] = useState<PublisherData | null>(
+    null
+  );
   const isLoggedIn = playFabClient?.IsClientLoggedIn();
   const { customId, persistLogin } = getUserAuth();
 
@@ -236,13 +266,10 @@ export const UserContextProvider = (props: Props) => {
       playFabId: PlayFabId,
       profile: InfoResultPayload?.PlayerProfile,
       stats: InfoResultPayload?.PlayerStatistics,
-      publisherData: publisherData?.Data,
+      publisherData: publisherData ?? undefined,
     }),
     [InfoResultPayload, isLoggedIn, PlayFabId, publisherData]
   );
-  console.log('UserContextProvider.player', player);
-  console.log('UserContextProvider.account', value.account);
-  console.log('UserContextProvider.publisherData', value.publisherData);
 
   return <UserContext.Provider value={value} {...props} />;
 };

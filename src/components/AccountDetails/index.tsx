@@ -1,23 +1,18 @@
 import { useState, useEffect } from 'react';
 import isEmpty from 'lodash/isEmpty';
-import { useRouter } from 'next/router';
 import cn from 'classnames';
-import set from 'lodash/set';
-import { IconLoader, IconLogOut, IconSave, Input } from '@supabase/ui';
+import { IconLoader, IconSave, Input } from '@supabase/ui';
 import Auth from '@/components/Auth';
 import Avatar from '@/components/Avatar';
+import LinkWalletInput from './LinkWalletInput';
+import LogoutButton from './LogoutButton';
 
+import { parseLinkedWalletResult } from '@/utils/wallet';
 import { playfab } from '@/utils/initPlayfab';
 import { Database } from '@/utils/database.types';
-import { clearCustomID } from '@/utils/authStorage';
 type Profiles = Database['public']['Tables']['profiles']['Row'];
 
 import styles from '@/styles/profile.module.css';
-
-function logout() {
-  playfab.ForgetAllCredentials();
-  clearCustomID();
-}
 
 async function AddOrUpdateContactEmail(
   EmailAddress: string
@@ -68,7 +63,6 @@ async function UpdateUserPublisherData(
 }
 
 export default function AccountDetails() {
-  const router = useRouter();
   const {
     account,
     isLoggedIn,
@@ -87,7 +81,7 @@ export default function AccountDetails() {
       setEmail(account.PrivateInfo?.Email ?? null);
       setAvatarUrl(profile?.AvatarUrl ?? null);
       setDisplayName(publisherData?.DisplayName?.Value ?? null);
-      setLinkedWallets(publisherData?.LinkedWallets?.Value?.split(',') ?? []);
+      setLinkedWallets(parseLinkedWalletResult(publisherData));
       setLoading(false);
     }
   }, [account, profile, publisherData]);
@@ -160,26 +154,13 @@ export default function AccountDetails() {
 
       <div>
         <label htmlFor="wallets">Linked Wallet(s)</label>
-        <Input
-          value={linkedWallets?.[0]}
-          copy={Boolean(linkedWallets?.[0])}
-          onChange={e => {
-            const wallets = set(linkedWallets, 0, e.target.value);
-            setLinkedWallets(wallets);
-          }}
-        />
-        {Boolean(linkedWallets?.[0]) ? (
-          <Input
-            value={linkedWallets?.[1]}
-            copy={Boolean(linkedWallets?.[1])}
-          />
-        ) : null}
-        {Boolean(linkedWallets?.[1]) ? (
-          <Input
-            value={linkedWallets?.[2]}
-            copy={Boolean(linkedWallets?.[2])}
-          />
-        ) : null}
+        <LinkWalletInput index={1} address={linkedWallets[0] || ''} />
+        {Boolean(linkedWallets[0] || '') && (
+          <LinkWalletInput index={2} address={linkedWallets[1] || ''} />
+        )}
+        {Boolean(linkedWallets[1]) && (
+          <LinkWalletInput index={3} address={linkedWallets[2] || ''} />
+        )}
       </div>
 
       <div style={{ marginTop: 16, marginBottom: 16 }}>
@@ -200,19 +181,7 @@ export default function AccountDetails() {
         </button>
       </div>
 
-      <div>
-        <button
-          className={cn(styles.button, 'block')}
-          disabled={loading}
-          onClick={() => {
-            logout();
-            setTimeout(() => router.push('/login'), 1000);
-          }}
-        >
-          <IconLogOut />
-          Sign Out
-        </button>
-      </div>
+      <LogoutButton loading={loading} />
     </>
   ) : null;
 }

@@ -37,7 +37,6 @@
 .profileCard .userInfo .avatarContainer {
   display: flex;
   align-items: center;
-  margin-top: 10px;
   flex-direction: column;
 }
 
@@ -59,9 +58,9 @@
   margin: 8px 0px;
 }
 
-.button.primary {
-  background-color: var(--custom-color-brand);
-  border: 1px solid var(--custom-color-brand);
+.button_primary {
+  background-color: var(--custom-color-brand) !important;
+  border: 1px solid var(--custom-color-brand) !important;
 }
 
 .button svg {

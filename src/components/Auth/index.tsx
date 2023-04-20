@@ -154,57 +154,12 @@ function SocialAuth({
   onlyThirdPartyProviders,
   ...props
 }: Props) {
-  const buttonStyles: any = {
-    azure: {
-      backgroundColor: '#008AD7',
-      color: 'white',
-    },
-    bitbucket: {
-      backgroundColor: '#205081',
-      color: 'white',
-    },
-    facebook: {
-      backgroundColor: '#4267B2',
-      color: 'white',
-    },
-    github: {
-      backgroundColor: '#333',
-      color: 'white',
-    },
-    gitlab: {
-      backgroundColor: '#FC6D27',
-    },
-    google: {
-      backgroundColor: '#ce4430',
-      color: 'white',
-    },
-    twitter: {
-      backgroundColor: '#1DA1F2',
-      color: 'white',
-    },
-    apple: {
-      backgroundColor: '#000',
-      color: 'white',
-    },
-    discord: {
-      backgroundColor: '#404fec',
-      color: 'white',
-    },
-    twitch: {
-      backgroundColor: '#9146ff',
-      color: 'white',
-    },
-  };
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleProviderSignIn = async (provider: Provider) => {
     setLoading(true);
     // TODO: handle provider login
-    // const { error } = await supabaseClient.auth.signIn(
-    //   { provider },
-    //   { redirectTo }
-    // );
     // if (error) setError(error.message);
     setLoading(false);
   };
@@ -234,7 +189,9 @@ function SocialAuth({
                       type="default"
                       shadow
                       size={socialButtonSize}
-                      style={socialColors ? buttonStyles[provider] : {}}
+                      style={
+                        socialColors ? SocialIcons.buttonStyles[provider] : {}
+                      }
                       icon={AuthIcon ? <AuthIcon /> : ''}
                       loading={loading}
                       onClick={() => handleProviderSignIn(provider)}

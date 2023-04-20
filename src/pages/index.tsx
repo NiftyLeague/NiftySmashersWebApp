@@ -44,8 +44,8 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <Modal />
       </section>
+      <Modal />
     </>
   );
 }

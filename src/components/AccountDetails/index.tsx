@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
 import isEmpty from 'lodash/isEmpty';
-import cn from 'classnames';
-import { IconLoader, IconSave, Input } from '@supabase/ui';
+import { Button, IconLoader, IconSave, Input } from '@supabase/ui';
 import Auth from '@/components/Auth';
 import Avatar from '@/components/Avatar';
 import LinkWalletInput from './LinkWalletInput';
 import LogoutButton from './LogoutButton';
 
+import useProviders from '@/hooks/useProviders';
 import { parseLinkedWalletResult } from '@/utils/wallet';
 import { playfab } from '@/utils/initPlayfab';
 import { Database } from '@/utils/database.types';
 type Profiles = Database['public']['Tables']['profiles']['Row'];
 
 import styles from '@/styles/profile.module.css';
+import LinkedProviders from './LinkedProviders';
 
 async function AddOrUpdateContactEmail(
   EmailAddress: string
@@ -75,6 +76,7 @@ export default function AccountDetails() {
   const [displayName, setDisplayName] = useState<Profiles['displayName']>(null);
   const [linkedWallets, setLinkedWallets] = useState<string[]>([]);
   const [avatar_url, setAvatarUrl] = useState<Profiles['avatar_url']>(null);
+  const providers = useProviders();
 
   useEffect(() => {
     if (account && !isEmpty(account)) {
@@ -139,7 +141,9 @@ export default function AccountDetails() {
         />
       ) : null}
       <div>
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email" style={{ marginTop: 0 }}>
+          Email
+        </label>
         <input id="email" type="text" value={email || ''} disabled />
       </div>
 
@@ -149,6 +153,16 @@ export default function AccountDetails() {
           type="text"
           value={displayName || ''}
           onChange={e => setDisplayName(e.target.value)}
+          actions={[
+            <Button
+              key="save"
+              className={styles.button_primary}
+              icon={loading ? <IconLoader /> : <IconSave />}
+              onClick={() => updateProfile({ displayName })}
+            >
+              {loading ? 'Loading ...' : 'Update'}
+            </Button>,
+          ]}
         />
       </div>
 
@@ -163,23 +177,12 @@ export default function AccountDetails() {
         )}
       </div>
 
-      <div style={{ marginTop: 16, marginBottom: 16 }}>
-        <button
-          className={cn(styles.button, styles.primary, 'block')}
-          disabled={loading}
-          onClick={() => updateProfile({ displayName })}
-        >
-          {loading ? (
-            <>
-              <IconLoader /> Loading ...
-            </>
-          ) : (
-            <>
-              <IconSave /> Save Updates
-            </>
-          )}
-        </button>
+      <div>
+        <label htmlFor="providerss">Linked Provider(s)</label>
+        <LinkedProviders providers={providers} />
       </div>
+
+      <hr className={styles.hr} />
 
       <LogoutButton loading={loading} />
     </>

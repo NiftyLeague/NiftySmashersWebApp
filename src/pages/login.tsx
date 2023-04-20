@@ -5,10 +5,12 @@ import { Card, Typography, Space } from '@supabase/ui';
 import { playfab } from '@/utils/initPlayfab';
 import Auth from '@/components/Auth';
 import BackButton from '@/components/BackButton';
+import useProviders from '@/hooks/useProviders';
 
 const Login = () => {
   const router = useRouter();
   const { isLoggedIn } = Auth.useUser();
+  const providers = useProviders();
 
   useEffect(() => {
     if (isLoggedIn) router.push('/profile');
@@ -41,7 +43,7 @@ const Login = () => {
               </div>
               <Auth
                 playFabClient={playfab}
-                providers={['google', 'discord', 'facebook']}
+                providers={providers}
                 view="sign_in"
                 socialLayout="horizontal"
                 socialButtonSize="xlarge"

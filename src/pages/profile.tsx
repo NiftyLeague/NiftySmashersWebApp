@@ -31,7 +31,7 @@ export default function Profile() {
       <div
         style={{
           display: 'flex',
-          maxWidth: '420px',
+          maxWidth: '450px',
           height: '100vh',
           margin: 'auto',
         }}
@@ -54,6 +54,7 @@ export default function Profile() {
                 type="underlined"
                 size="medium"
                 tabBarStyle={{ marginTop: 16 }}
+                tabBarGutter={8}
               >
                 <Tabs.Panel
                   id="account"

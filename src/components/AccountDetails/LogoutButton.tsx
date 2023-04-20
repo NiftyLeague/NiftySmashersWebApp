@@ -17,6 +17,7 @@ export default function LogoutButton({ loading = false }) {
     <div>
       <button
         className={cn(styles.button, 'block')}
+        style={{ marginBottom: 0 }}
         disabled={loading}
         onClick={() => {
           logout();

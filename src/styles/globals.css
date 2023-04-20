@@ -309,7 +309,7 @@ a {
 
 label {
   display: block;
-  margin: 5px 0;
+  margin: 8px 0 4px 0;
   color: var(--custom-color-secondary);
   font-size: 0.8rem;
   text-transform: uppercase;

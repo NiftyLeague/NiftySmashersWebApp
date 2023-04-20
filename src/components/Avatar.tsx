@@ -64,7 +64,8 @@ export default function Avatar({
       )}
       <div style={{ width: size }}>
         <label
-          className={cn(styles.button, styles.primary, 'block')}
+          className={cn(styles.button, styles.button_primary, 'block')}
+          style={{ marginBottom: 0 }}
           htmlFor="single"
         >
           {uploading ? (

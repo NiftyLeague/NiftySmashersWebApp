@@ -93,7 +93,7 @@ const ProfileConstraints = {
   ShowDisplayName: true,
   // ShowExperimentVariants: true,
   // ShowLastLogin: true,
-  // ShowLinkedAccounts: true,
+  ShowLinkedAccounts: true,
   // ShowLocations: true,
   // ShowMemberships: true,
   // ShowOrigination: true,
@@ -141,7 +141,7 @@ const GetPlayerCombinedInfoAsync = async (
 
 async function GetDisplayName(
   playFabClient: typeof PlayFabClient
-): Promise<PlayFabClientModels.GetUserDataResult> {
+): Promise<PublisherDataResult> {
   return new Promise((resolve, reject) => {
     playFabClient.GetUserPublisherData(
       { Keys: ['DisplayName'] },
@@ -159,7 +159,7 @@ async function GetDisplayName(
 
 async function GetLinkedWallets(
   playFabClient: typeof PlayFabClient
-): Promise<PlayFabClientModels.GetUserDataResult> {
+): Promise<PublisherDataResult> {
   return new Promise((resolve, reject) => {
     playFabClient.GetUserPublisherReadOnlyData(
       { Keys: ['LinkedWallets'] },

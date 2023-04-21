@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
-import Modal from '@/components/Modal';
+import TrailerModal from '@/components/TrailerModal';
+import UnityModal from '@/components/UnityModal';
 import styles from '@/styles/smashers.module.css';
 
 export default function Home() {
@@ -45,7 +46,8 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <Modal />
+      <TrailerModal />
+      <UnityModal />
     </>
   );
 }

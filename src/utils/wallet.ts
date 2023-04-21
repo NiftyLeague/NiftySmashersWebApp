@@ -205,3 +205,51 @@ export async function LinkWallet({
     );
   });
 }
+
+type UnlinkWalletParams = {
+  chain?: string;
+  address: string;
+};
+
+export async function UnlinkWallet({
+  chain = 'ethereum',
+  address,
+}: UnlinkWalletParams): Promise<PlayFabCloudScriptModels.ExecuteFunctionResult> {
+  let linkedWallets: string[] = [];
+  const { Data } = await GetLinkedWallets();
+  if (Data) linkedWallets = parseLinkedWalletResult(Data);
+
+  return new Promise((resolve, reject) => {
+    let error = null;
+    if (chain != 'ethereum')
+      error = new Error('Only Ethereum wallets are supported at this time');
+
+    const walletEntry = `${chain}:${address}`.toLowerCase();
+    if (!linkedWallets.includes(walletEntry))
+      error = new Error(
+        `${address.substring(0, 6)}... address is not linked to this account`
+      );
+
+    if (error) {
+      reject(error);
+      return;
+    }
+
+    const FunctionName = 'Accounts_UnlinkWallet';
+    const FunctionParameter = {
+      Chain: chain,
+      Address: address.toLowerCase(),
+    };
+
+    PlayFabCloudScript.ExecuteFunction(
+      { FunctionName, FunctionParameter },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result.data);
+        }
+      }
+    );
+  });
+}

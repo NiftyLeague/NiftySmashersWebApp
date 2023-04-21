@@ -10,7 +10,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <main className={'dark'}>
       <SessionProvider session={pageProps.session}>
         <Auth.UserContextProvider playFabClient={playfab}>
-          <SnackbarProvider maxSnack={3}>
+          <SnackbarProvider maxSnack={3} autoHideDuration={5000}>
             <Component {...pageProps} />
           </SnackbarProvider>
         </Auth.UserContextProvider>

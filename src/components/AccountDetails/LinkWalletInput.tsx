@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useSnackbar } from 'notistack';
 import { Button, IconLink2, Input } from '@supabase/ui';
 import { LinkWallet, signMessage } from '@/utils/wallet';
+import Auth from '@/components/Auth';
 
 export default function LinkWalletInput({
   index,
@@ -10,6 +12,8 @@ export default function LinkWalletInput({
   address?: string;
 }) {
   const [error, setError] = useState<string | undefined>();
+  const { enqueueSnackbar } = useSnackbar();
+  const { refetchPlayer } = Auth.useUser();
 
   const handleLinkWallet = async () => {
     setError(undefined);
@@ -18,6 +22,8 @@ export default function LinkWalletInput({
       const { address, nonce, signature } = result;
       try {
         await LinkWallet({ address, signature, nonce });
+        await refetchPlayer();
+        enqueueSnackbar('Wallet link success!', { variant: 'success' });
       } catch (e) {
         console.error(e);
         if (e instanceof Error) {

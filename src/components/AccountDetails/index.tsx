@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { Button, IconLoader, IconSave, Input } from '@supabase/ui';
+import { useSnackbar } from 'notistack';
 import Auth from '@/components/Auth';
 import Avatar from '@/components/Avatar';
 import LinkWalletInput from './LinkWalletInput';
@@ -71,6 +72,7 @@ export default function AccountDetails() {
     profile,
     publisherData,
   } = Auth.useUser();
+  const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState<Profiles['email']>(null);
   const [displayName, setDisplayName] = useState<Profiles['displayName']>(null);
@@ -118,9 +120,9 @@ export default function AccountDetails() {
       if (avatar_url && avatar_url !== profile.AvatarUrl)
         await UpdateAvatarUrl(avatar_url);
 
-      alert('Profile updated!');
+      enqueueSnackbar('Profile updated!', { variant: 'success' });
     } catch (error) {
-      alert('Error updating the data!');
+      enqueueSnackbar('Error updating the data.', { variant: 'error' });
       console.log(error);
     } finally {
       setLoading(false);

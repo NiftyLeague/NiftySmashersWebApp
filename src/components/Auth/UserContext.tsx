@@ -33,6 +33,7 @@ export interface AuthSession {
   profile?: Profile;
   publisherData?: PublisherData;
   stats?: Stats;
+  refetchPlayer: () => Promise<void>;
 }
 
 const UserContext = createContext<AuthSession>({
@@ -44,6 +45,7 @@ const UserContext = createContext<AuthSession>({
   profile: undefined,
   publisherData: undefined,
   stats: [],
+  refetchPlayer: () => new Promise(() => {}),
 });
 
 export interface Props {
@@ -256,6 +258,10 @@ export const UserContextProvider = (props: Props) => {
     }
   }, [customId, isLoggedIn, persistLogin, handleAccountInfo, handleAnonLogin]);
 
+  const refetchPlayer = useCallback(
+    async () => await handlePlayerCombinedInfo(),
+    [handlePlayerCombinedInfo]
+  );
   const { InfoResultPayload, PlayFabId } = player || {};
   const value = useMemo(
     () => ({
@@ -267,8 +273,9 @@ export const UserContextProvider = (props: Props) => {
       profile: InfoResultPayload?.PlayerProfile,
       stats: InfoResultPayload?.PlayerStatistics,
       publisherData: publisherData ?? undefined,
+      refetchPlayer,
     }),
-    [InfoResultPayload, isLoggedIn, PlayFabId, publisherData]
+    [InfoResultPayload, isLoggedIn, PlayFabId, publisherData, refetchPlayer]
   );
 
   return <UserContext.Provider value={value} {...props} />;

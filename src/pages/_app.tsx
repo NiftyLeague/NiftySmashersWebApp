@@ -2,6 +2,7 @@ import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { playfab } from '@/utils/initPlayfab';
 import { SessionProvider } from 'next-auth/react';
+import { SnackbarProvider } from 'notistack';
 import Auth from '@/components/Auth';
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -9,7 +10,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <main className={'dark'}>
       <SessionProvider session={pageProps.session}>
         <Auth.UserContextProvider playFabClient={playfab}>
-          <Component {...pageProps} />
+          <SnackbarProvider maxSnack={3}>
+            <Component {...pageProps} />
+          </SnackbarProvider>
         </Auth.UserContextProvider>
       </SessionProvider>
     </main>

@@ -23,6 +23,7 @@
     "lodash": "^4.17.21",
     "next": "13.2.4",
     "next-auth": "^4.22.0",
+    "notistack": "^3.0.1",
     "playfab-sdk": "^2.123.230403",
     "react": "18.2.0",
     "react-dom": "18.2.0",

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import cn from 'classnames';
+import { useSnackbar } from 'notistack';
 import { IconUpload } from '@supabase/ui';
 import { Database } from '@/utils/database.types';
 type Profiles = Database['public']['Tables']['profiles']['Row'];
@@ -19,6 +20,7 @@ export default function Avatar({
   onUpload: (url: string) => void;
 }) {
   const [uploading, setUploading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const uploadAvatar: React.ChangeEventHandler<
     HTMLInputElement
@@ -39,7 +41,7 @@ export default function Avatar({
 
       onUpload(filePath);
     } catch (error) {
-      alert('Error uploading avatar!');
+      enqueueSnackbar('Error updating avatar.', { variant: 'error' });
       console.log(error);
     } finally {
       setUploading(false);

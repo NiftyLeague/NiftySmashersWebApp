@@ -38,7 +38,7 @@ export default function TrailerModal() {
 
   return (
     <div id="trailer-modal" className={cn(styles.modal, 'hidden')}>
-      <div className={styles.modal_content}>
+      <div className={styles.modal_paper}>
         <iframe
           id="trailer-modal-iframe"
           className={styles.modal_iframe}

@@ -66,7 +66,7 @@ export default function Avatar({
       )}
       <div style={{ width: size }}>
         <label
-          className={cn(styles.button, styles.button_primary, 'block')}
+          className={cn(styles.button, styles.button_primary, 'block btn')}
           style={{ marginBottom: 0 }}
           htmlFor="single"
         >

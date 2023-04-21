@@ -9,10 +9,7 @@ export default function Document() {
           content="Mobile and PC friendly brawler game"
         />
         <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
-        />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -20,9 +17,14 @@ export default function Document() {
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap"
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;400;500;700&family=Press+Start+2P&family=Lilita+One&display=swap"
           rel="stylesheet"
         />
+
+        <link rel="preconnect" href="/fonts/style.css" />
+        <link rel="preconnect" href="/fonts" crossOrigin="anonymous" />
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
+        <link href="/fonts/style.css" rel="stylesheet" />
       </Head>
       <body>
         <Main />

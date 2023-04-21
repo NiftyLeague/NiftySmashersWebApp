@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { Button, IconLink2, Input } from '@supabase/ui';
-import { LinkWallet, signMessage } from '@/utils/wallet';
+import { LinkWallet, UnlinkWallet, signMessage } from '@/utils/wallet';
 import Auth from '@/components/Auth';
 
 export default function LinkWalletInput({
@@ -29,13 +29,35 @@ export default function LinkWalletInput({
         if (e instanceof Error) {
           setError(e.message);
         } else {
-          console.error(`Unknown error: ${e}`);
+          enqueueSnackbar(`Unknown error: ${e}`, { variant: 'error' });
         }
       }
     }
   };
 
-  // const handleUnLinkWallet = async () => {}
+  const handleUnLinkWallet = async () => {
+    setError(undefined);
+    console.log('address', address);
+    if (address) {
+      try {
+        const [chain, wallet] = address.split(':');
+        await UnlinkWallet({ address: wallet, chain });
+        await refetchPlayer();
+        enqueueSnackbar('Unlink wallet link success!', { variant: 'success' });
+      } catch (e) {
+        console.error(e);
+        if (e instanceof Error) {
+          setError(e.message);
+        } else if ((e as { errorMessage: string })?.errorMessage) {
+          enqueueSnackbar(`${(e as { errorMessage: string }).errorMessage}`, {
+            variant: 'error',
+          });
+        } else {
+          console.error(`Unknown error: ${e}`);
+        }
+      }
+    }
+  };
 
   const linked = Boolean(address && address.length > 1);
 
@@ -49,9 +71,9 @@ export default function LinkWalletInput({
       actions={
         linked
           ? [
-              // <Button danger key="remove" onClick={handleUnLinkWallet}>
-              //   Remove
-              // </Button>,
+              <Button danger key="remove" onClick={handleUnLinkWallet}>
+                Remove
+              </Button>,
             ]
           : [
               <Button

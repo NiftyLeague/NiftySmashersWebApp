@@ -26,6 +26,7 @@
     "notistack": "^3.0.1",
     "playfab-sdk": "^2.123.230403",
     "react": "18.2.0",
+    "react-device-detect": "^2.2.3",
     "react-dom": "18.2.0",
     "swr": "^2.0.0",
     "typescript": "5.0.2",

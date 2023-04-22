@@ -1,11 +1,16 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import TrailerModal from '@/components/TrailerModal';
+import GameSelectModal from '@/components/GameSelectModal';
 import UnityModal from '@/components/UnityModal';
 import styles from '@/styles/smashers.module.css';
 
 export default function Home() {
+  const [gameOpen, setGameOpen] = useState(false);
+  const launchGame = () => setGameOpen(true);
+  const closeGame = () => setGameOpen(false);
   return (
     <>
       <Head>
@@ -47,7 +52,8 @@ export default function Home() {
         </div>
       </section>
       <TrailerModal />
-      <UnityModal />
+      <GameSelectModal launchGame={launchGame} />
+      <UnityModal gameOpen={gameOpen} closeGame={closeGame} />
     </>
   );
 }

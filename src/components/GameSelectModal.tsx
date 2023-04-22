@@ -8,19 +8,15 @@ import styles from '@/styles/modal.module.css';
 const GameSelectModal = ({ launchGame }: { launchGame: () => void }) => {
   const [visible, setVisible] = useState(false);
 
-  const openModal = () => setVisible(true);
-  const closeModal = (e: Event) => {
-    const closeBtn = document.getElementById('options-close-icon');
-    const closeBtn2 = document.getElementById('internal-close-icon');
-    const modal = document.getElementById('options-modal');
-    if (e.target === modal || e.target === closeBtn || e.target === closeBtn2)
-      setVisible(false);
-  };
-
   useEffect(() => {
     const playBtn = document.getElementById('play-btn');
     const closeBtn = document.getElementById('options-close-icon');
     const modal = document.getElementById('options-modal');
+
+    const openModal = () => setVisible(true);
+    const closeModal = (e: Event) => {
+      if (e.target === modal || e.target === closeBtn) setVisible(false);
+    };
 
     playBtn?.addEventListener('click', openModal);
     modal?.addEventListener('click', closeModal);
@@ -37,7 +33,10 @@ const GameSelectModal = ({ launchGame }: { launchGame: () => void }) => {
     <div id="options-modal" className={cn(styles.modal, { hidden: !visible })}>
       <div className={styles.modal_paper_dark}>
         {visible && (
-          <ModalContent closeModal={closeModal} launchGame={launchGame} />
+          <ModalContent
+            closeModal={() => setVisible(false)}
+            launchGame={launchGame}
+          />
         )}
       </div>
       <div id="options-close-icon" className={styles.close_icon}>
@@ -51,7 +50,7 @@ const ModalContent = ({
   closeModal,
   launchGame,
 }: {
-  closeModal: (e: Event) => void;
+  closeModal: () => void;
   launchGame: () => void;
 }) => {
   const { isWindows, downloadURL, version, message } = useVersion();
@@ -88,7 +87,7 @@ const ModalContent = ({
           id="internal-close-icon"
           block
           type="outline"
-          onClick={e => closeModal(e as unknown as Event)}
+          onClick={closeModal}
           className={styles.button_secondary}
         >
           Close

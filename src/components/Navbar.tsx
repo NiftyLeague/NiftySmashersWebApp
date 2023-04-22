@@ -1,11 +1,41 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import styles from '@/styles/navbar.module.css';
 import cn from 'classnames';
 
 export default function Navbar() {
-  return (
+  const mobile = useMediaQuery('(max-width:576px)');
+  return mobile ? (
     <>
+      <a href="https://niftyleague.com" target="_blank" rel="noreferrer">
+        <div className={styles.logo_container}>
+          <Image
+            src="/logo/white.png"
+            alt="Company Logo"
+            className={styles.logo}
+            width={50}
+            height={48}
+          />
+        </div>
+      </a>
+      <nav className={styles.navbar}>
+        <Link href="/profile">
+          <div className={cn(styles.nav_item, styles.profile)}>
+            <div className={styles.profile_icon}>
+              <Image
+                src="/icons/user.svg"
+                alt="Profile Icon"
+                width={22}
+                height={22}
+              />
+            </div>
+          </div>
+        </Link>
+      </nav>
+    </>
+  ) : (
+    <div className={styles.desktop_nav}>
       <a href="https://niftyleague.com" target="_blank" rel="noreferrer">
         <div className={styles.logo_container}>
           <Image
@@ -85,6 +115,6 @@ export default function Navbar() {
           </div>
         </Link>
       </nav>
-    </>
+    </div>
   );
 }

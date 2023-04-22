@@ -112,7 +112,29 @@
 }
 
 @media only screen and (max-width: 576px) {
-  .navbar {
+  .logo_container {
+    top: -18px;
+    left: -18px;
+  }
+  .logo {
+    margin-top: 30px;
+    margin-left: 40px;
+  }
+  .desktop_nav {
     display: none;
+  }
+  .navbar:before {
+    top: -50px;
+    bottom: -62px;
+    left: -50px;
+    right: -50px;
+    border-width: 5px;
+    transform: perspective(16em) rotateX(60deg);
+  }
+  .profile {
+    padding: 25px;
+  }
+  .profile::before {
+    content: none;
   }
 }

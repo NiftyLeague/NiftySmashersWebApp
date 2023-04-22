@@ -20,7 +20,7 @@
 .modal_paper_dark {
   position: relative;
   background-color: var(--custom-panel-color);
-  border: 5px solid var(--custom-panel-color);
+  border: 2px solid var(--custom-panel-color);
   border-radius: var(--border-radius);
 }
 
@@ -40,6 +40,13 @@
 .modal_iframe {
   width: 80vw;
   height: 80vh;
+}
+
+.modal_game_canvas {
+  cursor: pointer !important;
+  height: 77vh;
+  pointer-events: auto;
+  width: calc(77vh * 1.33);
 }
 
 .close_icon {

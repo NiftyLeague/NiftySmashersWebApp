@@ -1,9 +1,13 @@
 import { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import cn from 'classnames';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+import { isOpera, browserName } from 'react-device-detect';
 import { Button, Typography, Space } from '@supabase/ui';
 import useVersion from '@/hooks/useVersion';
 import styles from '@/styles/modal.module.css';
+
+const Game = dynamic(() => import('./Game'), { ssr: false });
 
 const VIEWS: ViewsMap = {
   SELECT_OPTIONS: 'select_options',
@@ -71,9 +75,24 @@ const UnityModal = () => {
   );
 };
 
-const GameView = ({ visible }: { visible: boolean }) => {
-  console.log('GameView', visible);
-  return <div>TEMP UNITIY BUILD TEST</div>;
+const GameView = ({ visible = false }) => {
+  const [canUnmount, setCanUnmount] = useState(false);
+
+  useEffect(() => {
+    if (visible) setCanUnmount(false);
+  }, [visible]);
+
+  if (canUnmount) return null;
+  return isOpera ? (
+    <Typography.Title
+      level={2}
+      style={{ textAlign: 'center', marginTop: 8, padding: '10rem 3rem' }}
+    >
+      {browserName} Browser Not Supported
+    </Typography.Title>
+  ) : (
+    <Game setCanUnmount={setCanUnmount} visible={visible} />
+  );
 };
 
 const SelectView = ({
@@ -91,10 +110,10 @@ const SelectView = ({
   return (
     <Space
       size={4}
-      direction={'vertical'}
+      direction="vertical"
       className={styles.model_select_view_content}
     >
-      <Space size={4} direction={'horizontal'}>
+      <Space size={4} direction="horizontal">
         <Image
           src="/logo/white.png"
           alt="Company Logo"
@@ -112,7 +131,7 @@ const SelectView = ({
         out-click, out-smart and out-smash your opponent in a winner-takes-all
         DEGEN battle!
       </Typography.Text>
-      <Space direction={'horizontal'} style={{ marginTop: 25 }}>
+      <Space direction="horizontal" style={{ marginTop: 25 }}>
         <Button
           id="internal-close-icon"
           block

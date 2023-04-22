@@ -13,8 +13,7 @@
   left: 0;
   height: 100%;
   width: 100%;
-  /* background-color: rgba(98, 14, 223, 0.2); */
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.15);
 }
 
 .content {
@@ -27,12 +26,11 @@
 }
 
 .wordmark {
-  margin-bottom: 20px;
-  max-width: 98vw;
   width: 475px;
+  max-width: 98vw;
   height: auto;
   margin-bottom: auto;
-  margin-top: 65px;
+  margin-top: 70px;
 }
 
 .buttons {
@@ -43,16 +41,17 @@
 }
 
 .buttons button {
-  display: flex;
   align-items: center;
   background: var(--custom-color-brand);
-  border: 5px solid white;
-  padding: 12px 20px;
   border-radius: 100px;
-  transition: all 0.3s ease-in-out;
-  font-size: 20px;
+  border: 5px solid white;
+  color: white;
   cursor: pointer;
+  display: flex;
+  font-size: 20px;
+  padding: 12px 20px;
   text-transform: uppercase;
+  transition: all 0.3s ease-in-out;
 }
 
 .buttons button:hover {
@@ -66,6 +65,12 @@
 }
 
 @media only screen and (max-width: 576px) {
+  .wordmark {
+    margin-top: 90px;
+  }
+  .buttons {
+    margin-bottom: 45px;
+  }
   .buttons button {
     font-size: 16px;
   }

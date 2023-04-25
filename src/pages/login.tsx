@@ -2,8 +2,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { Card, Typography, Space } from '@supabase/ui';
-import { playfab } from '@/utils/initPlayfab';
-import Auth from '@/components/Auth';
+import Auth from '@/lib/playfab/components/Auth';
 import BackButton from '@/components/BackButton';
 import useProviders from '@/hooks/useProviders';
 
@@ -42,7 +41,6 @@ const Login = () => {
                 </Typography.Title>
               </div>
               <Auth
-                playFabClient={playfab}
                 providers={providers}
                 view="sign_in"
                 socialLayout="horizontal"

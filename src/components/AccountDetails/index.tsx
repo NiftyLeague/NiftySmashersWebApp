@@ -2,67 +2,23 @@ import { useState, useEffect } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { Button, IconLoader, IconSave, Input } from '@supabase/ui';
 import { useSnackbar } from 'notistack';
-import Auth from '@/components/Auth';
+import { Auth } from '@/lib/playfab/components';
+import { parseLinkedWalletResult } from '@/lib/playfab/utils';
+import {
+  AddOrUpdateContactEmail,
+  UpdateAvatarUrl,
+  UpdateUserPublisherData,
+} from '@/lib/playfab/api';
 import Avatar from '@/components/Avatar';
 import LinkWalletInput from './LinkWalletInput';
 import LogoutButton from './LogoutButton';
 
 import useProviders from '@/hooks/useProviders';
-import { parseLinkedWalletResult } from '@/utils/wallet';
-import { playfab } from '@/utils/initPlayfab';
 import { Database } from '@/utils/database.types';
 type Profiles = Database['public']['Tables']['profiles']['Row'];
 
 import styles from '@/styles/profile.module.css';
 import LinkedProviders from './LinkedProviders';
-
-async function AddOrUpdateContactEmail(
-  EmailAddress: string
-): Promise<PlayFabClientModels.AddOrUpdateContactEmailResult> {
-  return new Promise((resolve, reject) => {
-    playfab.AddOrUpdateContactEmail({ EmailAddress }, (error, result) => {
-      if (error) {
-        console.error('AddOrUpdateContactEmail Error:', error.errorMessage);
-        reject(error);
-      } else {
-        console.log('AddOrUpdateContactEmail Success');
-        resolve(result);
-      }
-    });
-  });
-}
-
-async function UpdateAvatarUrl(
-  ImageUrl: string
-): Promise<PlayFabClientModels.EmptyResponse> {
-  return new Promise((resolve, reject) => {
-    playfab.UpdateAvatarUrl({ ImageUrl }, (error, result) => {
-      if (error) {
-        console.error('UpdateAvatarUrl Error:', error.errorMessage);
-        reject(error);
-      } else {
-        console.log('UpdateAvatarUrl Success');
-        resolve(result);
-      }
-    });
-  });
-}
-
-async function UpdateUserPublisherData(
-  request: PlayFabClientModels.UpdateUserDataRequest
-): Promise<PlayFabClientModels.UpdateUserDataResult> {
-  return new Promise((resolve, reject) => {
-    playfab.UpdateUserPublisherData(request, (error, result) => {
-      if (error) {
-        console.error('UpdateUserPublisherData Error:', error.errorMessage);
-        reject(error);
-      } else {
-        console.log('UpdateUserPublisherData Success');
-        resolve(result.data);
-      }
-    });
-  });
-}
 
 export default function AccountDetails() {
   const {

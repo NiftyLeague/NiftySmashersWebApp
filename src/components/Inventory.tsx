@@ -1,4 +1,4 @@
-import Auth from '@/components/Auth';
+import Auth from '@/lib/playfab/components/Auth';
 
 import styles from '@/styles/profile.module.css';
 

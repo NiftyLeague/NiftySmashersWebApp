@@ -1,4 +1,5 @@
 import Cookies from 'universal-cookie';
+import { LoginResult, RegisterUserResult } from '@/lib/playfab/types';
 
 const cookies = new Cookies();
 
@@ -67,9 +68,7 @@ function setSession(SessionTicket: string, PlayFabId: string) {
 }
 
 export function setUserAuth(
-  result:
-    | PlayFabClientModels.LoginResult
-    | PlayFabClientModels.RegisterPlayFabUserResult,
+  result: LoginResult | RegisterUserResult,
   rememberMe: boolean
 ) {
   console.log('setUserAuth loginResult', result);

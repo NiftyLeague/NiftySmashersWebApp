@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Provider } from '@supabase/supabase-js';
-import { PlayFabClient } from 'playfab-sdk';
 import { useRouter } from 'next/router';
 import {
   Input,
@@ -14,10 +13,18 @@ import {
   IconInbox,
   IconLock,
 } from '@supabase/ui';
-import { UserContextProvider, useUser } from './UserContext';
-import * as SocialIcons from './Icons';
-import { setUserAuth } from '@/utils/authStorage';
-import { getRandomKey } from '@/utils/helpers';
+import { authStorage } from '@/lib/playfab/utils';
+import {
+  buttonStyles,
+  SocialIcons,
+  UserContextProvider,
+  useUser,
+} from '@/lib/playfab/components';
+import {
+  LoginWithEmailAddress,
+  RegisterPlayFabUser,
+  SendAccountRecoveryEmail,
+} from '@/lib/playfab/api';
 import AuthStyles from '@/styles/auth.module.css';
 
 const VIEWS: ViewsMap = {
@@ -40,7 +47,6 @@ type ViewType =
 type RedirectTo = undefined | string;
 
 export interface Props {
-  playFabClient: typeof PlayFabClient;
   className?: string;
   children?: React.ReactNode;
   style?: React.CSSProperties;
@@ -54,8 +60,9 @@ export interface Props {
   onlyThirdPartyProviders?: boolean;
 }
 
+type SetAuthView = React.Dispatch<React.SetStateAction<ViewType>>;
+
 function Auth({
-  playFabClient,
   className,
   style,
   socialLayout = 'vertical',
@@ -71,17 +78,13 @@ function Auth({
   const [defaultPassword, setDefaultPassword] = useState('');
 
   const verticalSocialLayout = socialLayout === 'vertical' ? true : false;
-
   let containerClasses = [AuthStyles['sbui-auth']];
-  if (className) {
-    containerClasses.push(className);
-  }
+  if (className) containerClasses.push(className);
 
   const Container = (props: any) => (
     <div className={containerClasses.join(' ')} style={style}>
       <Space size={8} direction={'vertical'}>
         <SocialAuth
-          playFabClient={playFabClient}
           verticalSocialLayout={verticalSocialLayout}
           providers={providers}
           socialLayout={socialLayout}
@@ -107,7 +110,6 @@ function Auth({
         <Container>
           <EmailAuth
             id={authView === VIEWS.SIGN_UP ? 'auth-sign-up' : 'auth-sign-in'}
-            playFabClient={playFabClient}
             authView={authView}
             setAuthView={setAuthView}
             defaultEmail={defaultEmail}
@@ -121,17 +123,14 @@ function Auth({
     case VIEWS.FORGOTTEN_PASSWORD:
       return (
         <Container>
-          <ForgottenPassword
-            playFabClient={playFabClient}
-            setAuthView={setAuthView}
-          />
+          <ForgottenPassword setAuthView={setAuthView} />
         </Container>
       );
 
     case VIEWS.UPDATE_PASSWORD:
       return (
         <Container>
-          <UpdatePassword playFabClient={playFabClient} />
+          <UpdatePassword />
         </Container>
       );
 
@@ -143,7 +142,6 @@ function Auth({
 function SocialAuth({
   className,
   style,
-  playFabClient,
   children,
   socialLayout = 'vertical',
   socialColors = false,
@@ -189,9 +187,7 @@ function SocialAuth({
                       type="default"
                       shadow
                       size={socialButtonSize}
-                      style={
-                        socialColors ? SocialIcons.buttonStyles[provider] : {}
-                      }
+                      style={socialColors ? buttonStyles[provider] : {}}
                       icon={AuthIcon ? <AuthIcon /> : ''}
                       loading={loading}
                       onClick={() => handleProviderSignIn(provider)}
@@ -219,17 +215,15 @@ function EmailAuth({
   setAuthView,
   setDefaultEmail,
   setDefaultPassword,
-  playFabClient,
   redirectTo,
 }: {
   authView: ViewType;
   defaultEmail: string;
   defaultPassword: string;
   id: 'auth-sign-up' | 'auth-sign-in';
-  setAuthView: any;
+  setAuthView: SetAuthView;
   setDefaultEmail: (email: string) => void;
   setDefaultPassword: (password: string) => void;
-  playFabClient: typeof PlayFabClient;
   redirectTo: RedirectTo;
 }) {
   const router = useRouter();
@@ -254,40 +248,26 @@ function EmailAuth({
     e.preventDefault();
     setError('');
     setLoading(true);
+    const params = { Email: email, Password: password };
     switch (authView) {
       case 'sign_in':
-        const loginRequest = { Email: email, Password: password };
-        playFabClient.LoginWithEmailAddress(
-          loginRequest,
-          (error, loginResult) => {
-            if (error) {
-              setError(error.errorMessage);
-              setLoading(false);
-            } else {
-              setUserAuth(loginResult.data, rememberMe);
-              if (redirectTo) router.push(redirectTo);
-            }
-          }
-        );
+        const loginRes = await LoginWithEmailAddress(params);
+        if (loginRes.error) {
+          setError(loginRes.errorMessage);
+          setLoading(false);
+        } else {
+          authStorage.setUserAuth(loginRes.data, rememberMe);
+          if (redirectTo) router.push(redirectTo);
+        }
         break;
       case 'sign_up':
-        const registerRequest = {
-          Email: email,
-          Username: getRandomKey(20),
-          Password: password,
-          RequireBothUsernameAndEmail: true,
-        };
-        playFabClient.RegisterPlayFabUser(
-          registerRequest,
-          (error, registerResult) => {
-            if (error) {
-              setError(error.errorMessage);
-            } else {
-              setUserAuth(registerResult.data, rememberMe);
-              if (redirectTo) router.push(redirectTo);
-            }
-          }
-        );
+        const regRes = await RegisterPlayFabUser(params);
+        if (regRes.error) {
+          setError(regRes.errorMessage);
+        } else {
+          authStorage.setUserAuth(regRes.data, rememberMe);
+          if (redirectTo) router.push(redirectTo);
+        }
         break;
     }
 
@@ -394,13 +374,7 @@ function EmailAuth({
   );
 }
 
-function ForgottenPassword({
-  setAuthView,
-  playFabClient,
-}: {
-  setAuthView: any;
-  playFabClient: typeof PlayFabClient;
-}) {
+function ForgottenPassword({ setAuthView }: { setAuthView: SetAuthView }) {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
@@ -411,20 +385,12 @@ function ForgottenPassword({
     setError('');
     setMessage('');
     setLoading(true);
-    const resetPasswordRequest = {
-      TitleId: playFabClient.settings.titleId,
-      Email: email,
-    };
-    playFabClient.SendAccountRecoveryEmail(
-      resetPasswordRequest,
-      (error, result) => {
-        if (error) {
-          setError(error.errorMessage);
-        } else {
-          setMessage('Check your email for the password reset link');
-        }
-      }
-    );
+    const res = await SendAccountRecoveryEmail({ Email: email });
+    if (res.error) {
+      setError(res.errorMessage);
+    } else {
+      setMessage('Check your email for the password reset link');
+    }
     setLoading(false);
   };
 
@@ -466,11 +432,7 @@ function ForgottenPassword({
   );
 }
 
-function UpdatePassword({
-  playFabClient,
-}: {
-  playFabClient: typeof PlayFabClient;
-}) {
+function UpdatePassword() {
   const { account } = useUser();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');

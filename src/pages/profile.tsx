@@ -10,7 +10,7 @@ import {
   Tabs,
   Typography,
 } from '@supabase/ui';
-import Auth from '@/components/Auth';
+import Auth from '@/lib/playfab/components/Auth';
 import AccountDetails from '@/components/AccountDetails';
 import Inventory from '@/components/Inventory';
 import BackButton from '@/components/BackButton';

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { Button, IconLink2, Input } from '@supabase/ui';
-import { LinkWallet, UnlinkWallet, signMessage } from '@/utils/wallet';
-import Auth from '@/components/Auth';
+import { LinkWallet, UnlinkWallet } from '@/lib/playfab/api';
+import { Auth } from '@/lib/playfab/components';
+import { signMessage } from '@/utils/wallet';
 
 export default function LinkWalletInput({
   index,

@@ -1,77 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Provider } from '@supabase/supabase-js';
 import { Button, Space } from '@supabase/ui';
-import Auth from '@/components/Auth';
-import * as SocialIcons from '@/components/Auth/Icons';
+import { Auth, SocialIcons, buttonStyles } from '@/lib/playfab/components';
 import { useSession, signIn, getSession } from 'next-auth/react';
-import { playfab } from '@/utils/initPlayfab';
 
 export interface Props {
   providers: Provider[];
   socialButtonSize?: 'tiny' | 'small' | 'medium' | 'large' | 'xlarge';
   socialLayout?: 'horizontal' | 'vertical';
 }
-
-type LinkGoogleResult = PlayFabClientModels.LinkGoogleAccountResult;
-type LinkFacebookResult = PlayFabClientModels.LinkFacebookAccountResult;
-type LinkProviderResult = LinkGoogleResult | LinkFacebookResult | null;
-
-async function linkGoogleAccount(): Promise<LinkGoogleResult | null> {
-  const ServerAuthCode = null;
-  if (ServerAuthCode) {
-    return new Promise((resolve, reject) => {
-      playfab.LinkGoogleAccount(
-        { ForceLink: true, ServerAuthCode },
-        function (error, result) {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(result.data);
-          }
-        }
-      );
-    });
-  }
-  return null;
-}
-
-async function linkFacebookAccount(): Promise<LinkFacebookResult> {
-  return new Promise((resolve, reject) => {
-    playfab.GetUserPublisherReadOnlyData(
-      { Keys: ['LinkedWallets'] },
-      function (error, result) {
-        if (error) {
-          console.error(
-            'GetUserPublisherReadOnlyData Error:',
-            error.errorMessage
-          );
-          reject(error);
-        } else {
-          resolve(result.data);
-        }
-      }
-    );
-  });
-}
-
-const linkProvider = async (
-  provider: Provider
-): Promise<{ error?: unknown; result?: LinkProviderResult }> => {
-  try {
-    let result: LinkProviderResult = null;
-    switch (provider) {
-      case 'google':
-        result = await linkGoogleAccount();
-      case 'facebook':
-        result = await linkFacebookAccount();
-      default:
-        break;
-    }
-    return { result };
-  } catch (error) {
-    return { error };
-  }
-};
 
 export default function LinkedProviders({
   providers,
@@ -123,9 +60,7 @@ export default function LinkedProviders({
               shadow
               size={socialButtonSize}
               style={
-                linkedProviders.includes(provider)
-                  ? SocialIcons.buttonStyles[provider]
-                  : {}
+                linkedProviders.includes(provider) ? buttonStyles[provider] : {}
               }
               icon={AuthIcon ? <AuthIcon /> : ''}
               loading={loading}

@@ -3,7 +3,7 @@ import { Button, IconMaximize } from '@supabase/ui';
 import useUnityPreConfig from '@/hooks/useUnityPreConfig';
 import useUnityEventHandlers from '@/hooks/useUnityEventHandlers';
 import useUnitySafeClose from '@/hooks/useUnitySafeClose';
-import Auth from '@/components/Auth';
+// import { Auth } from '@/lib/playfab/components';
 import Preloader from './Preloader';
 import styles from '@/styles/modal.module.css';
 

@@ -1,7 +1,7 @@
 const chars =
   'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
 
-export function getRandomKey(size = 100) {
+export default function getRandomKey(size = 100) {
   const data = new Uint8Array(4 * size);
   window.crypto.getRandomValues(data);
   const result = [];

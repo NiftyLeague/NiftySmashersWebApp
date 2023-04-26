@@ -13,11 +13,7 @@
     "@emotion/styled": "^11.10.6",
     "@metamask/eth-sig-util": "^5.0.2",
     "@mui/material": "^5.12.1",
-    "@supabase/supabase-js": "^1.2.1",
     "@supabase/ui": "^0.36.2",
-    "@types/node": "18.15.3",
-    "@types/react": "18.0.28",
-    "@types/react-dom": "18.0.11",
     "classnames": "^2.3.2",
     "crypto": "^1.0.1",
     "eslint": "8.36.0",
@@ -34,10 +30,12 @@
     "react-dom": "18.2.0",
     "react-unity-webgl": "^9.4.0",
     "swr": "^2.1.5",
-    "typescript": "5.0.2",
-    "universal-cookie": "^4.0.4"
+    "typescript": "5.0.2"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.192"
+    "@types/lodash": "^4.14.192",
+    "@types/node": "18.15.3",
+    "@types/react": "18.0.28",
+    "@types/react-dom": "18.0.11"
   }
 }

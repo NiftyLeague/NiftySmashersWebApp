@@ -8,7 +8,7 @@ import Preloader from './Preloader';
 import styles from '@/styles/modal.module.css';
 
 const Game = ({ closeGame }: { closeGame: () => void }) => {
-  //   const { account, publisherData } = Auth.useUser();
+  //   const { account, publisherData } = Auth.useUserContext();
   const address = '0x0';
   const authToken = '';
 

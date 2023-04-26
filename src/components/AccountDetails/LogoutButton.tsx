@@ -1,21 +1,23 @@
-import { useRouter } from 'next/router';
 import cn from 'classnames';
 import { IconLogOut } from '@supabase/ui';
-import { logout } from '@/lib/playfab/api';
+import { useUserSession } from '@/lib/playfab/hooks';
+import { fetchJson } from '@/lib/playfab/utils';
 
 import styles from '@/styles/profile.module.css';
 
 export default function LogoutButton({ loading = false }) {
-  const router = useRouter();
+  const { mutateUser } = useUserSession({ redirectTo: '/login' });
   return (
     <div>
       <button
         className={cn(styles.button, 'block')}
         style={{ marginBottom: 0 }}
         disabled={loading}
-        onClick={() => {
-          logout();
-          setTimeout(() => router.push('/login'), 1000);
+        onClick={async e => {
+          e.preventDefault();
+          mutateUser(
+            await fetchJson('/api/playfab/logout', { method: 'POST' })
+          );
         }}
       >
         <IconLogOut />

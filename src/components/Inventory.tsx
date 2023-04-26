@@ -3,7 +3,7 @@ import Auth from '@/lib/playfab/components/Auth';
 import styles from '@/styles/profile.module.css';
 
 export default function Inventory() {
-  const { currencies, isLoggedIn } = Auth.useUser();
+  const { currencies, isLoggedIn } = Auth.useUserContext();
   return isLoggedIn ? (
     <>
       <label htmlFor="inventory">Currencies</label>

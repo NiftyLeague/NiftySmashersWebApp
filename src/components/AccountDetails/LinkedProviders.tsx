@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Provider } from '@supabase/supabase-js';
 import { Button, Space } from '@supabase/ui';
+import type { Provider } from '@/lib/playfab/types';
 import { Auth, SocialIcons, buttonStyles } from '@/lib/playfab/components';
 import { useSession, signIn, getSession } from 'next-auth/react';
 
@@ -15,10 +15,10 @@ export default function LinkedProviders({
   socialButtonSize = 'medium',
   socialLayout = 'horizontal',
 }: Props) {
-  const player = Auth.useUser();
-  const { data: session } = useSession();
+  const player = Auth.useUserContext();
+  // const { data: session } = useSession();
   // console.log('LinkedProviders.player', player);
-  console.log('LinkedProviders.session', session);
+  // console.log('LinkedProviders.session', session);
   const verticalSocialLayout = socialLayout === 'vertical' ? true : false;
   const [loading, setLoading] = useState(false);
   const [linkedProviders, setLinkedProviders] = useState<Provider[]>([]);

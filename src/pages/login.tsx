@@ -1,20 +1,12 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { Card, Typography, Space } from '@supabase/ui';
+import { withSessionSsr } from '@/utils/session';
 import Auth from '@/lib/playfab/components/Auth';
 import BackButton from '@/components/BackButton';
 import useProviders from '@/hooks/useProviders';
 
 const Login = () => {
-  const router = useRouter();
-  const { isLoggedIn } = Auth.useUser();
   const providers = useProviders();
-
-  useEffect(() => {
-    if (isLoggedIn) router.push('/profile');
-  }, [isLoggedIn, router]);
-
   return (
     <>
       <BackButton />
@@ -26,33 +18,43 @@ const Login = () => {
           margin: 'auto',
         }}
       >
-        {!isLoggedIn && (
-          <Card style={{ margin: 'auto' }}>
-            <Space direction="vertical" size={8}>
-              <div>
-                <Image
-                  src="/logo/white.png"
-                  alt="Company Logo"
-                  width={50}
-                  height={50}
-                />
-                <Typography.Title level={3} style={{ marginTop: 16 }}>
-                  Welcome to Nifty League
-                </Typography.Title>
-              </div>
-              <Auth
-                providers={providers}
-                view="sign_in"
-                socialLayout="horizontal"
-                socialButtonSize="xlarge"
-                redirectTo="/profile"
+        <Card style={{ margin: 'auto' }}>
+          <Space direction="vertical" size={8}>
+            <div>
+              <Image
+                src="/logo/white.png"
+                alt="Company Logo"
+                width={50}
+                height={50}
               />
-            </Space>
-          </Card>
-        )}
+              <Typography.Title level={3} style={{ marginTop: 16 }}>
+                Welcome to Nifty League
+              </Typography.Title>
+            </div>
+            <Auth
+              providers={providers}
+              view="sign_in"
+              socialLayout="horizontal"
+              socialButtonSize="xlarge"
+              redirectTo="/profile"
+            />
+          </Space>
+        </Card>
       </div>
     </>
   );
 };
+
+export const getServerSideProps = withSessionSsr(async function ({ req }) {
+  const user = req.session.user;
+  // redirect to profile if already logged in
+  if (user && user.isLoggedIn) {
+    return {
+      props: {},
+      redirect: { destination: '/profile', permanent: false },
+    };
+  }
+  return { props: {} };
+});
 
 export default Login;

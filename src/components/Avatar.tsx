@@ -3,8 +3,6 @@ import Image from 'next/image';
 import cn from 'classnames';
 import { useSnackbar } from 'notistack';
 import { IconUpload } from '@supabase/ui';
-import { Database } from '@/utils/database.types';
-type Profiles = Database['public']['Tables']['profiles']['Row'];
 
 import styles from '@/styles/profile.module.css';
 
@@ -15,7 +13,7 @@ export default function Avatar({
   onUpload,
 }: {
   uid: string;
-  url: Profiles['avatar_url'];
+  url?: string;
   size: number;
   onUpload: (url: string) => void;
 }) {
@@ -42,7 +40,7 @@ export default function Avatar({
       onUpload(filePath);
     } catch (error) {
       enqueueSnackbar('Error updating avatar.', { variant: 'error' });
-      console.log(error);
+      console.error(error);
     } finally {
       setUploading(false);
     }

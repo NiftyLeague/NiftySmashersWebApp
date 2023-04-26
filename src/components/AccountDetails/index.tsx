@@ -2,84 +2,71 @@ import { useState, useEffect } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { Button, IconLoader, IconSave, Input } from '@supabase/ui';
 import { useSnackbar } from 'notistack';
+import { fetchJson, parseLinkedWalletResult } from '@/lib/playfab/utils';
+import useProviders from '@/hooks/useProviders';
 import { Auth } from '@/lib/playfab/components';
-import { parseLinkedWalletResult } from '@/lib/playfab/utils';
-import {
-  AddOrUpdateContactEmail,
-  UpdateAvatarUrl,
-  UpdateUserPublisherData,
-} from '@/lib/playfab/api';
 import Avatar from '@/components/Avatar';
+import LinkedProviders from './LinkedProviders';
 import LinkWalletInput from './LinkWalletInput';
 import LogoutButton from './LogoutButton';
 
-import useProviders from '@/hooks/useProviders';
-import { Database } from '@/utils/database.types';
-type Profiles = Database['public']['Tables']['profiles']['Row'];
+type Profile = {
+  linkedWallets?: string[];
+  displayName?: string;
+  avatar_url?: string;
+  email?: string;
+};
 
 import styles from '@/styles/profile.module.css';
-import LinkedProviders from './LinkedProviders';
 
 export default function AccountDetails() {
-  const {
-    account,
-    isLoggedIn,
-    playFabId: uid,
-    profile,
-    publisherData,
-  } = Auth.useUser();
+  const user = Auth.useUserContext();
+  const { account, isLoggedIn, playFabId: uid, profile, publisherData } = user;
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(true);
-  const [email, setEmail] = useState<Profiles['email']>(null);
-  const [displayName, setDisplayName] = useState<Profiles['displayName']>(null);
-  const [linkedWallets, setLinkedWallets] = useState<string[]>([]);
-  const [avatar_url, setAvatarUrl] = useState<Profiles['avatar_url']>(null);
+  const [email, setEmail] = useState<Profile['email']>();
+  const [displayName, setDisplayName] = useState<Profile['displayName']>();
+  const [linkedWallets, setLinkedWallets] = useState<Profile['linkedWallets']>(
+    []
+  );
+  const [avatar_url, setAvatarUrl] = useState<Profile['avatar_url']>();
   const providers = useProviders();
 
   useEffect(() => {
     if (account && !isEmpty(account)) {
-      setEmail(account.PrivateInfo?.Email ?? null);
-      setAvatarUrl(profile?.AvatarUrl ?? null);
-      setDisplayName(publisherData?.DisplayName?.Value ?? null);
+      setEmail(account.PrivateInfo?.Email);
+      setAvatarUrl(profile?.AvatarUrl);
+      setDisplayName(publisherData?.DisplayName?.Value);
       setLinkedWallets(parseLinkedWalletResult(publisherData));
       setLoading(false);
     }
   }, [account, profile, publisherData]);
 
-  async function updateProfile({
-    email,
-    displayName,
-    avatar_url,
-  }: {
-    email?: Profiles['email'];
-    displayName?: Profiles['displayName'];
-    avatar_url?: Profiles['avatar_url'];
-  }) {
+  async function updateProfile({ email, displayName, avatar_url }: Profile) {
     try {
       setLoading(true);
       if (!account || !profile) throw new Error('No user');
-
-      // Update Profile Contact Email
-      if (email && email !== account.PrivateInfo?.Email)
-        await AddOrUpdateContactEmail(email);
+      const body = {} as Profile;
 
       // Update Account Display Name
-      if (displayName && displayName !== publisherData?.DisplayName?.Value) {
-        const request = {
-          Data: { DisplayName: displayName },
-          Permission: 'public',
-        };
-        await UpdateUserPublisherData(request);
-      }
-
+      if (displayName && displayName !== publisherData?.DisplayName?.Value)
+        body.displayName = displayName;
+      // Update Profile Contact Email
+      if (email && email !== account.PrivateInfo?.Email) body.email = email;
       // Update Profile Avatar
       if (avatar_url && avatar_url !== profile.AvatarUrl)
-        await UpdateAvatarUrl(avatar_url);
+        body.avatar_url = avatar_url;
+
+      await fetchJson('/api/playfab/user/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
 
       enqueueSnackbar('Profile updated!', { variant: 'success' });
     } catch (error) {
       enqueueSnackbar('Error updating the data.', { variant: 'error' });
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -123,17 +110,18 @@ export default function AccountDetails() {
           ]}
         />
       </div>
-
-      <div>
-        <label htmlFor="wallets">Linked Wallet(s)</label>
-        <LinkWalletInput index={1} address={linkedWallets[0] || ''} />
-        {Boolean(linkedWallets[0] || '') && (
-          <LinkWalletInput index={2} address={linkedWallets[1] || ''} />
-        )}
-        {Boolean(linkedWallets[1]) && (
-          <LinkWalletInput index={3} address={linkedWallets[2] || ''} />
-        )}
-      </div>
+      {linkedWallets ? (
+        <div>
+          <label htmlFor="wallets">Linked Wallet(s)</label>
+          <LinkWalletInput index={1} address={linkedWallets[0] || ''} />
+          {Boolean(linkedWallets[0] || '') && (
+            <LinkWalletInput index={2} address={linkedWallets[1] || ''} />
+          )}
+          {Boolean(linkedWallets[1]) && (
+            <LinkWalletInput index={3} address={linkedWallets[2] || ''} />
+          )}
+        </div>
+      ) : null}
 
       <div>
         <label htmlFor="providerss">Linked Provider(s)</label>

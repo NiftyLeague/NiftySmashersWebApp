@@ -1,21 +1,20 @@
-import { Provider } from '@supabase/supabase-js';
 import { playfab } from '@/lib/playfab/init';
 import {
-  authStorage,
   getRandomKey,
   isEthereumSignatureValid,
   parseLinkedWalletResult,
 } from '@/lib/playfab/utils';
-import {
+import type {
   AccountResult,
   LinkFacebookResult,
   LinkGoogleResult,
   LinkProviderResult,
   LoginResult,
   PlayerResult,
-  PublisherData,
+  Provider,
   PublisherDataResult,
   RegisterUserResult,
+  UserData,
 } from '@/lib/playfab/types';
 
 const { PlayFabClient, PlayFabCloudScript } = playfab;
@@ -46,6 +45,7 @@ export const RegisterPlayFabUser = async (params: {
 export const LoginWithEmailAddress = async (params: {
   Email: string;
   Password: string;
+  InfoRequestParameters?: PlayFabClientModels.GetPlayerCombinedInfoRequestParams;
 }): Promise<PlayFabModule.IPlayFabSuccessContainer<LoginResult>> => {
   return new Promise((resolve, reject) => {
     PlayFabClient.LoginWithEmailAddress({ ...params }, (error, result) => {
@@ -59,8 +59,9 @@ export const LoginWithEmailAddress = async (params: {
   });
 };
 
-export const LoginWithCustomIDAsync = async (params: {
+export const LoginWithCustomID = async (params: {
   CustomId: string;
+  InfoRequestParameters?: PlayFabClientModels.GetPlayerCombinedInfoRequestParams;
 }): Promise<PlayFabModule.IPlayFabSuccessContainer<LoginResult>> => {
   return new Promise((resolve, reject) => {
     const request = { ...params, CreateAccount: false };
@@ -69,7 +70,6 @@ export const LoginWithCustomIDAsync = async (params: {
         console.error('LoginWithCustomID Error:', error.errorMessage);
         reject(error);
       } else {
-        console.log('CustomID Link Success');
         resolve(result);
       }
     });
@@ -85,7 +85,6 @@ export const GenerateCustomIDAsync = async (): Promise<string> => {
         console.error('LinkCustomID Error:', error.errorMessage);
         reject(error);
       } else {
-        console.log('CustomID Link Success');
         resolve(CustomId);
       }
     });
@@ -110,9 +109,8 @@ export const SendAccountRecoveryEmail = async (params: {
   });
 };
 
-export function logout() {
+export function logoutPlayFabUser() {
   PlayFabClient.ForgetAllCredentials();
-  authStorage.clearCustomID();
 }
 
 /*************************************** Linked Providers **********************************************/
@@ -226,20 +224,19 @@ const InfoRequestParameters = {
   // UserReadOnlyDataKeys: []
 } as PlayFabClientModels.GetPlayerCombinedInfoRequestParams;
 
-export const GetPlayerCombinedInfoAsync =
-  async (): Promise<PlayerResult | null> => {
-    return new Promise((resolve, reject) => {
-      const request = { InfoRequestParameters };
-      PlayFabClient.GetPlayerCombinedInfo(request, (error, result) => {
-        if (error) {
-          console.error('GetPlayerCombinedInfo Error:', error.errorMessage);
-          reject(error);
-        } else {
-          resolve(result.data);
-        }
-      });
+export const GetPlayerCombinedInfo = async (): Promise<PlayerResult | null> => {
+  return new Promise((resolve, reject) => {
+    const request = { InfoRequestParameters };
+    PlayFabClient.GetPlayerCombinedInfo(request, (error, result) => {
+      if (error) {
+        console.error('GetPlayerCombinedInfo Error:', error.errorMessage);
+        reject(error);
+      } else {
+        resolve(result.data);
+      }
     });
-  };
+  });
+};
 
 export async function GetDisplayName(): Promise<PublisherDataResult> {
   return new Promise((resolve, reject) => {
@@ -272,7 +269,7 @@ export async function GetLinkedWallets(): Promise<PublisherDataResult> {
   });
 }
 
-export const GetUserPublisherDataAsync = async (): Promise<PublisherData> => {
+export const GetUserPublisherData = async (): Promise<UserData> => {
   const { Data: PublisherData } = await GetDisplayName();
   const { Data: ReadOnlyData } = await GetLinkedWallets();
   return { ...PublisherData, ...ReadOnlyData };
@@ -289,7 +286,6 @@ export async function AddOrUpdateContactEmail(
         console.error('AddOrUpdateContactEmail Error:', error.errorMessage);
         reject(error);
       } else {
-        console.log('AddOrUpdateContactEmail Success');
         resolve(result);
       }
     });
@@ -305,7 +301,6 @@ export async function UpdateAvatarUrl(
         console.error('UpdateAvatarUrl Error:', error.errorMessage);
         reject(error);
       } else {
-        console.log('UpdateAvatarUrl Success');
         resolve(result);
       }
     });
@@ -321,7 +316,6 @@ export async function UpdateUserPublisherData(
         console.error('UpdateUserPublisherData Error:', error.errorMessage);
         reject(error);
       } else {
-        console.log('UpdateUserPublisherData Success');
         resolve(result.data);
       }
     });

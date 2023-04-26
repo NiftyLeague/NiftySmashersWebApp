@@ -1,13 +1,17 @@
 import { useEffect } from 'react';
 import Router from 'next/router';
 import useSWR from 'swr';
-import { User } from '@/pages/api/user';
+import type { User } from '@/lib/playfab/types';
+import { fetchJson } from '@/lib/playfab/utils';
 
-export default function useUser({
+export default function useUserSession({
   redirectTo = '',
   redirectIfFound = false,
 } = {}) {
-  const { data: user, mutate: mutateUser } = useSWR<User>('/api/user');
+  const { data: user, mutate: mutateUser } = useSWR<User>(
+    '/api/playfab/user/session',
+    fetchJson
+  );
 
   useEffect(() => {
     // if no redirect needed, just return (example: already on /dashboard)

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { Button, IconLink2, Input } from '@supabase/ui';
-import { LinkWallet, UnlinkWallet } from '@/lib/playfab/api';
+import { errorMsgHandler } from '@/utils/errorHandlers';
+import { fetchJson } from '@/lib/playfab/utils';
 import { Auth } from '@/lib/playfab/components';
 import { signMessage } from '@/utils/wallet';
 
@@ -14,7 +15,7 @@ export default function LinkWalletInput({
 }) {
   const [error, setError] = useState<string | undefined>();
   const { enqueueSnackbar } = useSnackbar();
-  const { refetchPlayer } = Auth.useUser();
+  const { refetchPlayer } = Auth.useUserContext();
 
   const handleLinkWallet = async () => {
     setError(undefined);
@@ -22,13 +23,17 @@ export default function LinkWalletInput({
     if (result) {
       const { address, nonce, signature } = result;
       try {
-        await LinkWallet({ address, signature, nonce });
+        await fetchJson('/api/playfab/user/link-wallet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address, signature, nonce }),
+        });
         await refetchPlayer();
         enqueueSnackbar('Wallet link success!', { variant: 'success' });
       } catch (e) {
-        console.error(e);
+        const msg = errorMsgHandler(e);
         if (e instanceof Error) {
-          setError(e.message);
+          setError(msg);
         } else {
           enqueueSnackbar(`Unknown error: ${e}`, { variant: 'error' });
         }
@@ -38,23 +43,22 @@ export default function LinkWalletInput({
 
   const handleUnLinkWallet = async () => {
     setError(undefined);
-    console.log('address', address);
     if (address) {
       try {
         const [chain, wallet] = address.split(':');
-        await UnlinkWallet({ address: wallet, chain });
+        await fetchJson('/api/playfab/user/unlink-wallet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address: wallet, chain }),
+        });
         await refetchPlayer();
         enqueueSnackbar('Unlink wallet link success!', { variant: 'success' });
       } catch (e) {
-        console.error(e);
+        const msg = errorMsgHandler(e);
         if (e instanceof Error) {
-          setError(e.message);
-        } else if ((e as { errorMessage: string })?.errorMessage) {
-          enqueueSnackbar(`${(e as { errorMessage: string }).errorMessage}`, {
-            variant: 'error',
-          });
+          setError(msg);
         } else {
-          console.error(`Unknown error: ${e}`);
+          enqueueSnackbar(msg, { variant: 'error' });
         }
       }
     }

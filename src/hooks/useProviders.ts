@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getProviders } from 'next-auth/react';
-import { Provider } from '@supabase/supabase-js';
+import type { Provider } from '@/lib/playfab/types';
 
 export default function useProviders(): Provider[] {
   const [providers, setProviders] = useState<Provider[]>([]);

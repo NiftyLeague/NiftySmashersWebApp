@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Provider } from '@supabase/supabase-js';
-import { useRouter } from 'next/router';
 import {
   Input,
   Checkbox,
@@ -13,18 +11,15 @@ import {
   IconInbox,
   IconLock,
 } from '@supabase/ui';
-import { authStorage } from '@/lib/playfab/utils';
+import { useUserSession, useUserContext } from '@/lib/playfab/hooks';
+import { fetchJson } from '@/lib/playfab/utils';
 import {
   buttonStyles,
   SocialIcons,
   UserContextProvider,
-  useUser,
 } from '@/lib/playfab/components';
-import {
-  LoginWithEmailAddress,
-  RegisterPlayFabUser,
-  SendAccountRecoveryEmail,
-} from '@/lib/playfab/api';
+import { errorMsgHandler } from '@/utils/errorHandlers';
+import type { User, Provider } from '@/lib/playfab/types';
 import AuthStyles from '@/styles/auth.module.css';
 
 const VIEWS: ViewsMap = {
@@ -226,14 +221,14 @@ function EmailAuth({
   setDefaultPassword: (password: string) => void;
   redirectTo: RedirectTo;
 }) {
-  const router = useRouter();
   const isMounted = useRef<boolean>(true);
   const [email, setEmail] = useState(defaultEmail);
   const [password, setPassword] = useState(defaultPassword);
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  // const [message, setMessage] = useState('');
+  const { mutateUser } = useUserSession({ redirectTo, redirectIfFound: true });
 
   useEffect(() => {
     setEmail(defaultEmail);
@@ -248,25 +243,34 @@ function EmailAuth({
     e.preventDefault();
     setError('');
     setLoading(true);
-    const params = { Email: email, Password: password };
+    const body = JSON.stringify({ email, password, rememberMe });
     switch (authView) {
       case 'sign_in':
-        const loginRes = await LoginWithEmailAddress(params);
-        if (loginRes.error) {
-          setError(loginRes.errorMessage);
+        try {
+          const res = await fetchJson<User>('/api/playfab/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body,
+          });
+          mutateUser(res);
+        } catch (error) {
+          const msg = errorMsgHandler(error);
+          setError(msg);
           setLoading(false);
-        } else {
-          authStorage.setUserAuth(loginRes.data, rememberMe);
-          if (redirectTo) router.push(redirectTo);
         }
         break;
       case 'sign_up':
-        const regRes = await RegisterPlayFabUser(params);
-        if (regRes.error) {
-          setError(regRes.errorMessage);
-        } else {
-          authStorage.setUserAuth(regRes.data, rememberMe);
-          if (redirectTo) router.push(redirectTo);
+        try {
+          const res = await fetchJson<User>('/api/playfab/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body,
+          });
+          mutateUser(res);
+        } catch (error) {
+          const msg = errorMsgHandler(error);
+          setError(msg);
+          setLoading(false);
         }
         break;
     }
@@ -366,7 +370,7 @@ function EmailAuth({
               Do you have an account? Sign in
             </Typography.Link>
           )}
-          {message && <Typography.Text>{message}</Typography.Text>}
+          {/* {message && <Typography.Text>{message}</Typography.Text>} */}
           {error && <Typography.Text type="danger">{error}</Typography.Text>}
         </Space>
       </Space>
@@ -385,13 +389,19 @@ function ForgottenPassword({ setAuthView }: { setAuthView: SetAuthView }) {
     setError('');
     setMessage('');
     setLoading(true);
-    const res = await SendAccountRecoveryEmail({ Email: email });
-    if (res.error) {
-      setError(res.errorMessage);
-    } else {
+    try {
+      await fetchJson<User>('/api/playfab/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
       setMessage('Check your email for the password reset link');
+    } catch (error) {
+      const msg = errorMsgHandler(error);
+      setError(msg);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -433,12 +443,11 @@ function ForgottenPassword({ setAuthView }: { setAuthView: SetAuthView }) {
 }
 
 function UpdatePassword() {
-  const { account } = useUser();
+  const { account } = useUserContext();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  console.log('UpdatePassword', account);
 
   const handlePasswordReset = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -497,6 +506,7 @@ function UpdatePassword() {
 Auth.ForgottenPassword = ForgottenPassword;
 Auth.UpdatePassword = UpdatePassword;
 Auth.UserContextProvider = UserContextProvider;
-Auth.useUser = useUser;
+Auth.useUserContext = useUserContext;
+Auth.useUserSession = useUserSession;
 
 export default Auth;

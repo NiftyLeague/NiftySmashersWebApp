@@ -27,6 +27,7 @@ export default function Home() {
               className={styles.wordmark}
               width={704}
               height={292}
+              priority
             />
             <div className={styles.buttons}>
               <button id="trailer-btn">

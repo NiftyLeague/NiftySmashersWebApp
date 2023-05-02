@@ -1,6 +1,29 @@
 import { useState, useEffect } from 'react';
 import { isMacOs, isAndroid, isIOS, isWindows } from 'react-device-detect';
 
+const COMMON_MSG = 'Available on all Android devices!';
+
+enum MSGS {
+  // win: 'Download the Smashers Game Launcher for best performance or play in browser.',
+  Windows = `Windows download will be enabled soon. ${COMMON_MSG}`,
+  // android: 'Download the app in Google Play Store or play on desktop!',
+  Android = 'Download the app in Google Play Store!',
+  // ios: 'Game available on desktop or Android devices only. Stay tuned for our iOS release!',
+  IOS = `${COMMON_MSG} Stay tuned for our iOS release.`,
+  // linux: 'Linux support is not available at this time.',
+  LINUX = `Linux support is not available at this time. ${COMMON_MSG}`,
+  // osx: 'Download for Mac & iOS devices will be added soon. Play in browser today!',
+  MAC = `${COMMON_MSG} Download for Mac & iOS will be added soon.`,
+}
+
+enum OS {
+  Windows = 'win',
+  Android = 'android',
+  IOS = 'iOS',
+  LINUX = 'linux',
+  MAC = 'osx',
+}
+
 const useVersion = () => {
   const [version, setVersion] = useState<string | null>(null);
   const env = process.env.NODE_ENV === 'production' ? 'prod' : 'stage';
@@ -11,22 +34,20 @@ const useVersion = () => {
   let message = '';
 
   if (isWindows) {
-    os = 'win';
-    message =
-      'Download the Smashers Game Launcher for best performance or play in browser.';
+    os = OS.Windows;
+    message = MSGS.Windows;
   } else if (isAndroid) {
-    os = 'android';
-    message = 'Download the app in Google Play Store or play on desktop!';
+    os = OS.Android;
+    message = MSGS.Android;
   } else if (isIOS) {
-    os = 'iOS';
-    message =
-      'Game available on desktop or Android devices only. Stay tuned for our iOS release!';
+    os = OS.IOS;
+    message = MSGS.IOS;
   } else if (isLinux) {
-    os = 'linux';
-    message = 'Linux support is not available at this time.';
+    os = OS.LINUX;
+    message = MSGS.LINUX;
   } else if (isMacOs) {
-    os = 'osx';
-    message = 'Download for Mac OS will be added soon. Play in browser today!';
+    os = OS.MAC;
+    message = MSGS.MAC;
   }
 
   const fileName = `NiftyLauncher-setup-${version?.substring(

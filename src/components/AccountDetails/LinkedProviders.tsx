@@ -26,10 +26,10 @@ export default function LinkedProviders({
   // initialize linkedProviders from playfab
   useEffect(() => {
     if (player.profile?.LinkedAccounts) {
-      const providers = player.profile?.LinkedAccounts.map(p =>
+      const providersList = player.profile?.LinkedAccounts.map(p =>
         p.Platform === 'GooglePlay' ? 'google' : p.Platform?.toLowerCase()
       );
-      setLinkedProviders(providers as Provider[]);
+      setLinkedProviders(providersList as Provider[]);
     }
   }, [player.profile]);
 

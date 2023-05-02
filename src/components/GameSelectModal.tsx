@@ -3,6 +3,7 @@ import cn from 'classnames';
 import Image from 'next/image';
 import { Button, Typography, Space } from '@supabase/ui';
 import useVersion from '@/hooks/useVersion';
+import useFlags from '@/hooks/useFlags';
 import styles from '@/styles/modal.module.css';
 
 const GameSelectModal = ({ launchGame }: { launchGame: () => void }) => {
@@ -55,6 +56,7 @@ const ModalContent = ({
 }) => {
   const { isWindows, downloadURL, version, message } = useVersion();
   const loading = !version && isWindows;
+  const { enableIOS, enableWebGL } = useFlags();
 
   const handleAndroidDownload = () => {};
 
@@ -106,54 +108,60 @@ const ModalContent = ({
           onClick={handleAndroidDownload}
           className={styles.button_mobile}
         />
-        <Button
-          block
-          type="outline"
-          icon={
-            <Image
-              src="/icons/apple.svg"
-              alt="Apple Logo"
-              width={22}
-              height={22}
-            />
-          }
-          disabled
-          className={styles.button_mobile}
-        />
-        {isWindows && (
-          <a href={downloadURL || ''}>
+        {enableIOS && (
+          <Button
+            block
+            type="outline"
+            icon={
+              <Image
+                src="/icons/apple.svg"
+                alt="Apple Logo"
+                width={22}
+                height={22}
+              />
+            }
+            disabled
+            className={styles.button_mobile}
+          />
+        )}
+        {enableWebGL ? (
+          <>
+            {isWindows && (
+              <a href={downloadURL || ''}>
+                <Button
+                  block
+                  disabled={!isWindows || !version}
+                  className={styles.button_primary}
+                  icon={
+                    <Image
+                      src="/icons/windows.svg"
+                      alt="Windows Logo"
+                      width={22}
+                      height={22}
+                    />
+                  }
+                >
+                  {loading ? 'Fetching version...' : 'Download'}
+                </Button>
+              </a>
+            )}
             <Button
               block
-              disabled={!isWindows || !version}
+              onClick={launchGame}
               className={styles.button_primary}
               icon={
                 <Image
-                  src="/icons/windows.svg"
-                  alt="Windows Logo"
+                  src="/icons/webgl.svg"
+                  alt="Webgl Logo"
                   width={22}
                   height={22}
                 />
               }
             >
-              {loading ? 'Fetching version...' : 'Download'}
+              Browser
             </Button>
-          </a>
-        )}
-        <Button
-          block
-          onClick={launchGame}
-          className={styles.button_primary}
-          icon={
-            <Image
-              src="/icons/webgl.svg"
-              alt="Webgl Logo"
-              width={22}
-              height={22}
-            />
-          }
-        >
-          Browser
-        </Button>
+          </>
+        ) : null}
       </Space>
     </Space>
   );

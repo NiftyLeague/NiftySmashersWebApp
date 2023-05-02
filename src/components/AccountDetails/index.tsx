@@ -4,20 +4,20 @@ import { Button, IconLoader, IconSave, Input } from '@supabase/ui';
 import { useSnackbar } from 'notistack';
 import { fetchJson, parseLinkedWalletResult } from '@/lib/playfab/utils';
 import useProviders from '@/hooks/useProviders';
+import useFlags from '@/hooks/useFlags';
 import { Auth } from '@/lib/playfab/components';
 import Avatar from '@/components/Avatar';
 import LinkedProviders from './LinkedProviders';
 import LinkWalletInput from './LinkWalletInput';
 import LogoutButton from './LogoutButton';
 
+import styles from '@/styles/profile.module.css';
+
 type Profile = {
-  linkedWallets?: string[];
-  displayName?: string;
   avatar_url?: string;
+  displayName?: string;
   email?: string;
 };
-
-import styles from '@/styles/profile.module.css';
 
 export default function AccountDetails() {
   const user = Auth.useUserContext();
@@ -26,23 +26,22 @@ export default function AccountDetails() {
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState<Profile['email']>();
   const [displayName, setDisplayName] = useState<Profile['displayName']>();
-  const [linkedWallets, setLinkedWallets] = useState<Profile['linkedWallets']>(
-    []
-  );
+  const [linkedWallets, setLinkedWallets] = useState<string[]>([]);
   const [avatar_url, setAvatarUrl] = useState<Profile['avatar_url']>();
   const providers = useProviders();
+  const flags = useFlags();
 
   useEffect(() => {
     if (account && !isEmpty(account)) {
       setEmail(account.PrivateInfo?.Email);
       setAvatarUrl(profile?.AvatarUrl);
       setDisplayName(publisherData?.DisplayName?.Value);
-      setLinkedWallets(parseLinkedWalletResult(publisherData));
+      setLinkedWallets(parseLinkedWalletResult(publisherData) ?? []);
       setLoading(false);
     }
   }, [account, profile, publisherData]);
 
-  async function updateProfile({ email, displayName, avatar_url }: Profile) {
+  async function updateProfile({ avatar_url, displayName, email }: Profile) {
     try {
       setLoading(true);
       if (!account || !profile) throw new Error('No user');
@@ -74,7 +73,7 @@ export default function AccountDetails() {
 
   return isLoggedIn ? (
     <>
-      {uid ? (
+      {uid && flags.enableAvatars ? (
         <Avatar
           uid={uid}
           url={avatar_url}
@@ -110,7 +109,7 @@ export default function AccountDetails() {
           ]}
         />
       </div>
-      {linkedWallets ? (
+      {flags.enableLinkWallet && (
         <div>
           <label htmlFor="wallets">Linked Wallet(s)</label>
           <LinkWalletInput index={1} address={linkedWallets[0] || ''} />
@@ -121,12 +120,14 @@ export default function AccountDetails() {
             <LinkWalletInput index={3} address={linkedWallets[2] || ''} />
           )}
         </div>
-      ) : null}
+      )}
 
-      <div>
-        <label htmlFor="providerss">Linked Provider(s)</label>
-        <LinkedProviders providers={providers} />
-      </div>
+      {flags.enableLinkProviders && (
+        <div>
+          <label htmlFor="providerss">Linked Provider(s)</label>
+          <LinkedProviders providers={providers} />
+        </div>
+      )}
 
       <hr className={styles.hr} />
 

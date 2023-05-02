@@ -105,7 +105,6 @@ html,
 body,
 #__next {
   max-width: 100vw;
-  overflow-x: hidden;
   color: rgb(var(--foreground-rgb));
   background: var(--custom-bg-color);
   font-family: var(--custom-font-family);
@@ -146,10 +145,10 @@ h2 {
   font-size: 1.8rem !important;
 }
 h3 {
-  font-size: 1.5rem !important;
+  font-size: 1.5rem;
 }
 h4 {
-  font-size: 1.2rem !important;
+  font-size: 1.2rem;
 }
 h5 {
   font-size: 0.83rem !important;
@@ -378,4 +377,10 @@ input {
 
 input[disabled] {
   color: var(--custom-color-secondary);
+}
+
+/* Component Overrides */
+
+.sbui-tab-bar-inner-container {
+  justify-content: space-around;
 }

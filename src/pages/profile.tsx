@@ -10,6 +10,7 @@ import {
   Typography,
 } from '@supabase/ui';
 import { withSessionSsr } from '@/utils/session';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import AccountDetails from '@/components/AccountDetails';
 import Inventory from '@/components/Inventory';
 import BackButton from '@/components/BackButton';
@@ -21,6 +22,7 @@ import { useEffect } from 'react';
 
 export default function Profile() {
   const { user } = useUserSession();
+  const mobile = useMediaQuery('(max-width:576px)');
   const router = useRouter();
 
   useEffect(() => {
@@ -33,22 +35,19 @@ export default function Profile() {
   return (
     <>
       <BackButton />
-      <div
-        style={{
-          display: 'flex',
-          maxWidth: '450px',
-          height: '100vh',
-          margin: 'auto',
-        }}
-      >
+      <div className={styles.profileContainer}>
         <Card className={styles.profileCard}>
           <div className={styles.profileCardHeader}>
-            <Image
-              src="/logo/white.png"
-              alt="Company Logo"
-              width={50}
-              height={48}
-            />
+            {mobile ? (
+              <div />
+            ) : (
+              <Image
+                src="/logo/white.png"
+                alt="Company Logo"
+                width={50}
+                height={48}
+              />
+            )}
             <Typography.Text type="success">
               You&apos;re signed in
             </Typography.Text>
@@ -60,11 +59,7 @@ export default function Profile() {
               tabBarStyle={{ marginTop: 16 }}
               tabBarGutter={8}
             >
-              <Tabs.Panel
-                id="account"
-                icon={<IconUser />}
-                label="Account Details"
-              >
+              <Tabs.Panel id="account" icon={<IconUser />} label="Account">
                 <AccountDetails />
               </Tabs.Panel>
               <Tabs.Panel

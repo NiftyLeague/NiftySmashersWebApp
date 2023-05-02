@@ -39,7 +39,7 @@
 
 .modal_iframe {
   width: 80vw;
-  height: 80vh;
+  aspect-ratio: 530 / 300;
 }
 
 .modal_game_canvas {

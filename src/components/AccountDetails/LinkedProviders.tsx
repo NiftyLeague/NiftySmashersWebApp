@@ -27,7 +27,7 @@ export default function LinkedProviders({
   useEffect(() => {
     if (player.profile?.LinkedAccounts) {
       const providers = player.profile?.LinkedAccounts.map(p =>
-        p.Platform?.toLowerCase()
+        p.Platform === 'GooglePlay' ? 'google' : p.Platform?.toLowerCase()
       );
       setLinkedProviders(providers as Provider[]);
     }

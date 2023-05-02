@@ -4,9 +4,11 @@ import { withSessionSsr } from '@/utils/session';
 import Auth from '@/lib/playfab/components/Auth';
 import BackButton from '@/components/BackButton';
 import useProviders from '@/hooks/useProviders';
+import useFlags from '@/hooks/useFlags';
 
 const Login = () => {
   const providers = useProviders();
+  const { enableLinkProviders } = useFlags();
   return (
     <>
       <BackButton />
@@ -32,7 +34,7 @@ const Login = () => {
               </Typography.Title>
             </div>
             <Auth
-              providers={providers}
+              providers={enableLinkProviders ? providers : undefined}
               view="sign_in"
               socialLayout="horizontal"
               socialButtonSize="xlarge"

@@ -14,7 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     const data = await LinkProvider(provider, accessToken);
-    console.log('LinkProvider data:', data);
+    console.log('LinkProvider response:', data);
     res.status(200).json(data);
   } catch (error) {
     const { status, message } = errorResHandler(error);

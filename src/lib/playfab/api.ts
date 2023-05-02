@@ -121,11 +121,12 @@ export function logoutPlayFabUser() {
 /*************************************** Linked Providers **********************************************/
 
 async function LinkGoogleAccount(
-  ServerAuthCode: string
+  AccessToken: string
 ): Promise<LinkGoogleResult | null> {
   return new Promise((resolve, reject) => {
     PlayFabClient.LinkGoogleAccount(
-      { ForceLink: true, ServerAuthCode },
+      // @ts-expect-error PlayFab type incorrectly expects ServerAuthCode
+      { ForceLink: true, AccessToken },
       function (error, result) {
         if (error) {
           reject(error);
@@ -197,12 +198,16 @@ export const LinkProvider = async (
     switch (provider) {
       case 'google':
         result = await LinkGoogleAccount(accesssToken);
+        break;
       case 'apple':
         result = await LinkAppleAccount(accesssToken);
+        break;
       case 'facebook':
         result = await LinkFacebookAccount(accesssToken);
+        break;
       case 'twitch':
         result = await LinkTwitchAccount(accesssToken);
+        break;
       default:
         break;
     }

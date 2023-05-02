@@ -6,9 +6,11 @@ import {
 } from '@/lib/playfab/utils';
 import type {
   AccountResult,
+  LinkAppleResult,
   LinkFacebookResult,
   LinkGoogleResult,
   LinkProviderResult,
+  LinkTwitchResult,
   LoginResult,
   PlayerResult,
   Provider,
@@ -18,6 +20,9 @@ import type {
 } from '@/lib/playfab/types';
 
 const { PlayFabClient, PlayFabCloudScript } = playfab;
+
+// Client API: https://github.com/PlayFab/NodeSDK/blob/master/PlayFabSdk/Scripts/PlayFab/PlayFabClient.js
+// CloudScript API: https://github.com/PlayFab/NodeSDK/blob/master/PlayFabSdk/Scripts/PlayFab/PlayFabCloudScript.js
 
 /*************************************** Login / Sign Up **********************************************/
 
@@ -115,35 +120,14 @@ export function logoutPlayFabUser() {
 
 /*************************************** Linked Providers **********************************************/
 
-async function linkGoogleAccount(): Promise<LinkGoogleResult | null> {
-  const ServerAuthCode = null;
-  if (ServerAuthCode) {
-    return new Promise((resolve, reject) => {
-      PlayFabClient.LinkGoogleAccount(
-        { ForceLink: true, ServerAuthCode },
-        function (error, result) {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(result.data);
-          }
-        }
-      );
-    });
-  }
-  return null;
-}
-
-async function linkFacebookAccount(): Promise<LinkFacebookResult> {
+async function LinkGoogleAccount(
+  ServerAuthCode: string
+): Promise<LinkGoogleResult | null> {
   return new Promise((resolve, reject) => {
-    PlayFabClient.GetUserPublisherReadOnlyData(
-      { Keys: ['LinkedWallets'] },
+    PlayFabClient.LinkGoogleAccount(
+      { ForceLink: true, ServerAuthCode },
       function (error, result) {
         if (error) {
-          console.error(
-            'GetUserPublisherReadOnlyData Error:',
-            error.errorMessage
-          );
           reject(error);
         } else {
           resolve(result.data);
@@ -153,16 +137,72 @@ async function linkFacebookAccount(): Promise<LinkFacebookResult> {
   });
 }
 
-export const linkProvider = async (
-  provider: Provider
+async function LinkAppleAccount(
+  IdentityToken: string
+): Promise<LinkAppleResult> {
+  return new Promise((resolve, reject) => {
+    PlayFabClient.LinkApple(
+      { ForceLink: true, IdentityToken },
+      function (error, result) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result.data);
+        }
+      }
+    );
+  });
+}
+
+async function LinkFacebookAccount(
+  AccessToken: string
+): Promise<LinkFacebookResult> {
+  return new Promise((resolve, reject) => {
+    PlayFabClient.LinkFacebookAccount(
+      { ForceLink: true, AccessToken },
+      function (error, result) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result.data);
+        }
+      }
+    );
+  });
+}
+
+async function LinkTwitchAccount(
+  AccessToken: string
+): Promise<LinkTwitchResult> {
+  return new Promise((resolve, reject) => {
+    PlayFabClient.LinkTwitch(
+      { ForceLink: true, AccessToken },
+      function (error, result) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result.data);
+        }
+      }
+    );
+  });
+}
+
+export const LinkProvider = async (
+  provider: Provider,
+  accesssToken: string
 ): Promise<{ error?: unknown; result?: LinkProviderResult }> => {
   try {
     let result: LinkProviderResult = null;
     switch (provider) {
       case 'google':
-        result = await linkGoogleAccount();
+        result = await LinkGoogleAccount(accesssToken);
+      case 'apple':
+        result = await LinkAppleAccount(accesssToken);
       case 'facebook':
-        result = await linkFacebookAccount();
+        result = await LinkFacebookAccount(accesssToken);
+      case 'twitch':
+        result = await LinkTwitchAccount(accesssToken);
       default:
         break;
     }

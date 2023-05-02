@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button, Space } from '@supabase/ui';
 import type { Provider } from '@/lib/playfab/types';
+import { fetchJson } from '@/lib/playfab/utils';
 import { Auth, SocialIcons, buttonStyles } from '@/lib/playfab/components';
-import { useSession, signIn, getSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 export interface Props {
   providers: Provider[];
@@ -16,14 +18,12 @@ export default function LinkedProviders({
   socialLayout = 'horizontal',
 }: Props) {
   const player = Auth.useUserContext();
-  // const { data: session } = useSession();
-  // console.log('LinkedProviders.player', player);
-  // console.log('LinkedProviders.session', session);
   const verticalSocialLayout = socialLayout === 'vertical' ? true : false;
-  const [loading, setLoading] = useState(false);
   const [linkedProviders, setLinkedProviders] = useState<Provider[]>([]);
-  const [error, setError] = useState('');
+  const session = useSession();
+  const { asPath } = useRouter();
 
+  // initialize linkedProviders from playfab
   useEffect(() => {
     if (player.profile?.LinkedAccounts) {
       const providers = player.profile?.LinkedAccounts.map(p =>
@@ -33,21 +33,43 @@ export default function LinkedProviders({
     }
   }, [player.profile]);
 
-  const handleLinkProvider = async (provider: Provider) => {
-    setLoading(true);
-    await signIn(provider);
-    // const session = await getSession();
-    // const { error, result } = await linkProvider(provider);
-    // console.log('handleLinkProvider.session', session);
-    // @ts-ignore
-    if (error) setError(error?.message || error?.errorMessage);
-    setLoading(false);
+  const handleLinkProvider = useCallback(
+    async (provider: Provider, accessToken: string) => {
+      if (!linkedProviders.includes(provider)) {
+        try {
+          await fetchJson('/api/playfab/user/link-provider', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ provider, accessToken }),
+          });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [linkedProviders.length]
+  );
+
+  // handle link provider on redirect if NextAuth session authenticated
+  useEffect(() => {
+    if (asPath.includes('#') && session.status === 'authenticated') {
+      const { provider, accessToken } = session.data as unknown as {
+        provider: Provider;
+        accessToken: string;
+      };
+      handleLinkProvider(provider, accessToken);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [asPath, session.status, handleLinkProvider]);
+
+  const handleSignIn = async (provider: Provider) => {
+    await signIn(provider, { callbackUrl: `/profile#link-${provider}` });
   };
 
   return providers && providers.length > 0 ? (
     <Space size={2} direction={socialLayout}>
       {providers.map(provider => {
-        // @ts-ignore
         const AuthIcon = SocialIcons[provider];
         return (
           <div
@@ -60,11 +82,13 @@ export default function LinkedProviders({
               shadow
               size={socialButtonSize}
               style={
-                linkedProviders.includes(provider) ? buttonStyles[provider] : {}
+                linkedProviders.includes(provider) || asPath.includes(provider)
+                  ? buttonStyles[provider]
+                  : {}
               }
+              disabled={linkedProviders.includes(provider)}
               icon={AuthIcon ? <AuthIcon /> : ''}
-              loading={loading}
-              onClick={() => handleLinkProvider(provider)}
+              onClick={() => handleSignIn(provider)}
               className="flex items-center"
             >
               {verticalSocialLayout && 'Sign up with ' + provider}

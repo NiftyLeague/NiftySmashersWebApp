@@ -22,15 +22,22 @@ export type User = {
 };
 
 export type LinkGoogleResult = PlayFabClientModels.LinkGoogleAccountResult;
+export type LinkAppleResult = PlayFabClientModels.EmptyResult;
 export type LinkFacebookResult = PlayFabClientModels.LinkFacebookAccountResult;
-export type LinkProviderResult = LinkGoogleResult | LinkFacebookResult | null;
+export type LinkTwitchResult = PlayFabClientModels.LinkTwitchAccountResult;
+export type LinkProviderResult =
+  | LinkGoogleResult
+  | LinkAppleResult
+  | LinkFacebookResult
+  | LinkTwitchResult
+  | null;
 export type Provider =
-  | 'apple'
-  | 'discord'
-  | 'facebook'
   | 'google'
+  | 'apple'
+  | 'facebook'
   | 'twitch'
-  | 'twitter';
+  | 'discord' // not implemented in playfab
+  | 'twitter'; // not implemented in playfab
 
 export type UserSettings = PlayFabClientModels.UserSettings;
 export type UserAccountInfo = PlayFabClientModels.UserAccountInfo;

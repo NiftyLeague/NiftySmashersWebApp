@@ -362,6 +362,32 @@ export async function UpdateUserPublisherData(
 
 /*************************************** PlayFabCloudScript **********************************************/
 
+async function ExecuteFunction(
+  FunctionName: string,
+  FunctionParameter: any
+): Promise<PlayFabCloudScriptModels.ExecuteFunctionResult> {
+  return new Promise((resolve, reject) => {
+    PlayFabCloudScript.ExecuteFunction(
+      { FunctionName, FunctionParameter },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result.data);
+        }
+      }
+    );
+  });
+}
+
+export async function ChangeDisplayName(
+  DisplayName: string
+): Promise<PlayFabCloudScriptModels.ExecuteFunctionResult> {
+  const FunctionName = 'Accounts_ChangeDisplayName';
+  const FunctionParameter = { DisplayName };
+  return ExecuteFunction(FunctionName, FunctionParameter);
+}
+
 type LinkWalletParams = {
   chain?: string;
   address: string;
@@ -378,48 +404,27 @@ export async function LinkWallet({
   let linkedWallets: string[] = [];
   const { Data } = await GetLinkedWallets();
   if (Data) linkedWallets = parseLinkedWalletResult(Data);
+  if (chain != 'ethereum')
+    throw new Error('Only Ethereum wallets are supported at this time');
 
-  return new Promise((resolve, reject) => {
-    let error = null;
-    if (chain != 'ethereum')
-      error = new Error('Only Ethereum wallets are supported at this time');
+  if (!isEthereumSignatureValid(address, signature, nonce))
+    throw new Error('Failed to validate signature');
 
-    if (!isEthereumSignatureValid(address, signature, nonce))
-      error = new Error('Failed to validate signature');
-
-    const walletEntry = `${chain}:${address}`.toLowerCase();
-    if (linkedWallets.includes(walletEntry))
-      error = new Error(
-        `${address.substring(
-          0,
-          6
-        )}... address is already linked to this account`
-      );
-
-    if (error) {
-      reject(error);
-      return;
-    }
-
-    const FunctionName = 'Accounts_LinkWallet';
-    const FunctionParameter = {
-      Chain: chain,
-      Address: address.toLowerCase(),
-      Signature: signature,
-      Nonce: nonce,
-    };
-
-    PlayFabCloudScript.ExecuteFunction(
-      { FunctionName, FunctionParameter },
-      (error, result) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(result.data);
-        }
-      }
+  const walletEntry = `${chain}:${address}`.toLowerCase();
+  if (linkedWallets.includes(walletEntry))
+    throw new Error(
+      `${address.substring(0, 6)}... address is already linked to this account`
     );
-  });
+
+  const FunctionName = 'Accounts_LinkWallet';
+  const FunctionParameter = {
+    Chain: chain,
+    Address: address.toLowerCase(),
+    Signature: signature,
+    Nonce: nonce,
+  };
+
+  return ExecuteFunction(FunctionName, FunctionParameter);
 }
 
 type UnlinkWalletParams = { chain?: string; address: string };
@@ -431,38 +436,20 @@ export async function UnlinkWallet({
   let linkedWallets: string[] = [];
   const { Data } = await GetLinkedWallets();
   if (Data) linkedWallets = parseLinkedWalletResult(Data);
+  if (chain != 'ethereum')
+    throw new Error('Only Ethereum wallets are supported at this time');
 
-  return new Promise((resolve, reject) => {
-    let error = null;
-    if (chain != 'ethereum')
-      error = new Error('Only Ethereum wallets are supported at this time');
-
-    const walletEntry = `${chain}:${address}`.toLowerCase();
-    if (!linkedWallets.includes(walletEntry))
-      error = new Error(
-        `${address.substring(0, 6)}... address is not linked to this account`
-      );
-
-    if (error) {
-      reject(error);
-      return;
-    }
-
-    const FunctionName = 'Accounts_UnlinkWallet';
-    const FunctionParameter = {
-      Chain: chain,
-      Address: address.toLowerCase(),
-    };
-
-    PlayFabCloudScript.ExecuteFunction(
-      { FunctionName, FunctionParameter },
-      (error, result) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(result.data);
-        }
-      }
+  const walletEntry = `${chain}:${address}`.toLowerCase();
+  if (!linkedWallets.includes(walletEntry))
+    throw new Error(
+      `${address.substring(0, 6)}... address is not linked to this account`
     );
-  });
+
+  const FunctionName = 'Accounts_UnlinkWallet';
+  const FunctionParameter = {
+    Chain: chain,
+    Address: address.toLowerCase(),
+  };
+
+  return ExecuteFunction(FunctionName, FunctionParameter);
 }

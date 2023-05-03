@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { withSessionRoute } from '@/utils/session';
 import {
   AddOrUpdateContactEmail,
-  UpdateUserPublisherData,
+  ChangeDisplayName,
   UpdateAvatarUrl,
 } from '@/lib/playfab/api';
 import { errorResHandler } from '@/utils/errorHandlers';
@@ -18,13 +18,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     // Update Account Display Name
-    if (displayName) {
-      const request = {
-        Data: { DisplayName: displayName },
-        Permission: 'public',
-      };
-      await UpdateUserPublisherData(request);
-    }
+    if (displayName) await ChangeDisplayName(displayName);
     // Update Profile Contact Email
     if (email) await AddOrUpdateContactEmail(email);
     // Update Profile Avatar

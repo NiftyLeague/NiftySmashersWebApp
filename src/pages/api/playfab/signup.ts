@@ -8,8 +8,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { email, password, rememberMe } = await req.body;
   try {
     const params = { Email: email, Password: password };
-    const loginRes = await RegisterPlayFabUser(params);
-    const { EntityToken, SessionTicket, PlayFabId } = loginRes.data;
+    const loginData = await RegisterPlayFabUser(params);
+    const { EntityToken, SessionTicket, PlayFabId } = loginData;
     // Generate & link a CustomID for new PlayFab user
     const CustomId = await GenerateCustomIDAsync();
     const user = {

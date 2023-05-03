@@ -36,3 +36,40 @@ export const USER_CONTEXT_INITIAL_STATE = {
   stats: [],
   refetchPlayer: () => new Promise(() => undefined),
 } as UserContextType;
+
+export const ProfileConstraints = {
+  ShowAvatarUrl: true,
+  // ShowBannedUntil: true,
+  // ShowCampaignAttributions: true,
+  // ShowContactEmailAddresses: true,
+  // ShowCreated: true,
+  ShowDisplayName: true,
+  // ShowExperimentVariants: true,
+  // ShowLastLogin: true,
+  ShowLinkedAccounts: true,
+  // ShowLocations: true,
+  // ShowMemberships: true,
+  // ShowOrigination: true,
+  // ShowPushNotificationRegistrations: true,
+  // ShowStatistics: true,
+  // ShowTags: true,
+  // ShowTotalValueToDateInUsd: true,
+  // ShowValuesToDate: true,
+} as PlayFabClientModels.PlayerProfileViewConstraints;
+
+export const InfoRequestParameters = {
+  GetUserAccountInfo: true,
+  GetPlayerProfile: true,
+  ProfileConstraints,
+  GetPlayerStatistics: true,
+  // PlayerStatisticNames: [],
+  GetUserInventory: true,
+  GetUserVirtualCurrency: true,
+  GetCharacterInventories: false,
+  GetCharacterList: false,
+  GetTitleData: false,
+  GetUserData: false,
+  // UserDataKeys: ['DisplayName', 'LinkedWallets'],
+  GetUserReadOnlyData: false,
+  // UserReadOnlyDataKeys: []
+} as PlayFabClientModels.GetPlayerCombinedInfoRequestParams;

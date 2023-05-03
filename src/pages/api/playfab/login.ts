@@ -11,18 +11,18 @@ const InfoRequestParameters = {
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { email, password, rememberMe, CustomId } = await req.body;
   try {
-    let loginRes;
+    let loginData;
     if (CustomId) {
-      loginRes = await LoginWithCustomID({ CustomId });
+      loginData = await LoginWithCustomID({ CustomId });
     } else {
-      loginRes = await LoginWithEmailAddress({
+      loginData = await LoginWithEmailAddress({
         Email: email,
         Password: password,
         InfoRequestParameters,
       });
     }
     const { EntityToken, SessionTicket, PlayFabId, InfoResultPayload } =
-      loginRes.data;
+      loginData;
     const user = {
       isLoggedIn: true,
       persistLogin: rememberMe ?? req.session.user?.persistLogin,

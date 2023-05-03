@@ -218,7 +218,7 @@ export async function UpdateUserPublisherData(
   return CallClientAPI<PublisherDataResult>('UpdateUserPublisherData', request);
 }
 
-/*************************************** DELETE Account Info **********************************************/
+/*************************************** Admin **********************************************/
 
 export async function DeletePlayer(
   PlayFabId: string

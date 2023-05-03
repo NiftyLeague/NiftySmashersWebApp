@@ -14,6 +14,7 @@ export default function LinkWalletInput({
   address?: string;
 }) {
   const [error, setError] = useState<string | undefined>();
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { refetchPlayer } = Auth.useUserContext();
 
@@ -43,6 +44,7 @@ export default function LinkWalletInput({
 
   const handleUnLinkWallet = async () => {
     setError(undefined);
+    setDeleteLoading(true);
     if (address) {
       try {
         const [chain, wallet] = address.split(':');
@@ -62,6 +64,7 @@ export default function LinkWalletInput({
         }
       }
     }
+    setDeleteLoading(false);
   };
 
   const linked = Boolean(address && address.length > 1);
@@ -76,7 +79,13 @@ export default function LinkWalletInput({
       actions={
         linked
           ? [
-              <Button danger key="remove" onClick={handleUnLinkWallet}>
+              <Button
+                danger
+                key="remove"
+                onClick={handleUnLinkWallet}
+                loading={deleteLoading}
+                style={{ opacity: 1 }}
+              >
                 Remove
               </Button>,
             ]

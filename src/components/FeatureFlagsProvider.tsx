@@ -1,11 +1,15 @@
 import { createContext, ReactNode, useState } from 'react';
 
 const DEFAULT_FLAGS = {
+  enableAccountCreation: false,
+  enableAvatars: false,
+  enableInventory: false,
+  enableIOS: false,
   enableLinkProviders: true,
   enableLinkWallet: true,
-  enableAvatars: true,
-  enableWebGL: true,
-  enableIOS: true,
+  enableProviderSignOn: false,
+  enableStats: false,
+  enableWebGL: false,
 } as FlagSet;
 
 /**

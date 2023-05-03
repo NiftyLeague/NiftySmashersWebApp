@@ -1,5 +1,6 @@
-import Image from 'next/image';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import {
   Card,
   IconDatabase,
@@ -16,14 +17,15 @@ import Inventory from '@/components/Inventory';
 import BackButton from '@/components/BackButton';
 import { useUserSession } from '@/lib/playfab/hooks';
 import type { User } from '@/lib/playfab/types';
+import useFlags from '@/hooks/useFlags';
 
 import styles from '@/styles/profile.module.css';
-import { useEffect } from 'react';
 
 export default function Profile() {
   const { user } = useUserSession();
   const mobile = useMediaQuery('(max-width:576px)');
   const router = useRouter();
+  const { enableInventory, enableStats } = useFlags();
 
   useEffect(() => {
     // logout caught after session
@@ -62,16 +64,24 @@ export default function Profile() {
               <Tabs.Panel id="account" icon={<IconUser />} label="Account">
                 <AccountDetails />
               </Tabs.Panel>
-              <Tabs.Panel
-                id="inventory"
-                icon={<IconDatabase />}
-                label="Inventory"
-              >
-                <Inventory />
-              </Tabs.Panel>
-              <Tabs.Panel id="stats" icon={<IconStar />} label="Stats">
-                <div>coming soon...</div>
-              </Tabs.Panel>
+              {enableInventory ? (
+                <Tabs.Panel
+                  id="inventory"
+                  icon={<IconDatabase />}
+                  label="Inventory"
+                >
+                  <Inventory />
+                </Tabs.Panel>
+              ) : (
+                <Tabs.Panel id="inventory" />
+              )}
+              {enableStats ? (
+                <Tabs.Panel id="stats" icon={<IconStar />} label="Stats">
+                  <div>coming soon...</div>
+                </Tabs.Panel>
+              ) : (
+                <Tabs.Panel id="stats" />
+              )}
             </Tabs>
           </Space>
         </Card>

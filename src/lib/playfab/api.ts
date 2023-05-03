@@ -283,24 +283,11 @@ export const GetPlayerCombinedInfo = async (): Promise<PlayerResult | null> => {
   });
 };
 
-export async function GetDisplayName(): Promise<PublisherDataResult> {
+export async function GetUserPublisherReadOnlyData(
+  Keys: string[]
+): Promise<PublisherDataResult> {
   return new Promise((resolve, reject) => {
-    const request = { Keys: ['DisplayName'] };
-    PlayFabClient.GetUserPublisherData(request, (error, result) => {
-      if (error) {
-        console.error('GetUserPublisherData Error:', error.errorMessage);
-        reject(error);
-      } else {
-        resolve(result.data);
-      }
-    });
-  });
-}
-
-export async function GetLinkedWallets(): Promise<PublisherDataResult> {
-  return new Promise((resolve, reject) => {
-    const request = { Keys: ['LinkedWallets'] };
-    PlayFabClient.GetUserPublisherReadOnlyData(request, (error, result) => {
+    PlayFabClient.GetUserPublisherReadOnlyData({ Keys }, (error, result) => {
       if (error) {
         console.error(
           'GetUserPublisherReadOnlyData Error:',
@@ -314,10 +301,16 @@ export async function GetLinkedWallets(): Promise<PublisherDataResult> {
   });
 }
 
+export async function GetLinkedWallets(): Promise<PublisherDataResult> {
+  return GetUserPublisherReadOnlyData(['LinkedWallets']);
+}
+
 export const GetUserPublisherData = async (): Promise<UserData> => {
-  const { Data: PublisherData } = await GetDisplayName();
-  const { Data: ReadOnlyData } = await GetLinkedWallets();
-  return { ...PublisherData, ...ReadOnlyData };
+  const { Data: PublisherData } = await GetUserPublisherReadOnlyData([
+    'LinkedWallets',
+    'DisplayName',
+  ]);
+  return { ...PublisherData };
 };
 
 /*************************************** UPDATE Account Info **********************************************/

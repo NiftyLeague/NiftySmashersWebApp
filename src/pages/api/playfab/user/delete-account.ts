@@ -1,17 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { withSessionRoute } from '@/utils/session';
+import { withUserRoute } from '@/utils/session';
 import { DeletePlayer, logoutPlayFabUser } from '@/lib/playfab/api';
 import { errorResHandler } from '@/utils/errorHandlers';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { PlayFabId } = await req.body;
-  const user = req.session.user;
-
-  if (!user || user.isLoggedIn === false) {
-    res.status(401).end();
-    return;
-  }
-
   try {
     const data = await DeletePlayer(PlayFabId);
     logoutPlayFabUser();
@@ -23,4 +16,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSessionRoute(handler);
+export default withUserRoute(handler);

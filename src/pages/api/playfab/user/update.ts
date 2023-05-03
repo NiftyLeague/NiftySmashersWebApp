@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { withSessionRoute } from '@/utils/session';
+import { withUserRoute } from '@/utils/session';
 import {
   AddOrUpdateContactEmail,
   ChangeDisplayName,
@@ -9,13 +9,6 @@ import { errorResHandler } from '@/utils/errorHandlers';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { email, displayName, avatar_url } = await req.body;
-  const user = req.session.user;
-
-  if (!user || user.isLoggedIn === false) {
-    res.status(401).end();
-    return;
-  }
-
   try {
     // Update Account Display Name
     if (displayName) await ChangeDisplayName(displayName);
@@ -31,4 +24,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSessionRoute(handler);
+export default withUserRoute(handler);

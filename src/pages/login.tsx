@@ -9,7 +9,7 @@ import useFlags from '@/hooks/useFlags';
 
 const Login = () => {
   const providers = useProviders();
-  const { enableLinkProviders } = useFlags();
+  const { enableProviderSignOn } = useFlags();
   const mobile = useMediaQuery('(max-width:576px)');
   return (
     <>
@@ -45,7 +45,7 @@ const Login = () => {
               </Typography.Title>
             </div>
             <Auth
-              providers={enableLinkProviders ? providers : undefined}
+              providers={enableProviderSignOn ? providers : undefined}
               view="sign_in"
               socialLayout="horizontal"
               socialButtonSize="xlarge"

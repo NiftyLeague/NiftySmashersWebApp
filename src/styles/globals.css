@@ -384,5 +384,7 @@ input[disabled] {
 /* Component Overrides */
 
 .sbui-tab-bar-inner-container {
-  justify-content: space-around;
+  /* TODO: change back after enabling Inventory & Stats tabs */
+  /* justify-content: space-around; */
+  justify-content: flex-start;
 }

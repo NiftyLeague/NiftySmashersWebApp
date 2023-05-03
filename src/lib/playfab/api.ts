@@ -13,105 +13,88 @@ import type {
   LinkTwitchResult,
   LoginResult,
   PlayerResult,
+  PlayFabError,
   Provider,
   PublisherDataResult,
   RegisterUserResult,
   UserData,
 } from '@/lib/playfab/types';
+import { InfoRequestParameters } from '@/lib/playfab/constants';
 
 const { PlayFabClient, PlayFabCloudScript } = playfab;
 
 // Client API: https://github.com/PlayFab/NodeSDK/blob/master/PlayFabSdk/Scripts/PlayFab/PlayFabClient.js
 // CloudScript API: https://github.com/PlayFab/NodeSDK/blob/master/PlayFabSdk/Scripts/PlayFab/PlayFabCloudScript.js
 
+async function CallClientAPI<T extends PlayFabModule.IPlayFabResultCommon>(
+  functionName: string,
+  request: any
+): Promise<T> {
+  return new Promise((resolve, reject) => {
+    (PlayFabClient as any)[functionName](
+      request,
+      (
+        error: PlayFabError,
+        result: PlayFabModule.IPlayFabSuccessContainer<T>
+      ) => {
+        if (error) {
+          console.error(`${functionName} Error`, error);
+          reject(error);
+        } else {
+          resolve(result?.data ?? {});
+        }
+      }
+    );
+  });
+}
+
 /*************************************** Login / Sign Up **********************************************/
 
 export const RegisterPlayFabUser = async (params: {
   Email: string;
   Password: string;
-}): Promise<PlayFabModule.IPlayFabSuccessContainer<RegisterUserResult>> => {
+}): Promise<RegisterUserResult> => {
   const request = {
     ...params,
     Username: getRandomKey(20),
     RequireBothUsernameAndEmail: true,
   };
-  return new Promise((resolve, reject) => {
-    PlayFabClient.RegisterPlayFabUser(request, (error, result) => {
-      if (error) {
-        console.error('RegisterPlayFabUser Error:', error.errorMessage);
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+  return CallClientAPI<RegisterUserResult>('RegisterPlayFabUser', request);
 };
 
 export const LoginWithEmailAddress = async (params: {
   Email: string;
   Password: string;
   InfoRequestParameters?: PlayFabClientModels.GetPlayerCombinedInfoRequestParams;
-}): Promise<PlayFabModule.IPlayFabSuccessContainer<LoginResult>> => {
-  return new Promise((resolve, reject) => {
-    PlayFabClient.LoginWithEmailAddress({ ...params }, (error, result) => {
-      if (error) {
-        console.error('LoginWithEmailAddress Error:', error.errorMessage);
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+}): Promise<LoginResult> => {
+  const request = { ...params };
+  return CallClientAPI<LoginResult>('LoginWithEmailAddress', request);
 };
 
 export const LoginWithCustomID = async (params: {
   CustomId: string;
   InfoRequestParameters?: PlayFabClientModels.GetPlayerCombinedInfoRequestParams;
-}): Promise<PlayFabModule.IPlayFabSuccessContainer<LoginResult>> => {
-  return new Promise((resolve, reject) => {
-    const request = { ...params, CreateAccount: false };
-    PlayFabClient.LoginWithCustomID(request, (error, result) => {
-      if (error) {
-        console.error('LoginWithCustomID Error:', error.errorMessage);
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+}): Promise<LoginResult> => {
+  const request = { ...params, CreateAccount: false };
+  return CallClientAPI<LoginResult>('LoginWithCustomID', request);
 };
 
 export const GenerateCustomIDAsync = async (): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const CustomId = getRandomKey(100);
-    const request = { CustomId, ForceLink: false };
-    PlayFabClient.LinkCustomID(request, (error, result) => {
-      if (error) {
-        console.error('LinkCustomID Error:', error.errorMessage);
-        reject(error);
-      } else {
-        resolve(CustomId);
-      }
-    });
-  });
+  const CustomId = getRandomKey(100);
+  const request = { CustomId, ForceLink: false };
+  await CallClientAPI('LinkCustomID', request);
+  return CustomId;
 };
 
+type AccountRecoveryResult = PlayFabClientModels.SendAccountRecoveryEmailResult;
 export const SendAccountRecoveryEmail = async (params: {
   Email: string;
-}): Promise<
-  PlayFabModule.IPlayFabSuccessContainer<PlayFabClientModels.SendAccountRecoveryEmailResult>
-> => {
-  return new Promise((resolve, reject) => {
-    const request = { TitleId: PlayFabClient.settings.titleId, ...params };
-    PlayFabClient.SendAccountRecoveryEmail(request, (error, result) => {
-      if (error) {
-        console.error('SendAccountRecoveryEmail Error:', error.errorMessage);
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+}): Promise<AccountRecoveryResult> => {
+  const request = { TitleId: PlayFabClient.settings.titleId, ...params };
+  return CallClientAPI<AccountRecoveryResult>(
+    'SendAccountRecoveryEmail',
+    request
+  );
 };
 
 export function logoutPlayFabUser() {
@@ -122,96 +105,55 @@ export function logoutPlayFabUser() {
 
 async function LinkGoogleAccount(
   AccessToken: string
-): Promise<LinkGoogleResult | null> {
-  return new Promise((resolve, reject) => {
-    PlayFabClient.LinkGoogleAccount(
-      // @ts-expect-error PlayFab type incorrectly expects ServerAuthCode
-      { ForceLink: true, AccessToken },
-      function (error, result) {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(result.data);
-        }
-      }
-    );
-  });
+): Promise<LinkGoogleResult> {
+  const request = { ForceLink: true, AccessToken };
+  return CallClientAPI<LinkGoogleResult>('LinkGoogleAccount', request);
 }
 
 async function LinkAppleAccount(
   IdentityToken: string
 ): Promise<LinkAppleResult> {
-  return new Promise((resolve, reject) => {
-    PlayFabClient.LinkApple(
-      { ForceLink: true, IdentityToken },
-      function (error, result) {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(result.data);
-        }
-      }
-    );
-  });
+  const request = { ForceLink: true, IdentityToken };
+  return CallClientAPI<LinkAppleResult>('LinkApple', request);
 }
 
 async function LinkFacebookAccount(
   AccessToken: string
 ): Promise<LinkFacebookResult> {
-  return new Promise((resolve, reject) => {
-    PlayFabClient.LinkFacebookAccount(
-      { ForceLink: true, AccessToken },
-      function (error, result) {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(result.data);
-        }
-      }
-    );
-  });
+  const request = { ForceLink: true, AccessToken };
+  return CallClientAPI<LinkFacebookResult>('LinkFacebookAccount', request);
 }
 
 async function LinkTwitchAccount(
   AccessToken: string
 ): Promise<LinkTwitchResult> {
-  return new Promise((resolve, reject) => {
-    PlayFabClient.LinkTwitch(
-      { ForceLink: true, AccessToken },
-      function (error, result) {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(result.data);
-        }
-      }
-    );
-  });
+  const request = { ForceLink: true, AccessToken };
+  return CallClientAPI<LinkTwitchResult>('LinkTwitch', request);
 }
 
 export const LinkProvider = async (
   provider: Provider,
   accesssToken: string
-): Promise<{ error?: unknown; result?: LinkProviderResult }> => {
+): Promise<{ error?: unknown; data?: LinkProviderResult }> => {
   try {
-    let result: LinkProviderResult = null;
+    let data: LinkProviderResult = null;
     switch (provider) {
       case 'google':
-        result = await LinkGoogleAccount(accesssToken);
+        data = await LinkGoogleAccount(accesssToken);
         break;
       case 'apple':
-        result = await LinkAppleAccount(accesssToken);
+        data = await LinkAppleAccount(accesssToken);
         break;
       case 'facebook':
-        result = await LinkFacebookAccount(accesssToken);
+        data = await LinkFacebookAccount(accesssToken);
         break;
       case 'twitch':
-        result = await LinkTwitchAccount(accesssToken);
+        data = await LinkTwitchAccount(accesssToken);
         break;
       default:
         break;
     }
-    return { result };
+    return { data };
   } catch (error) {
     return { error };
   }
@@ -219,90 +161,21 @@ export const LinkProvider = async (
 
 /*************************************** GET Account Info **********************************************/
 
-export const GetAccountInfoAsync = async (): Promise<AccountResult | null> => {
-  return new Promise((resolve, reject) => {
-    PlayFabClient.GetAccountInfo({}, (error, result) => {
-      if (error) {
-        console.error('GetAccountInfo Error:', error.errorMessage);
-        reject(error);
-      } else {
-        resolve(result.data);
-      }
-    });
-  });
+export const GetAccountInfoAsync = async (): Promise<AccountResult> => {
+  return CallClientAPI<AccountResult>('GetAccountInfo', {});
 };
 
-const ProfileConstraints = {
-  ShowAvatarUrl: true,
-  // ShowBannedUntil: true,
-  // ShowCampaignAttributions: true,
-  // ShowContactEmailAddresses: true,
-  // ShowCreated: true,
-  ShowDisplayName: true,
-  // ShowExperimentVariants: true,
-  // ShowLastLogin: true,
-  ShowLinkedAccounts: true,
-  // ShowLocations: true,
-  // ShowMemberships: true,
-  // ShowOrigination: true,
-  // ShowPushNotificationRegistrations: true,
-  // ShowStatistics: true,
-  // ShowTags: true,
-  // ShowTotalValueToDateInUsd: true,
-  // ShowValuesToDate: true,
-} as PlayFabClientModels.PlayerProfileViewConstraints;
-
-const InfoRequestParameters = {
-  GetUserAccountInfo: true,
-  GetPlayerProfile: true,
-  ProfileConstraints,
-  GetPlayerStatistics: true,
-  // PlayerStatisticNames: [],
-  GetUserInventory: true,
-  GetUserVirtualCurrency: true,
-  GetCharacterInventories: false,
-  GetCharacterList: false,
-  GetTitleData: false,
-  GetUserData: false,
-  // UserDataKeys: ['DisplayName', 'LinkedWallets'],
-  GetUserReadOnlyData: false,
-  // UserReadOnlyDataKeys: []
-} as PlayFabClientModels.GetPlayerCombinedInfoRequestParams;
-
-export const GetPlayerCombinedInfo = async (): Promise<PlayerResult | null> => {
-  return new Promise((resolve, reject) => {
-    const request = { InfoRequestParameters };
-    PlayFabClient.GetPlayerCombinedInfo(request, (error, result) => {
-      if (error) {
-        console.error('GetPlayerCombinedInfo Error:', error.errorMessage);
-        reject(error);
-      } else {
-        resolve(result.data);
-      }
-    });
-  });
+export const GetPlayerCombinedInfo = async (): Promise<PlayerResult> => {
+  const request = { InfoRequestParameters };
+  return CallClientAPI<PlayerResult>('GetPlayerCombinedInfo', request);
 };
 
 export async function GetUserPublisherReadOnlyData(
   Keys: string[]
 ): Promise<PublisherDataResult> {
-  return new Promise((resolve, reject) => {
-    PlayFabClient.GetUserPublisherReadOnlyData({ Keys }, (error, result) => {
-      if (error) {
-        console.error(
-          'GetUserPublisherReadOnlyData Error:',
-          error.errorMessage
-        );
-        reject(error);
-      } else {
-        resolve(result.data);
-      }
-    });
+  return CallClientAPI<PublisherDataResult>('GetUserPublisherReadOnlyData', {
+    Keys,
   });
-}
-
-export async function GetLinkedWallets(): Promise<PublisherDataResult> {
-  return GetUserPublisherReadOnlyData(['LinkedWallets']);
 }
 
 export const GetUserPublisherData = async (): Promise<UserData> => {
@@ -313,51 +186,36 @@ export const GetUserPublisherData = async (): Promise<UserData> => {
   return { ...PublisherData };
 };
 
+export async function GetLinkedWallets(): Promise<string[]> {
+  let linkedWallets: string[] = [];
+  const { Data } = await GetUserPublisherReadOnlyData(['LinkedWallets']);
+  if (Data) linkedWallets = parseLinkedWalletResult(Data);
+  return linkedWallets;
+}
+
 /*************************************** UPDATE Account Info **********************************************/
 
 export async function AddOrUpdateContactEmail(
   EmailAddress: string
 ): Promise<PlayFabClientModels.AddOrUpdateContactEmailResult> {
-  return new Promise((resolve, reject) => {
-    PlayFabClient.AddOrUpdateContactEmail({ EmailAddress }, (error, result) => {
-      if (error) {
-        console.error('AddOrUpdateContactEmail Error:', error.errorMessage);
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+  return CallClientAPI<PlayFabClientModels.AddOrUpdateContactEmailResult>(
+    'AddOrUpdateContactEmail',
+    { EmailAddress }
+  );
 }
 
 export async function UpdateAvatarUrl(
   ImageUrl: string
 ): Promise<PlayFabClientModels.EmptyResponse> {
-  return new Promise((resolve, reject) => {
-    PlayFabClient.UpdateAvatarUrl({ ImageUrl }, (error, result) => {
-      if (error) {
-        console.error('UpdateAvatarUrl Error:', error.errorMessage);
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+  return CallClientAPI('UpdateAvatarUrl', { ImageUrl });
 }
 
 export async function UpdateUserPublisherData(
-  request: PlayFabClientModels.UpdateUserDataRequest
+  Data: any,
+  Permission = 'public'
 ): Promise<PlayFabClientModels.UpdateUserDataResult> {
-  return new Promise((resolve, reject) => {
-    PlayFabClient.UpdateUserPublisherData(request, (error, result) => {
-      if (error) {
-        console.error('UpdateUserPublisherData Error:', error.errorMessage);
-        reject(error);
-      } else {
-        resolve(result.data);
-      }
-    });
-  });
+  const request = { Data, Permission };
+  return CallClientAPI<PublisherDataResult>('UpdateUserPublisherData', request);
 }
 
 /*************************************** PlayFabCloudScript **********************************************/
@@ -401,9 +259,7 @@ export async function LinkWallet({
   signature,
   nonce,
 }: LinkWalletParams): Promise<PlayFabCloudScriptModels.ExecuteFunctionResult> {
-  let linkedWallets: string[] = [];
-  const { Data } = await GetLinkedWallets();
-  if (Data) linkedWallets = parseLinkedWalletResult(Data);
+  const linkedWallets = await GetLinkedWallets();
   if (chain != 'ethereum')
     throw new Error('Only Ethereum wallets are supported at this time');
 
@@ -433,9 +289,7 @@ export async function UnlinkWallet({
   chain = 'ethereum',
   address,
 }: UnlinkWalletParams): Promise<PlayFabCloudScriptModels.ExecuteFunctionResult> {
-  let linkedWallets: string[] = [];
-  const { Data } = await GetLinkedWallets();
-  if (Data) linkedWallets = parseLinkedWalletResult(Data);
+  const linkedWallets = await GetLinkedWallets();
   if (chain != 'ethereum')
     throw new Error('Only Ethereum wallets are supported at this time');
 

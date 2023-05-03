@@ -1,10 +1,15 @@
-import { PlayFab, PlayFabClient, PlayFabCloudScript } from 'playfab-sdk';
+import {
+  PlayFab,
+  PlayFabAdmin,
+  PlayFabClient,
+  PlayFabCloudScript,
+} from 'playfab-sdk';
 
 const createClient = (titleId: string, developerSecretKey: string) => {
   PlayFab.settings.titleId = titleId;
   PlayFab.settings.developerSecretKey = developerSecretKey;
 
-  return { PlayFabClient, PlayFabCloudScript };
+  return { PlayFabAdmin, PlayFabClient, PlayFabCloudScript };
 };
 
 export const playfab = createClient(

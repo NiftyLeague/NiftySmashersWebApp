@@ -21,7 +21,7 @@ import type {
 } from '@/lib/playfab/types';
 import { InfoRequestParameters } from '@/lib/playfab/constants';
 
-const { PlayFabClient, PlayFabCloudScript } = playfab;
+const { PlayFabAdmin, PlayFabClient, PlayFabCloudScript } = playfab;
 
 // Client API: https://github.com/PlayFab/NodeSDK/blob/master/PlayFabSdk/Scripts/PlayFab/PlayFabClient.js
 // CloudScript API: https://github.com/PlayFab/NodeSDK/blob/master/PlayFabSdk/Scripts/PlayFab/PlayFabCloudScript.js
@@ -216,6 +216,22 @@ export async function UpdateUserPublisherData(
 ): Promise<PlayFabClientModels.UpdateUserDataResult> {
   const request = { Data, Permission };
   return CallClientAPI<PublisherDataResult>('UpdateUserPublisherData', request);
+}
+
+/*************************************** DELETE Account Info **********************************************/
+
+export async function DeletePlayer(
+  PlayFabId: string
+): Promise<PlayFabAdminModels.DeletePlayerResult> {
+  return new Promise((resolve, reject) => {
+    PlayFabAdmin.DeletePlayer({ PlayFabId }, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result.data);
+      }
+    });
+  });
 }
 
 /*************************************** PlayFabCloudScript **********************************************/

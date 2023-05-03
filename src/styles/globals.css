@@ -16,12 +16,14 @@
   --background-end-rgb: 255, 255, 255;
   --custom-bg-color: #3d3d3d;
   --custom-panel-color: #222;
+  --custom-card-color: rgba(31, 31, 31);
   --custom-color: #fff;
   --custom-color-secondary: #666;
   --custom-color-brand: #620edf;
   --custom-color-brand-secondary: #5e72eb;
   --custom-color-success: #24b47e;
-  --custom-color-error: rgba(239, 68, 68, 1);
+  --custom-color-error: rgba(239, 68, 68);
+  --custom-color-error-secondary: rgba(220, 38, 38);
 
   --primary-glow: conic-gradient(
     from 180deg at 50% 50%,

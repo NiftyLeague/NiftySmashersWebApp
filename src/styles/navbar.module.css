@@ -137,4 +137,10 @@
   .profile::before {
     content: none;
   }
+  .profile_icon {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    z-index: 5;
+  }
 }

@@ -134,10 +134,10 @@ export default function AccountDetails() {
       <hr className={styles.hr} />
 
       <Grid container spacing={1}>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <LogoutButton loading={loading} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <DeleteAccountDialog loading={loading} uid={uid} />
         </Grid>
       </Grid>

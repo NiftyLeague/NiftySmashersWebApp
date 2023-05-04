@@ -1,13 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withUserRoute } from '@/utils/session';
-import { DeletePlayer, logoutPlayFabUser } from '@/lib/playfab/api';
+import { DeletePlayer } from '@/lib/playfab/api';
 import { errorResHandler } from '@/utils/errorHandlers';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { PlayFabId } = await req.body;
   try {
     const data = await DeletePlayer(PlayFabId);
-    logoutPlayFabUser();
     req.session.destroy();
     res.status(200).json(data);
   } catch (error) {

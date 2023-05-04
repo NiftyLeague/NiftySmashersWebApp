@@ -20,6 +20,7 @@ import {
 } from '@/lib/playfab/components';
 import { errorMsgHandler } from '@/utils/errorHandlers';
 import type { User, Provider } from '@/lib/playfab/types';
+import useFlags from '@/hooks/useFlags';
 import AuthStyles from '@/styles/auth.module.css';
 
 const VIEWS: ViewsMap = {
@@ -229,6 +230,7 @@ function EmailAuth({
   const [loading, setLoading] = useState(false);
   // const [message, setMessage] = useState('');
   const { mutateUser } = useUserSession({ redirectTo, redirectIfFound: true });
+  const { enableAccountCreation } = useFlags();
 
   useEffect(() => {
     setEmail(defaultEmail);
@@ -349,26 +351,30 @@ function EmailAuth({
           </Button>
         </Space>
         <Space direction="vertical" style={{ textAlign: 'center' }}>
-          {authView === VIEWS.SIGN_IN ? (
-            <Typography.Link
-              href="#auth-sign-up"
-              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                e.preventDefault();
-                handleViewChange(VIEWS.SIGN_UP);
-              }}
-            >
-              Don&apos;t have an account? Sign up
-            </Typography.Link>
-          ) : (
-            <Typography.Link
-              href="#auth-sign-in"
-              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                e.preventDefault();
-                handleViewChange(VIEWS.SIGN_IN);
-              }}
-            >
-              Do you have an account? Sign in
-            </Typography.Link>
+          {enableAccountCreation && (
+            <>
+              {authView === VIEWS.SIGN_IN ? (
+                <Typography.Link
+                  href="#auth-sign-up"
+                  onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                    e.preventDefault();
+                    handleViewChange(VIEWS.SIGN_UP);
+                  }}
+                >
+                  Don&apos;t have an account? Sign up
+                </Typography.Link>
+              ) : (
+                <Typography.Link
+                  href="#auth-sign-in"
+                  onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                    e.preventDefault();
+                    handleViewChange(VIEWS.SIGN_IN);
+                  }}
+                >
+                  Do you have an account? Sign in
+                </Typography.Link>
+              )}
+            </>
           )}
           {/* {message && <Typography.Text>{message}</Typography.Text>} */}
           {error && <Typography.Text type="danger">{error}</Typography.Text>}

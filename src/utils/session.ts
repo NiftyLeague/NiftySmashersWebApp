@@ -28,6 +28,22 @@ export function withSessionRoute(handler: NextApiHandler) {
   return withIronSessionApiRoute(handler, sessionOptions);
 }
 
+const withUserHandler = (handler: NextApiHandler): NextApiHandler => {
+  return async function nextApiHandlerWrappedWithUser(req, res) {
+    const user = req.session.user;
+    if (!user || user.isLoggedIn === false) {
+      res.status(401).end();
+      return;
+    }
+
+    return handler(req, res);
+  };
+};
+
+export function withUserRoute(handler: NextApiHandler) {
+  return withSessionRoute(withUserHandler(handler));
+}
+
 // Theses types are compatible with InferGetStaticPropsType https://nextjs.org/docs/basic-features/data-fetching#typescript-use-getstaticprops
 export function withSessionSsr<
   P extends { [key: string]: unknown } = { [key: string]: unknown }

@@ -1,4 +1,6 @@
 import React, { createContext, useCallback, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/router';
+
 import { fetchJson, FetchError } from '@/lib/playfab/utils/fetchJson';
 import { USER_CONTEXT_INITIAL_STATE } from '@/lib/playfab/constants';
 import { useUserSession, useUserInfo } from '@/lib/playfab/hooks';
@@ -11,6 +13,8 @@ export const UserContext = createContext<UserContextType>(
 type Props = { [propName: string]: any };
 
 export const UserContextProvider = (props: Props) => {
+  const { query } = useRouter();
+  const gameToken = query['game-token'] as string | undefined;
   const { user, mutateUser } = useUserSession();
   const { userInfo, mutateUserInfo } = useUserInfo(user);
   const isLoggedIn = Boolean(user?.isLoggedIn);
@@ -46,10 +50,12 @@ export const UserContextProvider = (props: Props) => {
   );
 
   useEffect(() => {
-    if (!isLoggedIn && customId && persistLogin) {
+    if (gameToken) {
+      void handleAnonLogin(gameToken);
+    } else if (!isLoggedIn && customId && persistLogin) {
       void handleAnonLogin(customId);
     }
-  }, [customId, handleAnonLogin, isLoggedIn, persistLogin]);
+  }, [gameToken, customId, handleAnonLogin, isLoggedIn, persistLogin]);
 
   const refetchPlayer = useCallback(
     async () => await mutateUserInfo(),

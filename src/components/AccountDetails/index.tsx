@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import isEmpty from 'lodash/isEmpty';
+import Grid from '@mui/material/Grid';
 import { Button, IconLoader, IconSave, Input } from '@supabase/ui';
 import { useSnackbar } from 'notistack';
 import { fetchJson, parseLinkedWalletResult } from '@/lib/playfab/utils';
@@ -9,6 +10,7 @@ import { Auth } from '@/lib/playfab/components';
 import Avatar from '@/components/Avatar';
 import LinkedProviders from './LinkedProviders';
 import LinkWalletInput from './LinkWalletInput';
+import DeleteAccountDialog from './DeleteAccountDialog';
 import LogoutButton from './LogoutButton';
 
 import styles from '@/styles/profile.module.css';
@@ -131,7 +133,14 @@ export default function AccountDetails() {
 
       <hr className={styles.hr} />
 
-      <LogoutButton loading={loading} />
+      <Grid container spacing={1}>
+        <Grid item xs={12} sm={6}>
+          <LogoutButton loading={loading} />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <DeleteAccountDialog loading={loading} uid={uid} />
+        </Grid>
+      </Grid>
     </>
   ) : null;
 }

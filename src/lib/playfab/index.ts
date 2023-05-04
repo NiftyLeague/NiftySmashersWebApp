@@ -1,5 +1,3 @@
-export { default as playfab } from './init';
-
 export * as api from './api';
 export * as components from './components';
 export * as constants from './constants';

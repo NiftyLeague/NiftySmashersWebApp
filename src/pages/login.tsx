@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Card, Typography, Space } from '@supabase/ui';
 import { withSessionSsr } from '@/utils/session';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Auth from '@/lib/playfab/components/Auth';
 import BackButton from '@/components/BackButton';
 import useProviders from '@/hooks/useProviders';
@@ -8,7 +9,8 @@ import useFlags from '@/hooks/useFlags';
 
 const Login = () => {
   const providers = useProviders();
-  const { enableLinkProviders } = useFlags();
+  const { enableProviderSignOn } = useFlags();
+  const mobile = useMediaQuery('(max-width:576px)');
   return (
     <>
       <BackButton />
@@ -16,8 +18,9 @@ const Login = () => {
         style={{
           display: 'flex',
           maxWidth: '450px',
-          height: '100vh',
+          height: '100%',
           margin: 'auto',
+          overflowY: 'auto',
         }}
       >
         <Card style={{ margin: 'auto' }}>
@@ -28,13 +31,21 @@ const Login = () => {
                 alt="Company Logo"
                 width={50}
                 height={50}
+                style={mobile ? { float: 'right', marginTop: -10 } : {}}
               />
-              <Typography.Title level={3} style={{ marginTop: 16 }}>
+              <Typography.Title
+                level={3}
+                style={{
+                  marginTop: mobile ? 70 : 16,
+                  fontSize: mobile ? '1.15rem' : '1.35rem',
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 Welcome to Nifty League
               </Typography.Title>
             </div>
             <Auth
-              providers={enableLinkProviders ? providers : undefined}
+              providers={enableProviderSignOn ? providers : undefined}
               view="sign_in"
               socialLayout="horizontal"
               socialButtonSize="xlarge"

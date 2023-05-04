@@ -1,5 +1,6 @@
-import Image from 'next/image';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import {
   Card,
   IconDatabase,
@@ -10,18 +11,21 @@ import {
   Typography,
 } from '@supabase/ui';
 import { withSessionSsr } from '@/utils/session';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import AccountDetails from '@/components/AccountDetails';
 import Inventory from '@/components/Inventory';
 import BackButton from '@/components/BackButton';
 import { useUserSession } from '@/lib/playfab/hooks';
 import type { User } from '@/lib/playfab/types';
+import useFlags from '@/hooks/useFlags';
 
 import styles from '@/styles/profile.module.css';
-import { useEffect } from 'react';
 
 export default function Profile() {
   const { user } = useUserSession();
+  const mobile = useMediaQuery('(max-width:576px)');
   const router = useRouter();
+  const { enableInventory, enableStats } = useFlags();
 
   useEffect(() => {
     // logout caught after session
@@ -33,22 +37,19 @@ export default function Profile() {
   return (
     <>
       <BackButton />
-      <div
-        style={{
-          display: 'flex',
-          maxWidth: '450px',
-          height: '100vh',
-          margin: 'auto',
-        }}
-      >
+      <div className={styles.profileContainer}>
         <Card className={styles.profileCard}>
           <div className={styles.profileCardHeader}>
-            <Image
-              src="/logo/white.png"
-              alt="Company Logo"
-              width={50}
-              height={48}
-            />
+            {mobile ? (
+              <div />
+            ) : (
+              <Image
+                src="/logo/white.png"
+                alt="Company Logo"
+                width={50}
+                height={48}
+              />
+            )}
             <Typography.Text type="success">
               You&apos;re signed in
             </Typography.Text>
@@ -60,23 +61,27 @@ export default function Profile() {
               tabBarStyle={{ marginTop: 16 }}
               tabBarGutter={8}
             >
-              <Tabs.Panel
-                id="account"
-                icon={<IconUser />}
-                label="Account Details"
-              >
+              <Tabs.Panel id="account" icon={<IconUser />} label="Account">
                 <AccountDetails />
               </Tabs.Panel>
-              <Tabs.Panel
-                id="inventory"
-                icon={<IconDatabase />}
-                label="Inventory"
-              >
-                <Inventory />
-              </Tabs.Panel>
-              <Tabs.Panel id="stats" icon={<IconStar />} label="Stats">
-                <div>coming soon...</div>
-              </Tabs.Panel>
+              {enableInventory ? (
+                <Tabs.Panel
+                  id="inventory"
+                  icon={<IconDatabase />}
+                  label="Inventory"
+                >
+                  <Inventory />
+                </Tabs.Panel>
+              ) : (
+                <Tabs.Panel id="inventory" />
+              )}
+              {enableStats ? (
+                <Tabs.Panel id="stats" icon={<IconStar />} label="Stats">
+                  <div>coming soon...</div>
+                </Tabs.Panel>
+              ) : (
+                <Tabs.Panel id="stats" />
+              )}
             </Tabs>
           </Space>
         </Card>

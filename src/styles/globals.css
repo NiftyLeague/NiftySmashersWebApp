@@ -118,7 +118,7 @@ body,
 #__next,
 main {
   color: rgb(var(--foreground-rgb));
-  background: var(--custom-bg-color);
+  background: var(--custom-bg-color-dark);
   font-family: var(--custom-font-family);
   width: 100vw;
   height: 100%;

@@ -123,24 +123,25 @@
   .desktop_nav {
     display: none;
   }
+  .navbar {
+    width: 112px;
+    height: 78px;
+  }
   .navbar:before {
     top: -50px;
-    bottom: -62px;
-    left: -50px;
-    right: -50px;
+    bottom: -24px;
+    right: -55px;
+    left: 25px;
     border-width: 5px;
     transform: perspective(16em) rotateX(60deg);
   }
-  .profile {
-    padding: 25px;
-  }
-  .profile::before {
-    content: none;
-  }
-  .profile_icon {
-    position: absolute;
-    top: 25px;
-    right: 25px;
-    z-index: 5;
+  .profile_mobile {
+    margin: 0;
+    width: 102px;
+    height: 72px;
+    padding-left: 12px;
+    position: fixed;
+    right: 0;
+    top: 0;
   }
 }

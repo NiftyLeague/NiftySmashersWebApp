@@ -21,6 +21,7 @@
   position: fixed;
   top: 0;
   right: 0;
+  z-index: 9;
 }
 
 .navbar:before {
@@ -123,24 +124,26 @@
   .desktop_nav {
     display: none;
   }
+  .navbar {
+    position: absolute;
+    width: 112px;
+    height: 78px;
+  }
   .navbar:before {
     top: -50px;
-    bottom: -62px;
-    left: -50px;
-    right: -50px;
+    bottom: -24px;
+    right: -55px;
+    left: 25px;
     border-width: 5px;
     transform: perspective(16em) rotateX(60deg);
   }
-  .profile {
-    padding: 25px;
-  }
-  .profile::before {
-    content: none;
-  }
-  .profile_icon {
+  .profile_mobile {
+    margin: 0;
+    width: 102px;
+    height: 72px;
+    padding-left: 12px;
     position: absolute;
-    top: 25px;
-    right: 25px;
-    z-index: 5;
+    right: 0;
+    top: 0;
   }
 }

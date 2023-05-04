@@ -21,15 +21,14 @@ export default function Navbar() {
       </a>
       <nav className={styles.navbar}>
         <Link href="/profile">
-          <div className={cn(styles.nav_item, styles.profile)}>
-            <div className={styles.profile_icon}>
-              <Image
-                src="/icons/user.svg"
-                alt="Profile Icon"
-                width={22}
-                height={22}
-              />
-            </div>
+          <div className={cn(styles.nav_item, styles.profile_mobile)}>
+            <Image
+              src="/icons/user.svg"
+              alt="Profile Icon"
+              width={28}
+              height={28}
+              style={{ margin: 'auto', width: 28, height: 28 }}
+            />
           </div>
         </Link>
       </nav>

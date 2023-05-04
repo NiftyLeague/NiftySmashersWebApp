@@ -105,13 +105,14 @@
 
 html,
 body,
-#__next {
-  max-width: 100vw;
+#__next,
+main {
   color: rgb(var(--foreground-rgb));
   background: var(--custom-bg-color);
   font-family: var(--custom-font-family);
-  height: 100vh;
   width: 100vw;
+  height: 100%;
+  max-width: 100vw;
   overflow: hidden;
   position: relative;
   /* font-size: calc(15px + 0.390625vw); */

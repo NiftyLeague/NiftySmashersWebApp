@@ -109,10 +109,12 @@
   font-style: normal;
 }
 
+html {
+  overflow: hidden;
+}
 body {
   overflow-x: hidden;
 }
-
 html,
 body,
 #__next,

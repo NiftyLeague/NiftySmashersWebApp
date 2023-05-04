@@ -33,12 +33,12 @@ const DegensSection = () => {
       <div className={styles.section}>
         <AnimatedWrapper>
           <Grid container spacing={0} style={{ marginBottom: 20 }}>
-            <Grid item xs={3} sm={4}>
+            <Grid item xs={6} sm={4}>
               <h3 className="text-align-center animated-header-text animated-header-text-start transition-delay-small">
                 TRIBE
               </h3>
             </Grid>
-            <Grid item xs={9} sm={8}>
+            <Grid item xs={6} sm={8}>
               <h3 className="text-align-center animated-header-text animated-header-text-start transition-delay-small">
                 SPECIAL
               </h3>

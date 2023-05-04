@@ -125,6 +125,7 @@
     display: none;
   }
   .navbar {
+    position: absolute;
     width: 112px;
     height: 78px;
   }
@@ -141,7 +142,7 @@
     width: 102px;
     height: 72px;
     padding-left: 12px;
-    position: fixed;
+    position: absolute;
     right: 0;
     top: 0;
   }

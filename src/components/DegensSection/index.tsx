@@ -8,7 +8,7 @@ import { NIFTY_DEGENS } from './constants';
 import styles from './index.module.css';
 
 const DegensSection = () => {
-  const desktop = useMediaQuery('(min-width:768px)');
+  const desktop = useMediaQuery('(min-width:600px)');
   return (
     <Container>
       <div className={styles.section}>
@@ -54,7 +54,7 @@ const DegensSection = () => {
                   key={name}
                   style={{ marginBottom: 20 }}
                 >
-                  <Grid item xs={3} sm={4} className={styles.grid_col}>
+                  <Grid item xs={6} sm={4} className={styles.grid_col}>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                       <AnimatedWrapper>
                         <div
@@ -80,19 +80,16 @@ const DegensSection = () => {
                       </AnimatedWrapper>
                     </div>
                   </Grid>
-                  <Grid item xs={5} sm={5} className={styles.grid_col}>
-                    <AnimatedWrapper>
-                      <p className="animated-header-text animated-header-text-start transition-delay-medium">
-                        {description}
-                      </p>
-                    </AnimatedWrapper>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={4}
-                    sm={3}
-                    style={{ margin: 'auto', padding: 0 }}
-                  >
+                  {desktop && (
+                    <Grid item xs={5} sm={5} className={styles.grid_col}>
+                      <AnimatedWrapper>
+                        <p className="animated-header-text animated-header-text-start transition-delay-medium">
+                          {description}
+                        </p>
+                      </AnimatedWrapper>
+                    </Grid>
+                  )}
+                  <Grid item xs={6} sm={3} className={styles.grid_col_end}>
                     <AnimatedWrapper>
                       <div
                         style={{ position: 'relative' }}

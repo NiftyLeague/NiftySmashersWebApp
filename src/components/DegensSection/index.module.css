@@ -19,6 +19,10 @@
   margin: auto;
   padding: 2rem;
 }
+.grid_col_end {
+  margin: auto;
+  padding: 0px;
+}
 
 .divider {
   width: 1px;
@@ -43,7 +47,10 @@
   .grid_col {
     padding: 1rem;
   }
+  .grid_col_end {
+    padding: 0px 1rem;
+  }
   .divider {
-    left: 25%;
+    left: 50%;
   }
 }

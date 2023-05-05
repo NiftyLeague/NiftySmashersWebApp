@@ -34,11 +34,7 @@ export default function LinkWalletInput({
       }
     } catch (e) {
       const msg = errorMsgHandler(e);
-      if (e instanceof Error) {
-        setError(msg);
-      } else {
-        enqueueSnackbar(`Unknown error: ${e}`, { variant: 'error' });
-      }
+      setError(msg);
     }
   };
 
@@ -76,6 +72,8 @@ export default function LinkWalletInput({
       disabled
       error={error}
       value={address}
+      className={linked ? 'sbui-linked-input' : 'sbui-connect-input'}
+      style={{ marginBottom: 3 }}
       actions={
         linked
           ? [

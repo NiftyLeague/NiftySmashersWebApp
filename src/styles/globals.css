@@ -431,6 +431,7 @@ label {
   color: var(--custom-color-secondary);
   font-size: 0.8rem;
   text-transform: uppercase;
+  font-weight: var(--custom-font-weight-medium);
 }
 
 input {
@@ -444,10 +445,15 @@ input {
 }
 
 input[disabled] {
-  color: var(--custom-color-secondary);
+  color: rgba(224, 224, 224, 0.75) !important;
+  background-color: var(--custom-bg-color) !important;
 }
 
 /************************************* Component Overrides *************************************/
+
+.sbui-connect-input input[disabled] {
+  background-color: transparent !important;
+}
 
 .sbui-tab-bar-inner-container {
   /* TODO: change back after enabling Inventory & Stats tabs */

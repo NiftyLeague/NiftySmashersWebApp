@@ -24,9 +24,10 @@
   z-index: 9;
 }
 
-.navbar:before {
+.navbar::before {
   content: '';
   position: absolute;
+  z-index: -1;
   background: linear-gradient(
     to left,
     var(--custom-color-brand),
@@ -112,6 +113,13 @@
   margin-right: 8px;
 }
 
+.navbar_inner,
+.profile,
+.profile_mobile {
+  /* Safari perspective fix */
+  transform: translate3d(0px, 0px, 200px);
+}
+
 @media only screen and (max-width: 576px) {
   .logo_container {
     top: -18px;
@@ -130,7 +138,7 @@
     width: 112px;
     height: 78px;
   }
-  .navbar:before {
+  .navbar::before {
     top: -50px;
     bottom: -24px;
     right: -55px;

@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import ConsoleGame from '@/components/ConsoleGame';
+import GameSection from '@/components/GameSection';
 import DegensSection from '@/components/DegensSection';
 import Footer from '@/components/Footer';
 import TrailerModal from '@/components/TrailerModal';
@@ -25,12 +26,12 @@ export default function Home() {
         />
         <meta
           name="description"
-          content="Nifty Smashers is a free 3D platform fighting game that supports up to 16 local or online players. Available on all mobile devices, full cross-play coming soon!"
+          content="Nifty Smashers is a free 3D platform fighting game that supports up to 16 online players. Available on all Android devices - full cross-play coming soon!"
           key="desc"
         />
         <meta
           property="og:description"
-          content="Nifty Smashers is a free 3D platform fighting game that supports up to 16 local or online players. Available on all mobile devices, full cross-play coming soon!"
+          content="Nifty Smashers is a free 3D platform fighting game that supports up to 16 online players. Available on all Android devices - full cross-play coming soon!"
         />
         <meta
           property="og:image"
@@ -38,7 +39,7 @@ export default function Home() {
         />
       </Head>
       <section className={styles.main}>
-        <div className="radial-gradient-background-header" />
+        <div className="radial-gradient-bg-centered" />
         <div className={styles.container}>
           <Navbar />
           <div className={styles.content}>
@@ -77,6 +78,9 @@ export default function Home() {
         <ConsoleGame src="/assets/smashers.mp4" />
       </section>
       <section className={styles.game_details}>
+        <GameSection />
+      </section>
+      <section className={styles.character_details}>
         <DegensSection />
       </section>
       <Footer classes={{ footer: styles.footer }} />

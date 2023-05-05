@@ -96,7 +96,7 @@ const ConsoleGame = ({ src }: { src: string }) => {
           </div>
         </AnimatedWrapper>
       </div>
-      <div className="radial-gradient-background" />
+      <div className="radial-gradient-bg" style={{ height: '110%' }} />
     </div>
   );
 };

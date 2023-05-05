@@ -10,13 +10,13 @@ import styles from './index.module.css';
 const DegensSection = () => {
   const desktop = useMediaQuery('(min-width:600px)');
   return (
-    <Container>
+    <Container className={styles.container}>
       <div className={styles.section}>
         <div style={{ marginBottom: 20 }}>
           <AnimatedWrapper>
-            <h1 className="text-align-center animated-header-text animated-header-text-start transition-delay-small">
+            <h2 className="text-align-center animated-header-text animated-header-text-start transition-delay-small">
               Choose your fighter
-            </h1>
+            </h2>
           </AnimatedWrapper>
         </div>
         <div style={{ position: 'relative' }}>

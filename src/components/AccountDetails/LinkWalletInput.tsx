@@ -20,10 +20,10 @@ export default function LinkWalletInput({
 
   const handleLinkWallet = async () => {
     setError(undefined);
-    const result = await signMessage();
-    if (result) {
-      const { address, nonce, signature } = result;
-      try {
+    try {
+      const result = await signMessage();
+      if (result) {
+        const { address, nonce, signature } = result;
         await fetchJson('/api/playfab/user/link-wallet', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -31,13 +31,13 @@ export default function LinkWalletInput({
         });
         await refetchPlayer();
         enqueueSnackbar('Wallet link success!', { variant: 'success' });
-      } catch (e) {
-        const msg = errorMsgHandler(e);
-        if (e instanceof Error) {
-          setError(msg);
-        } else {
-          enqueueSnackbar(`Unknown error: ${e}`, { variant: 'error' });
-        }
+      }
+    } catch (e) {
+      const msg = errorMsgHandler(e);
+      if (e instanceof Error) {
+        setError(msg);
+      } else {
+        enqueueSnackbar(`Unknown error: ${e}`, { variant: 'error' });
       }
     }
   };

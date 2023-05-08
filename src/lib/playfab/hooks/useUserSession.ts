@@ -9,7 +9,7 @@ export default function useUserSession({
   redirectIfFound = false,
 } = {}) {
   const { data: user, mutate: mutateUser } = useSWR<User>(
-    '/api/playfab/user/session',
+    '/api/playfab/user/playfab-session',
     fetchJson
   );
 

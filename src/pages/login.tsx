@@ -59,6 +59,11 @@ const Login = () => {
 };
 
 export const getServerSideProps = withSessionSsr(async function ({ req }) {
+  // clear session and don't redirect
+  if (req.url?.includes('game-token')) {
+    req.session.destroy();
+    return { props: {} };
+  }
   const user = req.session.user;
   // redirect to profile if already logged in
   if (user && user.isLoggedIn) {

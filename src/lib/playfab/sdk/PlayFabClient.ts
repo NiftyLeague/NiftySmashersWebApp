@@ -6,9 +6,11 @@ import * as PlayFab from './PlayFab';
 export const settings = PlayFab.settings;
 
 export const IsClientLoggedIn = (user?: User): boolean => {
-  return user
-    ? user.SessionTicket != null && user.SessionTicket.length > 0
-    : false;
+  if (!user || !user.SessionTicket || !user.EntityToken?.TokenExpiration)
+    return false;
+  const expiration = new Date(user.EntityToken.TokenExpiration);
+  const expired = expiration < new Date();
+  return !expired && user.SessionTicket.length > 0 ? true : false;
 };
 
 export const AddGenericID: PlayFabClientModule.IPlayFabClient['AddGenericID'] =

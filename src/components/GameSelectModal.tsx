@@ -6,6 +6,9 @@ import useVersion from '@/hooks/useVersion';
 import useFlags from '@/hooks/useFlags';
 import styles from '@/styles/modal.module.css';
 
+const ANDROID_LINK =
+  'https://play.google.com/store/apps/details?id=com.NiftyLeague.NiftySmashersAlpha&pli=1';
+
 const GameSelectModal = ({ launchGame }: { launchGame: () => void }) => {
   const [visible, setVisible] = useState(false);
 
@@ -58,8 +61,6 @@ const ModalContent = ({
   const loading = !version && isWindows;
   const { enableIOS, enableWebGL } = useFlags();
 
-  const handleAndroidDownload = () => {};
-
   return (
     <Space
       size={4}
@@ -94,20 +95,26 @@ const ModalContent = ({
         >
           Close
         </Button>
-        <Button
-          block
-          type="outline"
-          icon={
-            <Image
-              src="/icons/android.svg"
-              alt="Android Logo"
-              width={22}
-              height={22}
-            />
-          }
-          onClick={handleAndroidDownload}
-          className={styles.button_mobile}
-        />
+        <a
+          href={ANDROID_LINK}
+          target="_blank"
+          rel="noreferrer"
+          style={{ width: '100%' }}
+        >
+          <Button
+            block
+            type="outline"
+            icon={
+              <Image
+                src="/icons/android.svg"
+                alt="Android Logo"
+                width={22}
+                height={22}
+              />
+            }
+            className={styles.button_mobile}
+          />
+        </a>
         {enableIOS && (
           <Button
             block

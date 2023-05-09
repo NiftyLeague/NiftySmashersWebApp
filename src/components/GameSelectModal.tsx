@@ -6,8 +6,9 @@ import useVersion from '@/hooks/useVersion';
 import useFlags from '@/hooks/useFlags';
 import styles from '@/styles/modal.module.css';
 
-const ANDROID_LINK =
-  'https://play.google.com/store/apps/details?id=com.NiftyLeague.NiftySmashersAlpha&pli=1';
+const GOOGLE_PLAY_LINK =
+  'https://play.google.com/store/apps/details?id=com.NiftyLeague.NiftySmashersAlpha&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1';
+const APPLE_STORE_LINK = '';
 
 const GameSelectModal = ({ launchGame }: { launchGame: () => void }) => {
   const [visible, setVisible] = useState(false);
@@ -59,7 +60,7 @@ const ModalContent = ({
 }) => {
   const { isWindows, downloadURL, version, message } = useVersion();
   const loading = !version && isWindows;
-  const { enableIOS, enableWebGL } = useFlags();
+  const { enableWebGL } = useFlags();
 
   return (
     <Space
@@ -80,13 +81,12 @@ const ModalContent = ({
         {message}
       </Typography.Text>
       <Typography.Text>
-        As Nifty League&apos;s main game, this brawl-styles action game will
-        have you white-knuckled and on the edge of your seat as you try to
-        out-click, out-smart and out-smash your opponent in a winner-takes-all
-        DEGEN battle!
+        This brawl-style action game will have you white-knuckled and on the
+        edge of your seat as you try to out-click, out-smart and out-smash your
+        opponent in a winner-takes-all battle!
       </Typography.Text>
-      <Space direction="horizontal" style={{ marginTop: 25 }}>
-        <Button
+      <Space direction="horizontal" style={{ marginTop: 20 }}>
+        {/* <Button
           id="internal-close-icon"
           block
           type="outline"
@@ -94,43 +94,39 @@ const ModalContent = ({
           className={styles.button_secondary}
         >
           Close
-        </Button>
+        </Button> */}
         <a
-          href={ANDROID_LINK}
+          href={GOOGLE_PLAY_LINK}
           target="_blank"
           rel="noreferrer"
           style={{ width: '100%' }}
         >
-          <Button
-            block
-            type="outline"
-            icon={
-              <Image
-                src="/icons/android.svg"
-                alt="Android Logo"
-                width={22}
-                height={22}
-              />
-            }
-            className={styles.button_mobile}
+          <Image
+            src="/assets/google-play-badge.png"
+            alt="Get it on Google Play"
+            width={564}
+            height={169}
+            style={{ width: '100%', height: 'auto' }}
           />
         </a>
-        {enableIOS && (
-          <Button
-            block
-            type="outline"
-            icon={
-              <Image
-                src="/icons/apple.svg"
-                alt="Apple Logo"
-                width={22}
-                height={22}
-              />
-            }
-            disabled
-            className={styles.button_mobile}
+        <a
+          aria-disabled
+          target="_blank"
+          rel="noreferrer"
+          style={{ width: '100%', textAlign: 'center' }}
+        >
+          <Image
+            src="/assets/apple-store-badge.svg"
+            alt="Apple Store Badge"
+            width={120}
+            height={40}
+            style={{
+              width: '92%',
+              height: 'auto',
+              opacity: 0.25,
+            }}
           />
-        )}
+        </a>
         {enableWebGL ? (
           <>
             {isWindows && (

@@ -82,8 +82,8 @@ const ModalContent = ({
       </Typography.Text>
       <Typography.Text>
         This brawl-style action game will have you white-knuckled and on the
-        edge of your seat as you try to out-click, out-smart and out-smash your
-        opponent in a winner-takes-all battle!
+        edge of your seat as you try to out-smash your opponent in a
+        winner-takes-all battle!
       </Typography.Text>
       <Space direction="horizontal" style={{ marginTop: 20 }}>
         {/* <Button

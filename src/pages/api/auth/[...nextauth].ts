@@ -24,6 +24,17 @@ const options = {
       clientSecret: process.env.TWITCH_CLIENT_SECRET as string,
     }),
   ],
+  cookies: {
+    pkceCodeVerifier: {
+      name: 'next-auth.pkce.code_verifier',
+      options: {
+        httpOnly: true,
+        sameSite: 'none',
+        path: '/',
+        secure: true,
+      },
+    },
+  },
   callbacks: {
     // @ts-ignore
     async jwt({ token, account }) {

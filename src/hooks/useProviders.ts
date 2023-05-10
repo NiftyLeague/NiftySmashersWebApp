@@ -22,8 +22,9 @@ import type { Provider } from '@/lib/playfab/types';
 
 // PREFER MANUAL APPROACH BECAUSE ABOVE CODE ADDS EXCESS LOAD TIME
 
-const PROVIDERS: Provider[] = ['google', 'apple', 'facebook', 'twitch'];
+const PROVIDERS = process.env.NEXT_PUBLIC_AUTH_PROVIDERS;
+const PROVIDERS_LIST = PROVIDERS ? (PROVIDERS.split(',') as Provider[]) : [];
 
 export default function useProviders(): Provider[] {
-  return PROVIDERS;
+  return PROVIDERS_LIST;
 }

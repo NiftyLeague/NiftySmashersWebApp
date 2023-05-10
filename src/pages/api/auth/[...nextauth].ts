@@ -30,7 +30,7 @@ const options = {
       options: {
         httpOnly: true,
         sameSite: 'none' as 'none',
-        path: '/profile#link-apple',
+        path: '/',
         secure: true,
       },
     },

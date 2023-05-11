@@ -6,15 +6,12 @@ import type { User } from '@/lib/playfab/types';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { email } = await req.body;
-  const { SessionTicket } = req.session.user as User;
-  if (SessionTicket) {
-    try {
-      const data = await SendAccountRecoveryEmail(email, SessionTicket);
-      res.status(200).json(data);
-    } catch (error) {
-      const { status, message } = errorResHandler(error);
-      res.status(status).json({ message });
-    }
+  try {
+    const data = await SendAccountRecoveryEmail(email);
+    res.status(200).json(data);
+  } catch (error) {
+    const { status, message } = errorResHandler(error);
+    res.status(status).json({ message });
   }
 }
 

@@ -92,14 +92,12 @@ export const GenerateCustomID = async (
 
 type AccountRecoveryResult = PlayFabClientModels.SendAccountRecoveryEmailResult;
 export const SendAccountRecoveryEmail = async (
-  Email: string,
-  SessionTicket: string
+  Email: string
 ): Promise<AccountRecoveryResult> => {
   const request = { TitleId: PlayFabClient.settings.titleId, Email };
   return CallClientAPI<AccountRecoveryResult>(
     'SendAccountRecoveryEmail',
-    request,
-    SessionTicket
+    request
   );
 };
 

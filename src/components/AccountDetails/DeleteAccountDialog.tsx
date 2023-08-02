@@ -14,13 +14,7 @@ import { fetchJson } from '@/lib/playfab/utils';
 
 import styles from '@/styles/profile.module.css';
 
-export default function DeleteAccountDialog({
-  loading = false,
-  uid,
-}: {
-  loading: boolean;
-  uid?: string;
-}) {
+export default function DeleteAccountDialog({ loading = false }) {
   const { mutateUser } = useUserSession({ redirectTo: '/login' });
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
@@ -34,7 +28,6 @@ export default function DeleteAccountDialog({
         await fetchJson('/api/playfab/user/delete-account', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ PlayFabId: uid }),
         })
       );
       router.push('/login');

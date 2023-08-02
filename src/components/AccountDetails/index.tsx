@@ -138,7 +138,7 @@ export default function AccountDetails() {
           <LogoutButton loading={loading} />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <DeleteAccountDialog loading={loading} uid={uid} />
+          <DeleteAccountDialog loading={loading} />
         </Grid>
       </Grid>
     </>

@@ -8,7 +8,7 @@ import styles from '@/styles/modal.module.css';
 
 const GOOGLE_PLAY_LINK =
   'https://play.google.com/store/apps/details?id=com.NiftyLeague.NiftySmashersAlpha&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1';
-const APPLE_STORE_LINK = '';
+const APPLE_STORE_LINK = 'https://testflight.apple.com/join/3A5LcqyO';
 
 const GameSelectModal = ({ launchGame }: { launchGame: () => void }) => {
   const [visible, setVisible] = useState(false);
@@ -80,9 +80,9 @@ const ModalContent = ({
       <Typography.Text type="secondary" className={styles.secondary}>
         {message}
       </Typography.Text>
-      <Typography.Text>
+      <Typography.Text style={{ lineHeight: 1.3 }}>
         This brawl-style action game will have you white-knuckled and on the
-        edge of your seat as you try to out-smash your opponent in a
+        edge of your seat as you try to out-smash your opponents in a
         winner-takes-all battle!
       </Typography.Text>
       <Space direction="horizontal" style={{ marginTop: 20 }}>
@@ -110,7 +110,7 @@ const ModalContent = ({
           />
         </a>
         <a
-          aria-disabled
+          href={APPLE_STORE_LINK}
           target="_blank"
           rel="noreferrer"
           style={{ width: '100%', textAlign: 'center' }}
@@ -123,7 +123,6 @@ const ModalContent = ({
             style={{
               width: '92%',
               height: 'auto',
-              opacity: 0.25,
             }}
           />
         </a>

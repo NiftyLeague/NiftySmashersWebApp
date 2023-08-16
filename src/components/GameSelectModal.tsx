@@ -7,7 +7,7 @@ import useFlags from '@/hooks/useFlags';
 import styles from '@/styles/modal.module.css';
 
 const GOOGLE_PLAY_LINK =
-  'https://play.google.com/store/apps/details?id=com.NiftyLeague.NiftySmashersAlpha&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1';
+  'https://play.google.com/store/apps/details?id=com.niftyleague.niftysmashers&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1';
 const APPLE_STORE_LINK = 'https://testflight.apple.com/join/3A5LcqyO';
 
 const GameSelectModal = ({ launchGame }: { launchGame: () => void }) => {

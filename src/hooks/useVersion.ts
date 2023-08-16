@@ -1,19 +1,14 @@
 import { useState, useEffect } from 'react';
 import { isMacOs, isAndroid, isIOS, isWindows } from 'react-device-detect';
 
-const COMMON_MSG = 'Available on Google Play!';
+const COMMON_MSG = 'Download Nifty Smashers Alpha on mobile!';
 
 enum MSGS {
-  // win: 'Download the Smashers Game Launcher for best performance or play in browser.',
-  Windows = `Windows download will be enabled soon. ${COMMON_MSG}`,
-  // android: 'Download the app in Google Play Store or play on desktop!',
-  Android = 'Download the app on Google Play!',
-  // ios: 'Game available on desktop or Android devices only. Stay tuned for our iOS release!',
-  IOS = `${COMMON_MSG} Stay tuned for our iOS release.`,
-  // linux: 'Linux support is not available at this time.',
-  LINUX = `Linux support is not available at this time. ${COMMON_MSG}`,
-  // osx: 'Download for Mac & iOS devices will be added soon. Play in browser today!',
-  MAC = `${COMMON_MSG} Download for Mac & iOS will be added soon.`,
+  Windows = `${COMMON_MSG} Windows will be supported soon.`,
+  Android = 'Download Nifty Smashers Alpha on Google Play!',
+  IOS = `Download Nifty Smashers Alpha on the App Store!`,
+  LINUX = `${COMMON_MSG} Linux support is not available at this time.`,
+  MAC = `${COMMON_MSG} Mac will be supported soon.`,
 }
 
 enum OS {

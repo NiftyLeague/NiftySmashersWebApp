@@ -26,12 +26,12 @@ export default function Home() {
         />
         <meta
           name="description"
-          content="Nifty Smashers is a free 3D platform fighting game that supports up to 16 online players. Available on all Android devices - full cross-play coming soon!"
+          content="Nifty Smashers is a free 3D platform fighting game that supports up to 16 online players. Available on iOS & Android devices - full cross-play coming soon!"
           key="desc"
         />
         <meta
           property="og:description"
-          content="Nifty Smashers is a free 3D platform fighting game that supports up to 16 online players. Available on all Android devices - full cross-play coming soon!"
+          content="Nifty Smashers is a free 3D platform fighting game that supports up to 16 online players. Available on iOS & Android devices - full cross-play coming soon!"
         />
         <meta
           property="og:image"
@@ -44,11 +44,11 @@ export default function Home() {
           <Navbar />
           <div className={styles.content}>
             <Image
-              src="/logo/wordmark_logo_white_glow.png"
+              src="/logo/wordmark_logo_smashers.png"
               alt="Wordmark Logo"
               className={styles.wordmark}
-              width={704}
-              height={292}
+              width={800}
+              height={548}
               priority
             />
             <div className={styles.buttons}>

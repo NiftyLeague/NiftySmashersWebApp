@@ -26,7 +26,7 @@ const GameSection = () => {
             <AnimatedWrapper>
               <p className="animated-header-text animated-header-text-start transition-delay-medium">
                 Nifty Smashers is a free 3D platform fighting game that supports
-                up to 16 online players. Available on all Android devices -{' '}
+                up to 16 online players. Available on iOS & Android devices -{' '}
                 <strong>full cross-play coming soon!</strong>
               </p>
             </AnimatedWrapper>

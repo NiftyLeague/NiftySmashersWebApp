@@ -27,11 +27,11 @@
 }
 
 .wordmark {
-  width: 475px;
-  max-width: 98vw;
+  width: 400px;
+  max-width: 70vw;
   height: auto;
   margin-bottom: auto;
-  margin-top: 70px;
+  margin-top: 30px;
 }
 
 .buttons {
@@ -40,6 +40,7 @@
   display: flex;
   justify-content: space-evenly;
   margin-bottom: 60px;
+  z-index: 99;
 }
 
 .buttons button {
@@ -68,7 +69,7 @@
 
 @media only screen and (max-width: 576px) {
   .wordmark {
-    margin-top: 90px;
+    margin-top: 55px;
   }
   .buttons {
     margin-bottom: 45px;

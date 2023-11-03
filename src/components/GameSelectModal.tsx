@@ -107,6 +107,7 @@ const ModalContent = ({
             width={564}
             height={169}
             style={{ width: '100%', height: 'auto' }}
+            priority
           />
         </a>
         <a
@@ -120,10 +121,8 @@ const ModalContent = ({
             alt="Apple Store Badge"
             width={120}
             height={40}
-            style={{
-              width: '92%',
-              height: 'auto',
-            }}
+            style={{ width: '92%',height: 'auto' }}
+            priority
           />
         </a>
         {enableWebGL ? (

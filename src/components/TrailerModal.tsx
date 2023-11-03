@@ -12,9 +12,10 @@ const ModalContent = ({
       <iframe
         ref={modalIframe}
         id="trailer-modal-iframe"
+        title="Nifty Smashers - Trailer"
         className={styles.modal_iframe}
-        src="https://www.youtube.com/embed/CroLiLm4cto?autoplay=1&enablejsapi=1&html5=1"
-        allow="autoplay; encrypted-media"
+        src="https://www.youtube.com/embed/4lnDrx4aDq8?autoplay=1&enablejsapi=1&html5=1"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
         frameBorder="0"
       ></iframe>

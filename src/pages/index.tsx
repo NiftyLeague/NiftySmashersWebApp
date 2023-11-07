@@ -47,8 +47,8 @@ export default function Home() {
               src="/logo/wordmark_logo_smashers.png"
               alt="Wordmark Logo"
               className={styles.wordmark}
-              width={800}
-              height={548}
+              width={824}
+              height={572}
               priority
             />
             <div className={styles.buttons}>

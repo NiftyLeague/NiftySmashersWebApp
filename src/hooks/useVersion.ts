@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import { isMacOs, isAndroid, isIOS, isWindows } from 'react-device-detect';
 
 const COMMON_MSG = 'Download Nifty Smashers Alpha on mobile!';
+const DESKTOP_MSG = 'PC & Mac will be supported soon.';
 
 enum MSGS {
-  Windows = `${COMMON_MSG} Windows will be supported soon.`,
+  Windows = `${COMMON_MSG} ${DESKTOP_MSG}`,
   Android = 'Download Nifty Smashers Alpha on Google Play!',
   IOS = `Download Nifty Smashers Alpha on the App Store!`,
-  LINUX = `${COMMON_MSG} Linux support is not available at this time.`,
-  MAC = `${COMMON_MSG} Mac will be supported soon.`,
+  LINUX = `${COMMON_MSG} ${DESKTOP_MSG}`,
+  MAC = `${COMMON_MSG} ${DESKTOP_MSG}`,
 }
 
 enum OS {

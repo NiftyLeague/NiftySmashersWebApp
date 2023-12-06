@@ -75,7 +75,7 @@ export default function Home() {
         </div>
       </section>
       <section className={styles.console_game}>
-        <ConsoleGame src="/assets/smashers.mp4" />
+        <ConsoleGame src="/assets/console-game/smashers-960p.mp4" />
       </section>
       <section className={styles.game_details}>
         <GameSection />

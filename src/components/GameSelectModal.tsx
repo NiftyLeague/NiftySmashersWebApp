@@ -81,9 +81,10 @@ const ModalContent = ({
         {message}
       </Typography.Text>
       <Typography.Text style={{ lineHeight: 1.3 }}>
-        This brawl-style action game will have you white-knuckled and on the
-        edge of your seat as you try to out-smash your opponents in a
-        winner-takes-all battle!
+        This platform fighting game will have you on the edge of your seat as
+        you and three other players grab your weapons, unleash unique abilities,
+        and try to smash each other out of the arena in a winner-takes-all
+        battle!
       </Typography.Text>
       <Space direction="horizontal" style={{ marginTop: 20 }}>
         {/* <Button
@@ -121,7 +122,7 @@ const ModalContent = ({
             alt="Apple Store Badge"
             width={120}
             height={40}
-            style={{ width: '92%',height: 'auto' }}
+            style={{ width: '92%', height: 'auto' }}
             priority
           />
         </a>

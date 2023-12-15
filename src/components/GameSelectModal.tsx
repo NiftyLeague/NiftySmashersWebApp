@@ -54,7 +54,16 @@ const ModalContent = ({ closeModal, launchGame }: { closeModal: () => void; laun
   return (
     <Space size={4} direction="vertical" className={styles.model_select_view_content}>
       <Space size={4} direction="horizontal">
-        <Image src="/logo/white.png" alt="Company Logo" width={50} height={48} />
+        <Image
+          src="/logo/white.png"
+          alt="Company Logo"
+          width={50}
+          height={48}
+          style={{
+            maxWidth: '100%',
+            height: 'auto',
+          }}
+        />
         <Typography.Title level={2}>Let&apos;s Brawl!</Typography.Title>
       </Space>
       <Typography.Text type="secondary" className={styles.secondary}>
@@ -80,8 +89,12 @@ const ModalContent = ({ closeModal, launchGame }: { closeModal: () => void; laun
             alt="Get it on Google Play"
             width={564}
             height={169}
-            style={{ width: '100%', height: 'auto' }}
             priority
+            style={{
+              width: '100%',
+              maxWidth: '100%',
+              height: 'auto',
+            }}
           />
         </a>
         <a href={APPLE_STORE_LINK} target="_blank" rel="noreferrer" style={{ width: '100%', textAlign: 'center' }}>
@@ -90,8 +103,12 @@ const ModalContent = ({ closeModal, launchGame }: { closeModal: () => void; laun
             alt="Apple Store Badge"
             width={120}
             height={40}
-            style={{ width: '92%', height: 'auto' }}
             priority
+            style={{
+              width: '92%',
+              maxWidth: '100%',
+              height: 'auto',
+            }}
           />
         </a>
         {enableWebGL ? (
@@ -102,7 +119,18 @@ const ModalContent = ({ closeModal, launchGame }: { closeModal: () => void; laun
                   block
                   disabled={!isWindows || !version}
                   className={styles.button_primary}
-                  icon={<Image src="/icons/windows.svg" alt="Windows Logo" width={22} height={22} />}
+                  icon={
+                    <Image
+                      src="/icons/windows.svg"
+                      alt="Windows Logo"
+                      width={22}
+                      height={22}
+                      style={{
+                        maxWidth: '100%',
+                        height: 'auto',
+                      }}
+                    />
+                  }
                   placeholder="Fetching version..."
                 >
                   {loading ? 'Fetching version...' : 'Download'}
@@ -113,7 +141,18 @@ const ModalContent = ({ closeModal, launchGame }: { closeModal: () => void; laun
               block
               onClick={launchGame}
               className={styles.button_primary}
-              icon={<Image src="/icons/webgl.svg" alt="Webgl Logo" width={22} height={22} />}
+              icon={
+                <Image
+                  src="/icons/webgl.svg"
+                  alt="Webgl Logo"
+                  width={22}
+                  height={22}
+                  style={{
+                    maxWidth: '100%',
+                    height: 'auto',
+                  }}
+                />
+              }
               placeholder="Browser"
             >
               Browser

@@ -22,7 +22,16 @@ export default function Footer({ classes }: { classes?: { footer?: string } }) {
         <Stack direction="row" alignItems="center" justifyContent="center" spacing={3}>
           {SOCIAL_LINKS.map(social => (
             <a href={social.link} target="_blank" rel="noreferrer" key={social.name}>
-              <Image src={social.image} width={20} height={20} alt={social.description} />
+              <Image
+                src={social.image}
+                width={20}
+                height={20}
+                alt={social.description}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
             </a>
           ))}
         </Stack>

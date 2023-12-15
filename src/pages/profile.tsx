@@ -32,7 +32,20 @@ export default function Profile() {
       <div className={styles.profileContainer}>
         <Card className={styles.profileCard}>
           <div className={styles.profileCardHeader}>
-            {mobile ? <div /> : <Image src="/logo/white.png" alt="Company Logo" width={50} height={48} />}
+            {mobile ? (
+              <div />
+            ) : (
+              <Image
+                src="/logo/white.png"
+                alt="Company Logo"
+                width={50}
+                height={48}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
+            )}
             <Typography.Text type="success">You&apos;re signed in</Typography.Text>
           </div>
           <Space direction="vertical" size={6} className={styles.userInfo}>

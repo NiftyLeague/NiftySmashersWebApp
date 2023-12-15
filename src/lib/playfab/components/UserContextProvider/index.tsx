@@ -6,9 +6,7 @@ import { USER_CONTEXT_INITIAL_STATE } from '@/lib/playfab/constants';
 import { useUserSession, useUserInfo } from '@/lib/playfab/hooks';
 import type { User, UserContextType } from '@/lib/playfab/types';
 
-export const UserContext = createContext<UserContextType>(
-  USER_CONTEXT_INITIAL_STATE
-);
+export const UserContext = createContext<UserContextType>(USER_CONTEXT_INITIAL_STATE);
 
 type Props = { [propName: string]: any };
 
@@ -37,16 +35,14 @@ export const UserContextProvider = (props: Props) => {
         switch (status) {
           case 400: // AccountDeleted
           case 404: // AccountNotFound
-            mutateUser(
-              await fetchJson('/api/playfab/logout', { method: 'POST' })
-            );
+            mutateUser(await fetchJson('/api/playfab/logout', { method: 'POST' }));
             break;
           default:
             break;
         }
       }
     },
-    [mutateUser]
+    [mutateUser],
   );
 
   useEffect(() => {
@@ -57,10 +53,7 @@ export const UserContextProvider = (props: Props) => {
     }
   }, [gameToken, customId, handleAnonLogin, isLoggedIn, persistLogin]);
 
-  const refetchPlayer = useCallback(
-    async () => await mutateUserInfo(),
-    [mutateUserInfo]
-  );
+  const refetchPlayer = useCallback(async () => await mutateUserInfo(), [mutateUserInfo]);
 
   const value = useMemo(
     () => ({
@@ -75,7 +68,7 @@ export const UserContextProvider = (props: Props) => {
       refetchPlayer,
       stats: userInfo?.PlayerStatistics,
     }),
-    [isLoggedIn, refetchPlayer, user, userInfo]
+    [isLoggedIn, refetchPlayer, user, userInfo],
   );
 
   return <UserContext.Provider value={value} {...props} />;

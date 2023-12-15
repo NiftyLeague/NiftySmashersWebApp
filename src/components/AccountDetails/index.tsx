@@ -50,13 +50,11 @@ export default function AccountDetails() {
       const body = {} as Profile;
 
       // Update Account Display Name
-      if (displayName && displayName !== publisherData?.DisplayName?.Value)
-        body.displayName = displayName;
+      if (displayName && displayName !== publisherData?.DisplayName?.Value) body.displayName = displayName;
       // Update Profile Contact Email
       if (email && email !== account.PrivateInfo?.Email) body.email = email;
       // Update Profile Avatar
-      if (avatar_url && avatar_url !== profile.AvatarUrl)
-        body.avatar_url = avatar_url;
+      if (avatar_url && avatar_url !== profile.AvatarUrl) body.avatar_url = avatar_url;
 
       await fetchJson('/api/playfab/user/update', {
         method: 'POST',
@@ -101,6 +99,7 @@ export default function AccountDetails() {
           onChange={e => setDisplayName(e.target.value)}
           actions={[
             <Button
+              placeholder="Loading..."
               key="save"
               className={styles.button_primary}
               icon={loading ? <IconLoader /> : <IconSave />}
@@ -115,12 +114,8 @@ export default function AccountDetails() {
         <div>
           <label htmlFor="wallets">Linked Wallet(s)</label>
           <LinkWalletInput index={1} address={linkedWallets[0] || ''} />
-          {Boolean(linkedWallets[0] || '') && (
-            <LinkWalletInput index={2} address={linkedWallets[1] || ''} />
-          )}
-          {Boolean(linkedWallets[1]) && (
-            <LinkWalletInput index={3} address={linkedWallets[2] || ''} />
-          )}
+          {Boolean(linkedWallets[0] || '') && <LinkWalletInput index={2} address={linkedWallets[1] || ''} />}
+          {Boolean(linkedWallets[1]) && <LinkWalletInput index={3} address={linkedWallets[2] || ''} />}
         </div>
       )}
 

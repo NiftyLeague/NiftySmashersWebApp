@@ -20,9 +20,7 @@ export default function Avatar({
   const [uploading, setUploading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
-  const uploadAvatar: React.ChangeEventHandler<
-    HTMLInputElement
-  > = async event => {
+  const uploadAvatar: React.ChangeEventHandler<HTMLInputElement> = async event => {
     try {
       setUploading(true);
 
@@ -55,19 +53,16 @@ export default function Avatar({
           className={cn(styles.avatar, styles.image)}
           height={size}
           width={size}
+          style={{
+            maxWidth: '100%',
+            height: 'auto',
+          }}
         />
       ) : (
-        <div
-          className={cn(styles.avatar, styles.no_image)}
-          style={{ height: size, width: size }}
-        />
+        <div className={cn(styles.avatar, styles.no_image)} style={{ height: size, width: size }} />
       )}
       <div style={{ width: size }}>
-        <label
-          className={cn(styles.button_primary, 'block btn')}
-          style={{ marginBottom: 0 }}
-          htmlFor="single"
-        >
+        <label className={cn(styles.button_primary, 'block btn')} style={{ marginBottom: 0 }} htmlFor="single">
           {uploading ? (
             'Uploading ...'
           ) : (

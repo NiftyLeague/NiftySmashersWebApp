@@ -27,7 +27,7 @@ export default function LinkedProviders({
   useEffect(() => {
     if (player.profile?.LinkedAccounts) {
       const providersList = player.profile?.LinkedAccounts.map(p =>
-        p.Platform === 'GooglePlay' ? 'google' : p.Platform?.toLowerCase()
+        p.Platform === 'GooglePlay' ? 'google' : p.Platform?.toLowerCase(),
       );
       setLinkedProviders(providersList as Provider[]);
     }
@@ -48,7 +48,7 @@ export default function LinkedProviders({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [linkedProviders.length]
+    [linkedProviders.length],
   );
 
   // handle link provider on redirect if NextAuth session authenticated
@@ -72,24 +72,18 @@ export default function LinkedProviders({
       {providers.map(provider => {
         const AuthIcon = SocialIcons[provider];
         return (
-          <div
-            key={provider}
-            style={!verticalSocialLayout ? { flexGrow: 1 } : {}}
-          >
+          <div key={provider} style={!verticalSocialLayout ? { flexGrow: 1 } : {}}>
             <Button
               block
               type="default"
               shadow
               size={socialButtonSize}
-              style={
-                linkedProviders.includes(provider) || asPath.includes(provider)
-                  ? buttonStyles[provider]
-                  : {}
-              }
+              style={linkedProviders.includes(provider) || asPath.includes(provider) ? buttonStyles[provider] : {}}
               disabled={linkedProviders.includes(provider)}
               icon={AuthIcon ? <AuthIcon /> : ''}
               onClick={() => handleSignIn(provider)}
               className="flex items-center"
+              placeholder="Sign up"
             >
               {verticalSocialLayout && 'Sign up with ' + provider}
             </Button>

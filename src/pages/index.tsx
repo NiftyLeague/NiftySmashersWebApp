@@ -20,10 +20,7 @@ export default function Home() {
       <Head>
         <title>Nifty Smashers</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-          property="og:title"
-          content="Nifty Smashers - Free to Play Fighting Game"
-        />
+        <meta property="og:title" content="Nifty Smashers - Free to Play Fighting Game" />
         <meta
           name="description"
           content="Nifty Smashers is a free 3D platform fighting game that supports up to 16 online players. Available on iOS & Android devices - full cross-play coming soon!"
@@ -50,6 +47,10 @@ export default function Home() {
               width={824}
               height={572}
               priority
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+              }}
             />
             <div className={styles.buttons}>
               <button id="trailer-btn">
@@ -58,6 +59,10 @@ export default function Home() {
                   alt="YouTube Logo"
                   width={22}
                   height={22}
+                  style={{
+                    maxWidth: '100%',
+                    height: 'auto',
+                  }}
                 />
                 Trailer
               </button>
@@ -67,6 +72,10 @@ export default function Home() {
                   alt="Game Icon"
                   width={22}
                   height={22}
+                  style={{
+                    maxWidth: '100%',
+                    height: 'auto',
+                  }}
                 />
                 Play
               </button>

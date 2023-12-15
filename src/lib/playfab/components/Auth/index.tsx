@@ -13,11 +13,7 @@ import {
 } from '@supabase/ui';
 import { useUserSession, useUserContext } from '@/lib/playfab/hooks';
 import { fetchJson } from '@/lib/playfab/utils';
-import {
-  buttonStyles,
-  SocialIcons,
-  UserContextProvider,
-} from '@/lib/playfab/components';
+import { buttonStyles, SocialIcons, UserContextProvider } from '@/lib/playfab/components';
 import { errorMsgHandler } from '@/utils/errorHandlers';
 import type { User, Provider } from '@/lib/playfab/types';
 import useFlags from '@/hooks/useFlags';
@@ -34,11 +30,7 @@ interface ViewsMap {
   [key: string]: ViewType;
 }
 
-type ViewType =
-  | 'sign_in'
-  | 'sign_up'
-  | 'forgotten_password'
-  | 'update_password';
+type ViewType = 'sign_in' | 'sign_up' | 'forgotten_password' | 'update_password';
 
 type RedirectTo = undefined | string;
 
@@ -163,10 +155,7 @@ function SocialAuth({
       {providers && providers.length > 0 && (
         <React.Fragment>
           <Space size={4} direction={'vertical'}>
-            <Typography.Text
-              type="secondary"
-              className={AuthStyles['sbui-auth-label']}
-            >
+            <Typography.Text type="secondary" className={AuthStyles['sbui-auth-label']}>
               Sign in with
             </Typography.Text>
             <Space size={2} direction={socialLayout}>
@@ -174,10 +163,7 @@ function SocialAuth({
                 // @ts-ignore
                 const AuthIcon = SocialIcons[provider];
                 return (
-                  <div
-                    key={provider}
-                    style={!verticalSocialLayout ? { flexGrow: 1 } : {}}
-                  >
+                  <div key={provider} style={!verticalSocialLayout ? { flexGrow: 1 } : {}}>
                     <Button
                       block
                       type="default"
@@ -188,6 +174,7 @@ function SocialAuth({
                       loading={loading}
                       onClick={() => handleProviderSignIn(provider)}
                       className="flex items-center"
+                      placeholder="Sign Up"
                     >
                       {verticalSocialLayout && 'Sign up with ' + provider}
                     </Button>
@@ -299,9 +286,7 @@ function EmailAuth({
             autoComplete="email"
             defaultValue={email}
             icon={<IconMail size={21} stroke={'#666666'} />}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setEmail(e.target.value)
-            }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
           />
           <Input
             label="Password"
@@ -309,9 +294,7 @@ function EmailAuth({
             defaultValue={password}
             autoComplete="current-password"
             icon={<IconKey size={21} stroke={'#666666'} />}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setPassword(e.target.value)
-            }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
           />
         </Space>
         <Space direction="vertical" size={6}>
@@ -322,9 +305,7 @@ function EmailAuth({
               id="remember_me"
               size="medium"
               checked={rememberMe}
-              onChange={(value: React.ChangeEvent<HTMLInputElement>) =>
-                setRememberMe(value.target.checked)
-              }
+              onChange={(value: React.ChangeEvent<HTMLInputElement>) => setRememberMe(value.target.checked)}
             />
             {authView === VIEWS.SIGN_IN && (
               <Typography.Link
@@ -346,6 +327,7 @@ function EmailAuth({
             icon={<IconLock size={21} />}
             loading={loading}
             block
+            placeholder="Sign Up"
           >
             {authView === VIEWS.SIGN_IN ? 'Sign in' : 'Sign up'}
           </Button>
@@ -418,9 +400,7 @@ function ForgottenPassword({ setAuthView }: { setAuthView: SetAuthView }) {
             label="Email address"
             placeholder="Your email address"
             icon={<IconMail size={21} stroke={'#666666'} />}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setEmail(e.target.value)
-            }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
           />
           <Button
             block
@@ -428,6 +408,7 @@ function ForgottenPassword({ setAuthView }: { setAuthView: SetAuthView }) {
             htmlType="submit"
             icon={<IconInbox size={21} />}
             loading={loading}
+            placeholder="Send reset password instructions"
           >
             Send reset password instructions
           </Button>
@@ -488,9 +469,7 @@ function UpdatePassword() {
             placeholder="Enter your new password"
             type="password"
             icon={<IconKey size={21} stroke={'#666666'} />}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setPassword(e.target.value)
-            }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
           />
           <Button
             block
@@ -498,6 +477,7 @@ function UpdatePassword() {
             htmlType="submit"
             icon={<IconKey size={21} />}
             loading={loading}
+            placeholder="Update password"
           >
             Update password
           </Button>

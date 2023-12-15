@@ -1,15 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import {
-  Card,
-  IconDatabase,
-  IconStar,
-  IconUser,
-  Space,
-  Tabs,
-  Typography,
-} from '@supabase/ui';
+import { Card, IconDatabase, IconStar, IconUser, Space, Tabs, Typography } from '@supabase/ui';
 import { withSessionSsr } from '@/utils/session';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AccountDetails from '@/components/AccountDetails';
@@ -48,28 +40,21 @@ export default function Profile() {
                 alt="Company Logo"
                 width={50}
                 height={48}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
               />
             )}
-            <Typography.Text type="success">
-              You&apos;re signed in
-            </Typography.Text>
+            <Typography.Text type="success">You&apos;re signed in</Typography.Text>
           </div>
           <Space direction="vertical" size={6} className={styles.userInfo}>
-            <Tabs
-              type="underlined"
-              size="medium"
-              tabBarStyle={{ marginTop: 16 }}
-              tabBarGutter={8}
-            >
+            <Tabs type="underlined" size="medium" tabBarStyle={{ marginTop: 16 }} tabBarGutter={8}>
               <Tabs.Panel id="account" icon={<IconUser />} label="Account">
                 <AccountDetails />
               </Tabs.Panel>
               {enableInventory ? (
-                <Tabs.Panel
-                  id="inventory"
-                  icon={<IconDatabase />}
-                  label="Inventory"
-                >
+                <Tabs.Panel id="inventory" icon={<IconDatabase />} label="Inventory">
                   <Inventory />
                 </Tabs.Panel>
               ) : (

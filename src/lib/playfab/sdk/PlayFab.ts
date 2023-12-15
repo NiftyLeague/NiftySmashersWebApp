@@ -8,8 +8,7 @@ export const api_version = '';
 export const buildIdentifier = 'adobuild_nodesdk_118';
 
 type RequestGetParams = { [key: string]: string };
-interface Settings
-  extends Omit<PlayFabModule.IPlayFabSettings, 'verticalName'> {
+interface Settings extends Omit<PlayFabModule.IPlayFabSettings, 'verticalName'> {
   verticalName: null | string;
   requestGetParams: RequestGetParams;
 }
@@ -42,7 +41,7 @@ export function MakeRequest(
   request: any,
   authType: string | null,
   authValue: string | null,
-  callback: (error: any, result: any) => void
+  callback: (error: any, result: any) => void,
 ) {
   if (request == null) request = {};
   const requestBody = Buffer.from(JSON.stringify(request), 'utf8');
@@ -106,10 +105,7 @@ export function MakeRequest(
         };
       }
 
-      if (
-        replyEnvelope.hasOwnProperty('error') ||
-        !replyEnvelope.hasOwnProperty('data')
-      ) {
+      if (replyEnvelope.hasOwnProperty('error') || !replyEnvelope.hasOwnProperty('data')) {
         callback(replyEnvelope, null);
       } else {
         callback(null, replyEnvelope);
@@ -130,7 +126,7 @@ export function MakeRequest(
         errorCode: 2, // PlayFabErrorCode.ConnectionError
         errorMessage: e.message,
       },
-      null
+      null,
     );
   });
 

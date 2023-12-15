@@ -25,9 +25,8 @@ const GameSection = () => {
           <div style={{ position: 'relative' }}>
             <AnimatedWrapper>
               <p className="animated-header-text animated-header-text-start transition-delay-medium">
-                Nifty Smashers is a free 3D platform fighting game that supports
-                up to 16 online players. Available on iOS & Android devices -{' '}
-                <strong>full cross-play coming soon!</strong>
+                Nifty Smashers is a free 3D platform fighting game that supports up to 16 online players. Available on
+                iOS & Android devices - <strong>full cross-play coming soon!</strong>
               </p>
             </AnimatedWrapper>
           </div>
@@ -36,16 +35,7 @@ const GameSection = () => {
           <div className={styles.highlight_video} onClick={playVid}>
             <AnimatedWrapper>
               <div className="quick-pop-anim quick-pop-anim-start transition-delay-small">
-                <video
-                  id="level-video"
-                  width="100%"
-                  height="100%"
-                  muted
-                  autoPlay
-                  loop
-                  playsInline
-                  data-keepplaying
-                >
+                <video id="level-video" width="100%" height="100%" muted autoPlay loop playsInline data-keepplaying>
                   <source src="/assets/levels/rocket.mp4" type="video/mp4" />
                 </video>
                 <div className={cn(styles.gradient, 'radial-gradient-bg')} />

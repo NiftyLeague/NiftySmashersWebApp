@@ -1,9 +1,5 @@
 import { useContext } from 'react';
-import {
-  FeatureFlagContext,
-  FlagSet,
-  ProviderConfig,
-} from '@/components/FeatureFlagsProvider';
+import { FeatureFlagContext, FlagSet, ProviderConfig } from '@/components/FeatureFlagsProvider';
 
 /**
  * `useFlags` is a custom hook which returns all feature flags. It uses the `useContext` primitive

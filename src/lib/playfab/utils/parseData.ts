@@ -12,8 +12,6 @@ export default function safeJSONParse(input: any) {
   return output;
 }
 
-export const parseLinkedWalletResult = (data?: {
-  [key: string]: PlayFabClientModels.UserDataRecord;
-}): string[] => {
+export const parseLinkedWalletResult = (data?: { [key: string]: PlayFabClientModels.UserDataRecord }): string[] => {
   return safeJSONParse(data?.LinkedWallets?.Value);
 };

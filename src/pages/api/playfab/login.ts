@@ -21,16 +21,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         InfoRequestParameters,
       });
     }
-    const { EntityToken, SessionTicket, PlayFabId, InfoResultPayload } =
-      loginData;
+    const { EntityToken, SessionTicket, PlayFabId, InfoResultPayload } = loginData;
     const user = {
       isLoggedIn: true,
       persistLogin: rememberMe ?? req.session.user?.persistLogin,
       EntityToken,
       PlayFabId,
       SessionTicket,
-      CustomId:
-        CustomId ?? InfoResultPayload?.AccountInfo?.CustomIdInfo?.CustomId,
+      CustomId: CustomId ?? InfoResultPayload?.AccountInfo?.CustomIdInfo?.CustomId,
     } as User;
     req.session.user = user;
     await req.session.save();

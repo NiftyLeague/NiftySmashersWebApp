@@ -41,10 +41,7 @@ const ConsoleGame = ({ src }: { src: string }) => {
           </video>
           <div
             onClick={playVid}
-            className={cn(
-              styles.bonk_note,
-              'animated-fade-start animated-fade transition-delay-medium'
-            )}
+            className={cn(styles.bonk_note, 'animated-fade-start animated-fade transition-delay-medium')}
           >
             <Image
               alt="Classic Gaming Reinvented Bonk"
@@ -59,11 +56,7 @@ const ConsoleGame = ({ src }: { src: string }) => {
         </div>
       </AnimatedWrapper>
       <div className={styles.gaming_controller}>
-        <AnimatedWrapper
-          parallax
-          parallaxDirection="bottom"
-          transitionAmount="medium"
-        >
+        <AnimatedWrapper parallax parallaxDirection="bottom" transitionAmount="medium">
           <div className="animation-bounce animated-fade-start animated-fade transition-delay-large">
             <Image
               alt="Classic Gaming Reinvented Controller Left"
@@ -78,11 +71,7 @@ const ConsoleGame = ({ src }: { src: string }) => {
         </AnimatedWrapper>
       </div>
       <div className={styles.gaming_controller}>
-        <AnimatedWrapper
-          parallax
-          parallaxDirection="bottom"
-          transitionAmount="medium"
-        >
+        <AnimatedWrapper parallax parallaxDirection="bottom" transitionAmount="medium">
           <div className="animation-bounce2 animated-fade-start animated-fade transition-delay-large">
             <Image
               alt="Classic Gaming Reinvented Controller Right"

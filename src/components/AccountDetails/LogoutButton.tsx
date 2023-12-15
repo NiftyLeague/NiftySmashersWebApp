@@ -15,9 +15,7 @@ export default function LogoutButton({ loading = false }) {
         disabled={loading}
         onClick={async e => {
           e.preventDefault();
-          mutateUser(
-            await fetchJson('/api/playfab/logout', { method: 'POST' })
-          );
+          mutateUser(await fetchJson('/api/playfab/logout', { method: 'POST' }));
         }}
       >
         <IconLogOut />

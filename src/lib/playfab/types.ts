@@ -25,12 +25,7 @@ export type LinkGoogleResult = PlayFabClientModels.LinkGoogleAccountResult;
 export type LinkAppleResult = PlayFabClientModels.EmptyResult;
 export type LinkFacebookResult = PlayFabClientModels.LinkFacebookAccountResult;
 export type LinkTwitchResult = PlayFabClientModels.LinkTwitchAccountResult;
-export type LinkProviderResult =
-  | LinkGoogleResult
-  | LinkAppleResult
-  | LinkFacebookResult
-  | LinkTwitchResult
-  | null;
+export type LinkProviderResult = LinkGoogleResult | LinkAppleResult | LinkFacebookResult | LinkTwitchResult | null;
 export type Provider =
   | 'google'
   | 'apple'

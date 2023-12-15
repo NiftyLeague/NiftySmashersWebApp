@@ -10,10 +10,7 @@ declare global {
 
 function generateMessage(address: string, nonce: string) {
   const addressToLower = address.toLowerCase();
-  const signAddress = `${addressToLower.substring(
-    0,
-    6
-  )}...${addressToLower.substring(addressToLower.length - 4)}`;
+  const signAddress = `${addressToLower.substring(0, 6)}...${addressToLower.substring(addressToLower.length - 4)}`;
   return `Please sign this message to verify that ${signAddress} belongs to you. ${nonce}`;
 }
 
@@ -43,11 +40,7 @@ export async function signMessage() {
   return null;
 }
 
-export async function isEthereumSignatureValid(
-  address: string,
-  signature: string,
-  nonce: string
-): Promise<boolean> {
+export async function isEthereumSignatureValid(address: string, signature: string, nonce: string): Promise<boolean> {
   if (!address || !signature || !nonce) return false;
   const message = generateMessage(address, nonce);
   return true;

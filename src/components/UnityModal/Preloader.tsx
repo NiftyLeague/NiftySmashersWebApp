@@ -27,13 +27,7 @@ const PreloaderSVG = () => (
   </svg>
 );
 
-export default function Preloader({
-  ready,
-  progress,
-}: {
-  ready: boolean;
-  progress: number;
-}): JSX.Element {
+export default function Preloader({ ready, progress }: { ready: boolean; progress: number }): JSX.Element {
   const loadingPercentage = Math.round(progress * 100);
   const [percent, setPercent] = useState(loadingPercentage);
   const { milliseconds, start, stop } = useStopwatch({ interval: 100 });
@@ -87,10 +81,7 @@ export default function Preloader({
           <div className={styles.pong_loader} />
           <div className={styles.pong_loader_left} />
           <div className={styles.pong_loader_right} />
-          <svg
-            role="img"
-            className={cn(styles.df_icon, styles.df_icon_preloader_arcade)}
-          >
+          <svg role="img" className={cn(styles.df_icon, styles.df_icon_preloader_arcade)}>
             <PreloaderSVG />
           </svg>
         </div>
@@ -105,14 +96,10 @@ export default function Preloader({
           />
         </Box>
         <Box sx={{ minWidth: 35 }}>
-          <Typography variant="body2" color="white">{`${Math.round(
-            percent
-          )}%`}</Typography>
+          <Typography variant="body2" color="white">{`${Math.round(percent)}%`}</Typography>
         </Box>
       </Box>
-      {isMobileOnly && milliseconds > 12000
-        ? 'For the best experience try us out on desktop!'
-        : null}
+      {isMobileOnly && milliseconds > 12000 ? 'For the best experience try us out on desktop!' : null}
     </div>
   );
 }

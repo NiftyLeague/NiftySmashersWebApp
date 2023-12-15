@@ -2,10 +2,7 @@
 
 import * as PlayFab from './PlayFab';
 
-export const DeletePlayer: PlayFabAdminModule.IPlayFabAdmin['DeletePlayer'] = (
-  request,
-  callback
-) => {
+export const DeletePlayer: PlayFabAdminModule.IPlayFabAdmin['DeletePlayer'] = (request, callback) => {
   if (PlayFab.settings.developerSecretKey == null) {
     throw 'Must have PlayFab.settings.DeveloperSecretKey set to call this method';
   }
@@ -16,11 +13,11 @@ export const DeletePlayer: PlayFabAdminModule.IPlayFabAdmin['DeletePlayer'] = (
     PlayFab.settings.developerSecretKey,
     function (
       error: PlayFabModule.IPlayFabError,
-      result: PlayFabModule.IPlayFabSuccessContainer<PlayFabAdminModels.DeletePlayerResult>
+      result: PlayFabModule.IPlayFabSuccessContainer<PlayFabAdminModels.DeletePlayerResult>,
     ) {
       if (callback != null) {
         callback(error, result);
       }
-    }
+    },
   );
 };

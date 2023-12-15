@@ -2,10 +2,19 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [
-      'nifty-league.s3.amazonaws.com',
-      'lh3.googleusercontent.com',
-      'dl.openseauserdata.com',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'nifty-league.s3.amazonaws.com',
+        port: '',
+        pathname: '/degens/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'nifty-league.s3.amazonaws.com',
+        port: '',
+        pathname: '/assets/**',
+      },
     ],
   },
 };

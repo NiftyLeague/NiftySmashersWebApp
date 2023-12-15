@@ -47,14 +47,36 @@ export default function Home() {
               width={824}
               height={572}
               priority
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+              }}
             />
             <div className={styles.buttons}>
               <button id="trailer-btn">
-                <Image src="/icons/youtube.svg" alt="YouTube Logo" width={22} height={22} />
+                <Image
+                  src="/icons/youtube.svg"
+                  alt="YouTube Logo"
+                  width={22}
+                  height={22}
+                  style={{
+                    maxWidth: '100%',
+                    height: 'auto',
+                  }}
+                />
                 Trailer
               </button>
               <button id="play-btn">
-                <Image src="/icons/controller.svg" alt="Game Icon" width={22} height={22} />
+                <Image
+                  src="/icons/controller.svg"
+                  alt="Game Icon"
+                  width={22}
+                  height={22}
+                  style={{
+                    maxWidth: '100%',
+                    height: 'auto',
+                  }}
+                />
                 Play
               </button>
             </div>

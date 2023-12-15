@@ -6,7 +6,17 @@ export default function BackButton() {
   return (
     <Link href="/">
       <div className={styles.logo_container}>
-        <Image src="/icons/back.svg" alt="Back Button" className={styles.logo} width={45} height={45} />
+        <Image
+          src="/icons/back.svg"
+          alt="Back Button"
+          className={styles.logo}
+          width={45}
+          height={45}
+          style={{
+            maxWidth: '100%',
+            height: 'auto',
+          }}
+        />
       </div>
     </Link>
   );

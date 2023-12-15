@@ -31,7 +31,10 @@ const Login = () => {
                 alt="Company Logo"
                 width={50}
                 height={50}
-                style={mobile ? { float: 'right', marginTop: -10 } : {}}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
               />
               <Typography.Title
                 level={3}

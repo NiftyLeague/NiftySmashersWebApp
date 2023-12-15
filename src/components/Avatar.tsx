@@ -47,7 +47,17 @@ export default function Avatar({
   return (
     <div className={styles.avatarContainer}>
       {url ? (
-        <Image src={url} alt="Avatar" className={cn(styles.avatar, styles.image)} height={size} width={size} />
+        <Image
+          src={url}
+          alt="Avatar"
+          className={cn(styles.avatar, styles.image)}
+          height={size}
+          width={size}
+          style={{
+            maxWidth: '100%',
+            height: 'auto',
+          }}
+        />
       ) : (
         <div className={cn(styles.avatar, styles.no_image)} style={{ height: size, width: size }} />
       )}

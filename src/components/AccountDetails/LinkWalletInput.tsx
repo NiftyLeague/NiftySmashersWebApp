@@ -6,13 +6,7 @@ import { fetchJson } from '@/lib/playfab/utils';
 import { Auth } from '@/lib/playfab/components';
 import { signMessage } from '@/utils/wallet';
 
-export default function LinkWalletInput({
-  index,
-  address,
-}: {
-  index: number;
-  address?: string;
-}) {
+export default function LinkWalletInput({ index, address }: { index: number; address?: string }) {
   const [error, setError] = useState<string | undefined>();
   const [deleteLoading, setDeleteLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -83,6 +77,7 @@ export default function LinkWalletInput({
                 onClick={handleUnLinkWallet}
                 loading={deleteLoading}
                 style={{ opacity: 1 }}
+                placeholder="Remove"
               >
                 Remove
               </Button>,
@@ -93,6 +88,7 @@ export default function LinkWalletInput({
                 icon={<IconLink2 />}
                 key="connect"
                 onClick={handleLinkWallet}
+                placeholder="Connect Wallet"
               >
                 Connect Wallet
               </Button>,

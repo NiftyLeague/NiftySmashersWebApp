@@ -13,10 +13,7 @@ const UnityModal = ({ closeGame, gameOpen }: UnityModalProps) => {
     <div id="unity-modal" className={cn(styles.modal, { hidden: !gameOpen })}>
       <div className={styles.modal_paper_dark}>
         {isOpera ? (
-          <Typography.Title
-            level={2}
-            style={{ textAlign: 'center', marginTop: 8, padding: '10rem 3rem' }}
-          >
+          <Typography.Title level={2} style={{ textAlign: 'center', marginTop: 8, padding: '10rem 3rem' }}>
             {browserName} Browser Not Supported
           </Typography.Title>
         ) : (

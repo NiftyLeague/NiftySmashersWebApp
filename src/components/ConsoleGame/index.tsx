@@ -22,9 +22,13 @@ const ConsoleGame = ({ src }: { src: string }) => {
             className="pixelated"
             width={4842}
             height={3371}
-            layout="responsive"
             src="/assets/console-game/classic-gaming-reinvented-notv.png"
             priority
+            sizes="100vw"
+            style={{
+              width: '100%',
+              height: 'auto',
+            }}
           />
           <video
             id="console-video"
@@ -41,57 +45,58 @@ const ConsoleGame = ({ src }: { src: string }) => {
           </video>
           <div
             onClick={playVid}
-            className={cn(
-              styles.bonk_note,
-              'animated-fade-start animated-fade transition-delay-medium'
-            )}
+            className={cn(styles.bonk_note, 'animated-fade-start animated-fade transition-delay-medium')}
           >
             <Image
               alt="Classic Gaming Reinvented Bonk"
               className="pixelated"
               width={4842}
               height={3371}
-              layout="responsive"
               src="/assets/console-game/bonk.png"
               priority
+              sizes="100vw"
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
             />
           </div>
         </div>
       </AnimatedWrapper>
       <div className={styles.gaming_controller}>
-        <AnimatedWrapper
-          parallax
-          parallaxDirection="bottom"
-          transitionAmount="medium"
-        >
+        <AnimatedWrapper parallax parallaxDirection="bottom" transitionAmount="small">
           <div className="animation-bounce animated-fade-start animated-fade transition-delay-large">
             <Image
               alt="Classic Gaming Reinvented Controller Left"
               className="pixelated"
               width={4842}
               height={3371}
-              layout="responsive"
               src="/assets/console-game/gaming_controller_left.png"
               priority
+              sizes="100vw"
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
             />
           </div>
         </AnimatedWrapper>
       </div>
       <div className={styles.gaming_controller}>
-        <AnimatedWrapper
-          parallax
-          parallaxDirection="bottom"
-          transitionAmount="medium"
-        >
+        <AnimatedWrapper parallax parallaxDirection="bottom" transitionAmount="small">
           <div className="animation-bounce2 animated-fade-start animated-fade transition-delay-large">
             <Image
               alt="Classic Gaming Reinvented Controller Right"
               className="pixelated"
               width={4842}
               height={3371}
-              layout="responsive"
               src="/assets/console-game/gaming_controller_right.png"
               priority
+              sizes="100vw"
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
             />
           </div>
         </AnimatedWrapper>

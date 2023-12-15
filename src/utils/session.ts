@@ -2,11 +2,7 @@
 import { withIronSessionApiRoute, withIronSessionSsr } from 'iron-session/next';
 import type { IronSessionOptions } from 'iron-session';
 import type { User } from '@/lib/playfab/types';
-import {
-  GetServerSidePropsContext,
-  GetServerSidePropsResult,
-  NextApiHandler,
-} from 'next';
+import { GetServerSidePropsContext, GetServerSidePropsResult, NextApiHandler } from 'next';
 
 export const sessionOptions: IronSessionOptions = {
   password: process.env.NEXTAUTH_SECRET as string,
@@ -45,12 +41,8 @@ export function withUserRoute(handler: NextApiHandler) {
 }
 
 // Theses types are compatible with InferGetStaticPropsType https://nextjs.org/docs/basic-features/data-fetching#typescript-use-getstaticprops
-export function withSessionSsr<
-  P extends { [key: string]: unknown } = { [key: string]: unknown }
->(
-  handler: (
-    context: GetServerSidePropsContext
-  ) => GetServerSidePropsResult<P> | Promise<GetServerSidePropsResult<P>>
+export function withSessionSsr<P extends { [key: string]: unknown } = { [key: string]: unknown }>(
+  handler: (context: GetServerSidePropsContext) => GetServerSidePropsResult<P> | Promise<GetServerSidePropsResult<P>>,
 ) {
   return withIronSessionSsr(handler, sessionOptions);
 }

@@ -25,13 +25,7 @@ type ReturnType = {
   restart: () => void;
 };
 
-function useStopwatch({
-  interval = 10,
-  onStop,
-  onStart,
-  onPause,
-  onRestart,
-}: HookParams): ReturnType {
+function useStopwatch({ interval = 10, onStop, onStart, onPause, onRestart }: HookParams): ReturnType {
   const stopwatchRef = useRef<NodeJS.Timer | null>(null);
   const [status, setStatus] = useState(STATUS.STOPPED);
   const [milliseconds, setMilliseconds] = useState(0);
@@ -76,6 +70,7 @@ function useStopwatch({
     if (status === STATUS.RUNNING) {
       setStopwatch();
     } else if (status === STATUS.STOPPED || status === STATUS.PAUSED) {
+      // @ts-expect-error
       clearInterval(stopwatchRef.current as NodeJS.Timer);
     }
   }, [status, setStopwatch]);

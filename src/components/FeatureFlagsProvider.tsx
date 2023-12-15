@@ -30,9 +30,7 @@ export const FeatureFlagContext = createContext<ProviderConfig>(initialState);
 function useProcessFlagsFromEnv() {
   const [flags] = useState<FlagSet>(() => {
     const storedValue = process.env.NEXT_PUBLIC_FEATURE_FLAGS;
-    return storedValue === undefined
-      ? DEFAULT_FLAGS
-      : { ...DEFAULT_FLAGS, ...JSON.parse(storedValue) };
+    return storedValue === undefined ? DEFAULT_FLAGS : { ...DEFAULT_FLAGS, ...JSON.parse(storedValue) };
   });
 
   return { flags };
@@ -45,9 +43,5 @@ type ConfigProviderProps = {
 export function FeatureFlagProvider({ children }: ConfigProviderProps) {
   const { flags } = useProcessFlagsFromEnv();
 
-  return (
-    <FeatureFlagContext.Provider value={{ flags }}>
-      {children}
-    </FeatureFlagContext.Provider>
-  );
+  return <FeatureFlagContext.Provider value={{ flags }}>{children}</FeatureFlagContext.Provider>;
 }

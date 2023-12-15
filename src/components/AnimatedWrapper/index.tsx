@@ -23,22 +23,15 @@ const AnimatedWrapper = ({
   transitionAmount?: string;
 }) => {
   const ref: any = useRef<HTMLDivElement>();
-  const onScreen: boolean = useOnScreen<HTMLDivElement>(
-    ref,
-    immediate ? '0px' : '-100px'
-  );
+  const onScreen: boolean = useOnScreen<HTMLDivElement>(ref, immediate ? '0px' : '-100px');
 
   useEffect(() => {
     if (onScreen) {
       const sectionElement: HTMLDivElement = ref.current;
       if (sectionElement) {
-        const animatedTextElements = sectionElement.querySelectorAll(
-          animatedClassNames.join(',')
-        );
+        const animatedTextElements = sectionElement.querySelectorAll(animatedClassNames.join(','));
         Array.from(animatedTextElements).forEach(element => {
-          element.classList.remove(
-            ...animatedClassNames.map(name => name.replace('.', ''))
-          );
+          element.classList.remove(...animatedClassNames.map(name => name.replace('.', '')));
         });
       }
     }
@@ -50,16 +43,11 @@ const AnimatedWrapper = ({
           const rect = sectionElement.getBoundingClientRect();
           if (parallaxDirection === 'verticalScale') {
             const scale = window.scrollY / (2 * window.innerHeight);
-            const parallaxChild = sectionElement.getElementsByClassName(
-              'parallax-child'
-            )[0] as HTMLDivElement;
+            const parallaxChild = sectionElement.getElementsByClassName('parallax-child')[0] as HTMLDivElement;
             if (parallaxChild) {
               parallaxChild.style.transform = `scale(${1 + scale})`;
             }
-          } else if (
-            parallaxDirection === 'top' ||
-            parallaxDirection === 'bottom'
-          ) {
+          } else if (parallaxDirection === 'top' || parallaxDirection === 'bottom') {
             let direction = 1;
             if (transitionAmount === 'extreme') {
               direction = 3;
@@ -73,43 +61,27 @@ const AnimatedWrapper = ({
             if (parallaxDirection === 'top') {
               direction = -1 * direction;
             }
-            const parallaxHeroChild = sectionElement.getElementsByClassName(
-              'parallax-hero-child'
-            )[0] as HTMLDivElement;
+            const parallaxHeroChild = sectionElement.getElementsByClassName('parallax-hero-child')[0] as HTMLDivElement;
             if (parallaxHeroChild) {
               const translationY = window.scrollY / 3;
-              parallaxHeroChild.style.transform = `translateY(${
-                translationY * direction
-              }px)`;
+              parallaxHeroChild.style.transform = `translateY(${translationY * direction}px)`;
             } else {
               const translationY = (rect.top * 100) / window.innerHeight;
-              const parallaxChild = sectionElement.getElementsByClassName(
-                'parallax-child'
-              )[0] as HTMLDivElement;
+              const parallaxChild = sectionElement.getElementsByClassName('parallax-child')[0] as HTMLDivElement;
               if (parallaxChild) {
-                parallaxChild.style.transform = `translateY(${
-                  translationY * direction
-                }px)`;
+                parallaxChild.style.transform = `translateY(${translationY * direction}px)`;
               } else {
-                sectionElement.style.transform = `translateY(${
-                  translationY * direction
-                }px)`;
+                sectionElement.style.transform = `translateY(${translationY * direction}px)`;
               }
             }
           } else {
             const translationX = (rect.top * 100) / window.innerHeight;
             const direction = parallaxDirection === 'left' ? -1 : 1;
-            const parallaxChild = sectionElement.getElementsByClassName(
-              'parallax-child'
-            )[0] as HTMLDivElement;
+            const parallaxChild = sectionElement.getElementsByClassName('parallax-child')[0] as HTMLDivElement;
             if (parallaxChild) {
-              parallaxChild.style.transform = `translateX(${
-                translationX * direction
-              }px)`;
+              parallaxChild.style.transform = `translateX(${translationX * direction}px)`;
             } else {
-              sectionElement.style.transform = `translateX(${
-                translationX * direction
-              }px)`;
+              sectionElement.style.transform = `translateX(${translationX * direction}px)`;
             }
           }
         }

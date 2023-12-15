@@ -4,14 +4,8 @@ import useSWR from 'swr';
 import type { User } from '@/lib/playfab/types';
 import { fetchJson } from '@/lib/playfab/utils';
 
-export default function useUserSession({
-  redirectTo = '',
-  redirectIfFound = false,
-} = {}) {
-  const { data: user, mutate: mutateUser } = useSWR<User>(
-    '/api/playfab/user/playfab-session',
-    fetchJson
-  );
+export default function useUserSession({ redirectTo = '', redirectIfFound = false } = {}) {
+  const { data: user, mutate: mutateUser } = useSWR<User>('/api/playfab/user/playfab-session', fetchJson);
 
   useEffect(() => {
     // if no redirect needed, just return (example: already on /dashboard)

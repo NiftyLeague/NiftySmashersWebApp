@@ -15,7 +15,7 @@ const useUnitySafeClose = ({ closeGame, unload }: HookProps) => {
       const modal = document.getElementById('unity-modal');
       if (e.target === modal || e.target === closeBtn) handleLeavePage();
     },
-    [handleLeavePage]
+    [handleLeavePage],
   );
 
   useEffect(() => {

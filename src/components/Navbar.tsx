@@ -16,6 +16,10 @@ export default function Navbar() {
             className={styles.logo}
             width={50}
             height={48}
+            style={{
+              maxWidth: '100%',
+              height: 'auto',
+            }}
           />
         </div>
       </a>
@@ -27,7 +31,11 @@ export default function Navbar() {
               alt="Profile Icon"
               width={28}
               height={28}
-              style={{ margin: 'auto', width: 28, height: 28 }}
+              style={{
+                margin: 'auto',
+                width: 28,
+                height: 28,
+              }}
             />
           </div>
         </Link>
@@ -43,35 +51,37 @@ export default function Navbar() {
             className={styles.logo}
             width={50}
             height={48}
+            style={{
+              maxWidth: '100%',
+              height: 'auto',
+            }}
           />
         </div>
       </a>
       <nav className={styles.navbar}>
         <div className={styles.navbar_inner}>
-          <a
-            href="https://discord.gg/niftyleague"
-            target="_blank"
-            rel="noreferrer"
-            className={styles.nav_item}
-          >
+          <a href="https://discord.gg/niftyleague" target="_blank" rel="noreferrer" className={styles.nav_item}>
             <Image
               src="/icons/discord.svg"
               alt="Discord Logo"
               width={22}
               height={22}
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+              }}
             />
           </a>
-          <a
-            href="https://twitter.com/NiftyLeague"
-            target="_blank"
-            rel="noreferrer"
-            className={styles.nav_item}
-          >
+          <a href="https://twitter.com/NiftyLeague" target="_blank" rel="noreferrer" className={styles.nav_item}>
             <Image
               src="/icons/twitter.svg"
               alt="Twitter Logo"
               width={22}
               height={22}
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+              }}
             />
           </a>
           <a
@@ -85,6 +95,10 @@ export default function Navbar() {
               alt="Twitch Logo"
               width={22}
               height={22}
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+              }}
             />
           </a>
           <a
@@ -98,6 +112,10 @@ export default function Navbar() {
               alt="OpenSea Logo"
               width={22}
               height={22}
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+              }}
             />
           </a>
         </div>
@@ -109,6 +127,10 @@ export default function Navbar() {
                 alt="Profile Icon"
                 width={22}
                 height={22}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
               />
             </div>
           </div>

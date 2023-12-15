@@ -2,11 +2,7 @@ import { useCallback, useEffect, useState, useRef, RefObject } from 'react';
 import styles from '@/styles/modal.module.css';
 import cn from 'classnames';
 
-const ModalContent = ({
-  modalIframe,
-}: {
-  modalIframe: RefObject<HTMLIFrameElement>;
-}) => {
+const ModalContent = ({ modalIframe }: { modalIframe: RefObject<HTMLIFrameElement> }) => {
   return (
     <div className={styles.modal_paper}>
       <iframe
@@ -33,7 +29,7 @@ export default function TrailerModal() {
     setVisible(false);
     modalIframe?.current?.contentWindow?.postMessage(
       '{"event":"command","func":"' + 'pauseVideo' + '","args":""}',
-      '*'
+      '*',
     );
   }, []);
 
@@ -41,7 +37,7 @@ export default function TrailerModal() {
     if (visible) {
       modalIframe?.current?.contentWindow?.postMessage(
         '{"event":"command","func":"' + 'playVideo' + '","args":""}',
-        '*'
+        '*',
       );
     }
   }, [visible]);

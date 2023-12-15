@@ -28,7 +28,7 @@ export default function DeleteAccountDialog({ loading = false }) {
         await fetchJson('/api/playfab/user/delete-account', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-        })
+        }),
       );
       router.push('/login');
       enqueueSnackbar('Delete Account Success!', { variant: 'success' });
@@ -60,26 +60,18 @@ export default function DeleteAccountDialog({ loading = false }) {
           paper: styles.delete_account_dialog_paper,
         }}
       >
-        <DialogTitle id="alert-dialog-title">
-          {'Are you sure you want to delete your account?'}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{'Are you sure you want to delete your account?'}</DialogTitle>
         <DialogContent>
-          <DialogContentText
-            id="alert-dialog-description"
-            sx={{ color: '#fff' }}
-          >
-            Once your account is deleted all of your data will be removed and
-            there will be no way to recover your account.
+          <DialogContentText id="alert-dialog-description" sx={{ color: '#fff' }}>
+            Once your account is deleted all of your data will be removed and there will be no way to recover your
+            account.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <button className={cn(styles.button_secondary)} onClick={handleClose}>
             Cancel
           </button>
-          <button
-            className={cn(styles.button_danger)}
-            onClick={handleDeleteUser}
-          >
+          <button className={cn(styles.button_danger)} onClick={handleDeleteUser}>
             Delete Account
           </button>
         </DialogActions>

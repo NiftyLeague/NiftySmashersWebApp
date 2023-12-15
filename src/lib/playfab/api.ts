@@ -1,9 +1,5 @@
 import { playfab } from '@/lib/playfab/sdk';
-import {
-  getRandomKey,
-  isEthereumSignatureValid,
-  parseLinkedWalletResult,
-} from '@/lib/playfab/utils';
+import { getRandomKey, isEthereumSignatureValid, parseLinkedWalletResult } from '@/lib/playfab/utils';
 import type {
   AccountResult,
   LinkAppleResult,
@@ -29,15 +25,12 @@ const { PlayFabAdmin, PlayFabClient, PlayFabCloudScript } = playfab;
 async function CallClientAPI<T extends PlayFabModule.IPlayFabResultCommon>(
   functionName: string,
   request: any,
-  SessionTicket?: string
+  SessionTicket?: string,
 ): Promise<T> {
   return new Promise((resolve, reject) => {
     (PlayFabClient as any)[functionName](
       request,
-      (
-        error: PlayFabError,
-        result: PlayFabModule.IPlayFabSuccessContainer<T>
-      ) => {
+      (error: PlayFabError, result: PlayFabModule.IPlayFabSuccessContainer<T>) => {
         if (error) {
           console.error(`${functionName} Error`, error);
           reject(error);
@@ -45,17 +38,14 @@ async function CallClientAPI<T extends PlayFabModule.IPlayFabResultCommon>(
           resolve(result?.data ?? {});
         }
       },
-      SessionTicket
+      SessionTicket,
     );
   });
 }
 
 /*************************************** Login / Sign Up **********************************************/
 
-export const RegisterPlayFabUser = async (params: {
-  Email: string;
-  Password: string;
-}): Promise<RegisterUserResult> => {
+export const RegisterPlayFabUser = async (params: { Email: string; Password: string }): Promise<RegisterUserResult> => {
   const request = {
     ...params,
     Username: getRandomKey(20),
@@ -81,9 +71,7 @@ export const LoginWithCustomID = async (params: {
   return CallClientAPI<LoginResult>('LoginWithCustomID', request);
 };
 
-export const GenerateCustomID = async (
-  SessionTicket: string
-): Promise<string> => {
+export const GenerateCustomID = async (SessionTicket: string): Promise<string> => {
   const CustomId = getRandomKey(100);
   const request = { CustomId, ForceLink: false };
   await CallClientAPI('LinkCustomID', request, SessionTicket);
@@ -91,54 +79,29 @@ export const GenerateCustomID = async (
 };
 
 type AccountRecoveryResult = PlayFabClientModels.SendAccountRecoveryEmailResult;
-export const SendAccountRecoveryEmail = async (
-  Email: string
-): Promise<AccountRecoveryResult> => {
+export const SendAccountRecoveryEmail = async (Email: string): Promise<AccountRecoveryResult> => {
   const request = { TitleId: PlayFabClient.settings.titleId, Email };
-  return CallClientAPI<AccountRecoveryResult>(
-    'SendAccountRecoveryEmail',
-    request
-  );
+  return CallClientAPI<AccountRecoveryResult>('SendAccountRecoveryEmail', request);
 };
 
 /*************************************** Linked Providers **********************************************/
 
-async function LinkGoogleAccount(
-  AccessToken: string,
-  SessionTicket: string
-): Promise<LinkGoogleResult> {
+async function LinkGoogleAccount(AccessToken: string, SessionTicket: string): Promise<LinkGoogleResult> {
   const request = { ForceLink: true, AccessToken };
-  return CallClientAPI<LinkGoogleResult>(
-    'LinkGoogleAccount',
-    request,
-    SessionTicket
-  );
+  return CallClientAPI<LinkGoogleResult>('LinkGoogleAccount', request, SessionTicket);
 }
 
-async function LinkAppleAccount(
-  IdentityToken: string,
-  SessionTicket: string
-): Promise<LinkAppleResult> {
+async function LinkAppleAccount(IdentityToken: string, SessionTicket: string): Promise<LinkAppleResult> {
   const request = { ForceLink: true, IdentityToken };
   return CallClientAPI<LinkAppleResult>('LinkApple', request, SessionTicket);
 }
 
-async function LinkFacebookAccount(
-  AccessToken: string,
-  SessionTicket: string
-): Promise<LinkFacebookResult> {
+async function LinkFacebookAccount(AccessToken: string, SessionTicket: string): Promise<LinkFacebookResult> {
   const request = { ForceLink: true, AccessToken };
-  return CallClientAPI<LinkFacebookResult>(
-    'LinkFacebookAccount',
-    request,
-    SessionTicket
-  );
+  return CallClientAPI<LinkFacebookResult>('LinkFacebookAccount', request, SessionTicket);
 }
 
-async function LinkTwitchAccount(
-  AccessToken: string,
-  SessionTicket: string
-): Promise<LinkTwitchResult> {
+async function LinkTwitchAccount(AccessToken: string, SessionTicket: string): Promise<LinkTwitchResult> {
   const request = { ForceLink: true, AccessToken };
   return CallClientAPI<LinkTwitchResult>('LinkTwitch', request, SessionTicket);
 }
@@ -146,7 +109,7 @@ async function LinkTwitchAccount(
 export const LinkProvider = async (
   provider: Provider,
   accesssToken: string,
-  SessionTicket: string
+  SessionTicket: string,
 ): Promise<{ error?: unknown; data?: LinkProviderResult }> => {
   try {
     let data: LinkProviderResult = null;
@@ -174,54 +137,36 @@ export const LinkProvider = async (
 
 /*************************************** GET Account Info **********************************************/
 
-export const GetAccountInfo = async (
-  SessionTicket: string
-): Promise<AccountResult> => {
+export const GetAccountInfo = async (SessionTicket: string): Promise<AccountResult> => {
   return CallClientAPI<AccountResult>('GetAccountInfo', {}, SessionTicket);
 };
 
-export const GetPlayerCombinedInfo = async (
-  SessionTicket: string
-): Promise<PlayerResult> => {
+export const GetPlayerCombinedInfo = async (SessionTicket: string): Promise<PlayerResult> => {
   const request = { InfoRequestParameters };
-  return CallClientAPI<PlayerResult>(
-    'GetPlayerCombinedInfo',
-    request,
-    SessionTicket
-  );
+  return CallClientAPI<PlayerResult>('GetPlayerCombinedInfo', request, SessionTicket);
 };
 
 export async function GetUserPublisherReadOnlyData(
   Keys: string[],
-  SessionTicket: string
+  SessionTicket: string,
 ): Promise<PublisherDataResult> {
   return CallClientAPI<PublisherDataResult>(
     'GetUserPublisherReadOnlyData',
     {
       Keys,
     },
-    SessionTicket
+    SessionTicket,
   );
 }
 
-export const GetUserPublisherData = async (
-  SessionTicket: string
-): Promise<UserData> => {
-  const { Data: PublisherData } = await GetUserPublisherReadOnlyData(
-    ['LinkedWallets', 'DisplayName'],
-    SessionTicket
-  );
+export const GetUserPublisherData = async (SessionTicket: string): Promise<UserData> => {
+  const { Data: PublisherData } = await GetUserPublisherReadOnlyData(['LinkedWallets', 'DisplayName'], SessionTicket);
   return { ...PublisherData };
 };
 
-export async function GetLinkedWallets(
-  SessionTicket: string
-): Promise<string[]> {
+export async function GetLinkedWallets(SessionTicket: string): Promise<string[]> {
   let linkedWallets: string[] = [];
-  const { Data } = await GetUserPublisherReadOnlyData(
-    ['LinkedWallets'],
-    SessionTicket
-  );
+  const { Data } = await GetUserPublisherReadOnlyData(['LinkedWallets'], SessionTicket);
   if (Data) linkedWallets = parseLinkedWalletResult(Data);
   return linkedWallets;
 }
@@ -230,18 +175,18 @@ export async function GetLinkedWallets(
 
 export async function AddOrUpdateContactEmail(
   EmailAddress: string,
-  SessionTicket: string
+  SessionTicket: string,
 ): Promise<PlayFabClientModels.AddOrUpdateContactEmailResult> {
   return CallClientAPI<PlayFabClientModels.AddOrUpdateContactEmailResult>(
     'AddOrUpdateContactEmail',
     { EmailAddress },
-    SessionTicket
+    SessionTicket,
   );
 }
 
 export async function UpdateAvatarUrl(
   ImageUrl: string,
-  SessionTicket: string
+  SessionTicket: string,
 ): Promise<PlayFabClientModels.EmptyResponse> {
   return CallClientAPI('UpdateAvatarUrl', { ImageUrl }, SessionTicket);
 }
@@ -249,21 +194,15 @@ export async function UpdateAvatarUrl(
 export async function UpdateUserPublisherData(
   Data: any,
   Permission = 'public',
-  SessionTicket: string
+  SessionTicket: string,
 ): Promise<PlayFabClientModels.UpdateUserDataResult> {
   const request = { Data, Permission };
-  return CallClientAPI<PublisherDataResult>(
-    'UpdateUserPublisherData',
-    request,
-    SessionTicket
-  );
+  return CallClientAPI<PublisherDataResult>('UpdateUserPublisherData', request, SessionTicket);
 }
 
 /*************************************** Admin **********************************************/
 
-export async function DeletePlayer(
-  PlayFabId: string
-): Promise<PlayFabAdminModels.DeletePlayerResult> {
+export async function DeletePlayer(PlayFabId: string): Promise<PlayFabAdminModels.DeletePlayerResult> {
   return new Promise((resolve, reject) => {
     PlayFabAdmin.DeletePlayer({ PlayFabId }, (error, result) => {
       if (error) {
@@ -280,26 +219,22 @@ export async function DeletePlayer(
 async function ExecuteFunction(
   FunctionName: string,
   FunctionParameter: any,
-  EntityToken: string
+  EntityToken: string,
 ): Promise<PlayFabCloudScriptModels.ExecuteFunctionResult> {
   return new Promise((resolve, reject) => {
-    PlayFabCloudScript.ExecuteFunction(
-      { FunctionName, FunctionParameter },
-      EntityToken,
-      (error, result) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(result.data);
-        }
+    PlayFabCloudScript.ExecuteFunction({ FunctionName, FunctionParameter }, EntityToken, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result.data);
       }
-    );
+    });
   });
 }
 
 export async function ChangeDisplayName(
   DisplayName: string,
-  EntityToken: string
+  EntityToken: string,
 ): Promise<PlayFabCloudScriptModels.ExecuteFunctionResult> {
   const FunctionName = 'Accounts_ChangeDisplayName';
   const FunctionParameter = { DisplayName };
@@ -324,17 +259,13 @@ export async function LinkWallet({
   SessionTicket,
 }: LinkWalletParams): Promise<PlayFabCloudScriptModels.ExecuteFunctionResult> {
   const linkedWallets = await GetLinkedWallets(SessionTicket);
-  if (chain != 'ethereum')
-    throw new Error('Only Ethereum wallets are supported at this time');
+  if (chain != 'ethereum') throw new Error('Only Ethereum wallets are supported at this time');
 
-  if (!isEthereumSignatureValid(address, signature, nonce))
-    throw new Error('Failed to validate signature');
+  if (!isEthereumSignatureValid(address, signature, nonce)) throw new Error('Failed to validate signature');
 
   const walletEntry = `${chain}:${address}`.toLowerCase();
   if (linkedWallets.includes(walletEntry))
-    throw new Error(
-      `${address.substring(0, 6)}... address is already linked to this account`
-    );
+    throw new Error(`${address.substring(0, 6)}... address is already linked to this account`);
 
   const FunctionName = 'Accounts_LinkWallet';
   const FunctionParameter = {
@@ -361,14 +292,11 @@ export async function UnlinkWallet({
   SessionTicket,
 }: UnlinkWalletParams): Promise<PlayFabCloudScriptModels.ExecuteFunctionResult> {
   const linkedWallets = await GetLinkedWallets(SessionTicket);
-  if (chain != 'ethereum')
-    throw new Error('Only Ethereum wallets are supported at this time');
+  if (chain != 'ethereum') throw new Error('Only Ethereum wallets are supported at this time');
 
   const walletEntry = `${chain}:${address}`.toLowerCase();
   if (!linkedWallets.includes(walletEntry))
-    throw new Error(
-      `${address.substring(0, 6)}... address is not linked to this account`
-    );
+    throw new Error(`${address.substring(0, 6)}... address is not linked to this account`);
 
   const FunctionName = 'Accounts_UnlinkWallet';
   const FunctionParameter = {

@@ -46,6 +46,7 @@ const Game = ({ closeGame }: { closeGame: () => void }) => {
         onClick={() => requestFullscreen(true)}
         style={{ position: 'absolute', top: 5, right: 5 }}
         icon={<IconMaximize />}
+        placeholder=""
       />
     </>
   );

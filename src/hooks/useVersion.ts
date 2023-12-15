@@ -23,9 +23,7 @@ enum OS {
 const useVersion = () => {
   const [version, setVersion] = useState<string | null>(null);
   const env = process.env.NODE_ENV === 'production' ? 'prod' : 'stage';
-  const isLinux =
-    typeof window !== 'undefined' &&
-    window?.navigator?.userAgent?.indexOf('Linux') >= 0;
+  const isLinux = typeof window !== 'undefined' && window?.navigator?.userAgent?.indexOf('Linux') >= 0;
   let os = '';
   let message = '';
 
@@ -46,20 +44,15 @@ const useVersion = () => {
     message = MSGS.MAC;
   }
 
-  const fileName = `NiftyLauncher-setup-${version?.substring(
-    0,
-    version?.indexOf('-')
-  )}.exe`;
+  const fileName = `NiftyLauncher-setup-${version?.substring(0, version?.indexOf('-'))}.exe`;
   const downloadURL =
-    os === 'win'
-      ? `https://d7ct17ettlkln.cloudfront.net/launcher/${env}/${os}/${version}/${fileName}`
-      : null;
+    os === 'win' ? `https://d7ct17ettlkln.cloudfront.net/launcher/${env}/${os}/${version}/${fileName}` : null;
 
   useEffect(() => {
     const fetchVersion = async () => {
       if (os === 'win') {
         const v: string = await fetch(
-          `https://nifty-league.s3.amazonaws.com/launcher/${env}/${os}/version.bin?t=${Date.now()}`
+          `https://nifty-league.s3.amazonaws.com/launcher/${env}/${os}/version.bin?t=${Date.now()}`,
         )
           .then(async res => {
             if (res.status >= 400) {

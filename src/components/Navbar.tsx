@@ -10,13 +10,7 @@ export default function Navbar() {
     <>
       <a href="https://niftyleague.com" target="_blank" rel="noreferrer">
         <div className={styles.logo_container}>
-          <Image
-            src="/logo/white.png"
-            alt="Company Logo"
-            className={styles.logo}
-            width={50}
-            height={48}
-          />
+          <Image src="/logo/white.png" alt="Company Logo" className={styles.logo} width={50} height={48} />
         </div>
       </a>
       <nav className={styles.navbar}>
@@ -37,42 +31,16 @@ export default function Navbar() {
     <div className={styles.desktop_nav}>
       <a href="https://niftyleague.com" target="_blank" rel="noreferrer">
         <div className={styles.logo_container}>
-          <Image
-            src="/logo/white.png"
-            alt="Company Logo"
-            className={styles.logo}
-            width={50}
-            height={48}
-          />
+          <Image src="/logo/white.png" alt="Company Logo" className={styles.logo} width={50} height={48} />
         </div>
       </a>
       <nav className={styles.navbar}>
         <div className={styles.navbar_inner}>
-          <a
-            href="https://discord.gg/niftyleague"
-            target="_blank"
-            rel="noreferrer"
-            className={styles.nav_item}
-          >
-            <Image
-              src="/icons/discord.svg"
-              alt="Discord Logo"
-              width={22}
-              height={22}
-            />
+          <a href="https://discord.gg/niftyleague" target="_blank" rel="noreferrer" className={styles.nav_item}>
+            <Image src="/icons/discord.svg" alt="Discord Logo" width={22} height={22} />
           </a>
-          <a
-            href="https://twitter.com/NiftyLeague"
-            target="_blank"
-            rel="noreferrer"
-            className={styles.nav_item}
-          >
-            <Image
-              src="/icons/twitter.svg"
-              alt="Twitter Logo"
-              width={22}
-              height={22}
-            />
+          <a href="https://twitter.com/NiftyLeague" target="_blank" rel="noreferrer" className={styles.nav_item}>
+            <Image src="/icons/twitter.svg" alt="Twitter Logo" width={22} height={22} />
           </a>
           <a
             href="https://www.twitch.tv/niftyleagueofficial"
@@ -80,12 +48,7 @@ export default function Navbar() {
             rel="noreferrer"
             className={styles.nav_item}
           >
-            <Image
-              src="/icons/twitch.svg"
-              alt="Twitch Logo"
-              width={22}
-              height={22}
-            />
+            <Image src="/icons/twitch.svg" alt="Twitch Logo" width={22} height={22} />
           </a>
           <a
             href="https://opensea.io/collection/niftydegen"
@@ -93,23 +56,13 @@ export default function Navbar() {
             rel="noreferrer"
             className={styles.nav_item}
           >
-            <Image
-              src="/icons/opensea.svg"
-              alt="OpenSea Logo"
-              width={22}
-              height={22}
-            />
+            <Image src="/icons/opensea.svg" alt="OpenSea Logo" width={22} height={22} />
           </a>
         </div>
         <Link href="/profile">
           <div className={cn(styles.nav_item, styles.profile)}>
             <div className={styles.profile_icon}>
-              <Image
-                src="/icons/user.svg"
-                alt="Profile Icon"
-                width={22}
-                height={22}
-              />
+              <Image src="/icons/user.svg" alt="Profile Icon" width={22} height={22} />
             </div>
           </div>
         </Link>

@@ -1,5 +1,4 @@
-const chars =
-  'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
+const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
 
 export default function getRandomKey(size = 100) {
   const data = new Uint8Array(4 * size);

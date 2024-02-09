@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
@@ -10,11 +10,21 @@ import TrailerModal from '@/components/TrailerModal';
 import GameSelectModal from '@/components/GameSelectModal';
 import UnityModal from '@/components/UnityModal';
 import styles from '@/styles/smashers.module.css';
+import { useSearchParams } from 'next/navigation';
 
 export default function Home() {
+  const search = useSearchParams();
   const [gameOpen, setGameOpen] = useState(false);
   const launchGame = () => setGameOpen(true);
   const closeGame = () => setGameOpen(false);
+
+  useEffect(() => {
+    if (search.has('referral')) {
+      const playBtn = document.getElementById('play-btn');
+      playBtn?.click();
+    }
+  }, [search]);
+
   return (
     <>
       <Head>
@@ -47,10 +57,6 @@ export default function Home() {
               width={824}
               height={572}
               priority
-              style={{
-                maxWidth: '100%',
-                height: 'auto',
-              }}
             />
             <div className={styles.buttons}>
               <button id="trailer-btn">

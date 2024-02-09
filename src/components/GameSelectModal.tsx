@@ -6,9 +6,8 @@ import useVersion from '@/hooks/useVersion';
 import useFlags from '@/hooks/useFlags';
 import styles from '@/styles/modal.module.css';
 
-const GOOGLE_PLAY_LINK =
-  'https://play.google.com/store/apps/details?id=com.niftyleague.niftysmashers&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1';
-const APPLE_STORE_LINK = 'https://testflight.apple.com/join/3A5LcqyO';
+const GOOGLE_PLAY_LINK = process.env.NEXT_PUBLIC_GOOGLE_PLAY_LINK;
+const APPLE_STORE_LINK = process.env.NEXT_PUBLIC_APPLE_STORE_LINK;
 
 const GameSelectModal = ({ launchGame }: { launchGame: () => void }) => {
   const [visible, setVisible] = useState(false);

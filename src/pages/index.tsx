@@ -47,10 +47,6 @@ export default function Home() {
               width={824}
               height={572}
               priority
-              style={{
-                maxWidth: '100%',
-                height: 'auto',
-              }}
             />
             <div className={styles.buttons}>
               <button id="trailer-btn">

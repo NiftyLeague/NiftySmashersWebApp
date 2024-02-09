@@ -17,6 +17,39 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/invite/:ref_code(\\w{1,})',
+        has: [
+          {
+            type: 'header',
+            key: 'User-Agent',
+            value: '.*(iPhone|iPad|iPod).*',
+          },
+        ],
+        destination: process.env.NEXT_PUBLIC_APPLE_STORE_LINK,
+        permanent: false,
+      },
+      {
+        source: '/invite/:ref_code(\\w{1,})',
+        has: [
+          {
+            type: 'header',
+            key: 'User-Agent',
+            value: '.*(Mobile|Android).*',
+          },
+        ],
+        destination: process.env.NEXT_PUBLIC_GOOGLE_PLAY_LINK,
+        permanent: false,
+      },
+      {
+        source: '/invite/:ref_code(\\w{1,})',
+        destination: '/?ref=:ref_code',
+        permanent: false,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

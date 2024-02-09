@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import cn from 'classnames';
+import Link from 'next/link';
 import Image from 'next/image';
 import { Button, Typography, Space } from '@supabase/ui';
 import useVersion from '@/hooks/useVersion';
 import useFlags from '@/hooks/useFlags';
 import styles from '@/styles/modal.module.css';
-
-const GOOGLE_PLAY_LINK =
-  'https://play.google.com/store/apps/details?id=com.niftyleague.niftysmashers&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1';
-const APPLE_STORE_LINK = 'https://testflight.apple.com/join/3A5LcqyO';
 
 const GameSelectModal = ({ launchGame }: { launchGame: () => void }) => {
   const [visible, setVisible] = useState(false);
@@ -83,34 +80,41 @@ const ModalContent = ({ closeModal, launchGame }: { closeModal: () => void; laun
         >
           Close
         </Button> */}
-        <a href={GOOGLE_PLAY_LINK} target="_blank" rel="noreferrer" style={{ width: '100%' }}>
-          <Image
-            src="/assets/google-play-badge.png"
-            alt="Get it on Google Play"
-            width={564}
-            height={169}
-            priority
-            style={{
-              width: '100%',
-              maxWidth: '100%',
-              height: 'auto',
-            }}
-          />
-        </a>
-        <a href={APPLE_STORE_LINK} target="_blank" rel="noreferrer" style={{ width: '100%', textAlign: 'center' }}>
-          <Image
-            src="/assets/apple-store-badge.svg"
-            alt="Apple Store Badge"
-            width={120}
-            height={40}
-            priority
-            style={{
-              width: '92%',
-              maxWidth: '100%',
-              height: 'auto',
-            }}
-          />
-        </a>
+        <Link
+          href="/android/&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
+          legacyBehavior
+        >
+          <a target="_blank" rel="noreferrer" style={{ width: '100%' }}>
+            <Image
+              src="/assets/google-play-badge.png"
+              alt="Get it on Google Play"
+              width={564}
+              height={169}
+              priority
+              style={{
+                width: '100%',
+                maxWidth: '100%',
+                height: 'auto',
+              }}
+            />
+          </a>
+        </Link>
+        <Link href="/ios" legacyBehavior>
+          <a target="_blank" rel="noreferrer" style={{ width: '100%', textAlign: 'center' }}>
+            <Image
+              src="/assets/apple-store-badge.svg"
+              alt="Apple Store Badge"
+              width={120}
+              height={40}
+              priority
+              style={{
+                width: '92%',
+                maxWidth: '100%',
+                height: 'auto',
+              }}
+            />
+          </a>
+        </Link>
         {enableWebGL ? (
           <>
             {isWindows && (

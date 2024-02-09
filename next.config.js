@@ -20,6 +20,50 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/ios',
+        has: [
+          {
+            type: 'header',
+            key: 'x-vercel-ip-country',
+            value: 'CA',
+          },
+        ],
+        destination: process.env.NEXT_PUBLIC_APPLE_CA_STORE_LINK,
+        permanent: false,
+      },
+      {
+        source: '/ios/:params*',
+        has: [
+          {
+            type: 'header',
+            key: 'x-vercel-ip-country',
+            value: 'CA',
+          },
+        ],
+        destination: `${process.env.NEXT_PUBLIC_APPLE_CA_STORE_LINK}:params*`,
+        permanent: false,
+      },
+      {
+        source: '/ios',
+        destination: process.env.NEXT_PUBLIC_APPLE_STORE_LINK,
+        permanent: false,
+      },
+      {
+        source: '/ios/:params*',
+        destination: `${process.env.NEXT_PUBLIC_APPLE_STORE_LINK}:params*`,
+        permanent: false,
+      },
+      {
+        source: '/android',
+        destination: process.env.NEXT_PUBLIC_GOOGLE_PLAY_LINK,
+        permanent: false,
+      },
+      {
+        source: '/android/:params*',
+        destination: `${process.env.NEXT_PUBLIC_GOOGLE_PLAY_LINK}:params*`,
+        permanent: false,
+      },
+      {
         source: '/invite/:ref_code(\\w{1,})',
         has: [
           {
@@ -28,7 +72,7 @@ const nextConfig = {
             value: '.*(iPhone|iPad|iPod).*',
           },
         ],
-        destination: process.env.NEXT_PUBLIC_APPLE_STORE_LINK,
+        destination: '/ios/?referral=:ref_code',
         permanent: false,
       },
       {
@@ -40,12 +84,12 @@ const nextConfig = {
             value: '.*(Mobile|Android).*',
           },
         ],
-        destination: process.env.NEXT_PUBLIC_GOOGLE_PLAY_LINK,
+        destination: '/android/&referral=:ref_code',
         permanent: false,
       },
       {
         source: '/invite/:ref_code(\\w{1,})',
-        destination: '/?ref=:ref_code',
+        destination: '/?referral=:ref_code',
         permanent: false,
       },
     ];
